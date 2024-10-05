@@ -43252,8 +43252,8 @@ a.u-link.u-text-hover-grey-90:hover {
   }
 
   .u-header .u-line-2 {
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 3px;
+    margin-bottom: -3px;
     margin-right: initial;
     margin-left: initial;
     width: auto;
