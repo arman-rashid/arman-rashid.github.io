@@ -42553,8 +42553,8 @@ a.u-link.u-text-hover-grey-90:hover {
         
         
         
-        --theme-sheet-width-xl: 1140px;
-        --theme-sheet-width-lg: 940px;
+        --theme-sheet-width-xl: 941px;
+        --theme-sheet-width-lg: 721px;
         --theme-sheet-width-md: 720px;
         --theme-sheet-width-sm: 540px;
         --theme-sheet-width-xs: 340px;
@@ -43130,7 +43130,11 @@ a.u-link.u-text-hover-grey-90:hover {
   transform-origin: left center;
   margin: 7px auto 13px;
 }
-
+@media (max-width: 1199px) {
+  .u-header .u-text-1 {
+    margin-top: 20px;
+  }
+}
 @media (max-width: 991px) {
   .u-header .u-sheet-1 {
     min-height: 778px;
@@ -43154,10 +43158,11 @@ a.u-link.u-text-hover-grey-90:hover {
 }
 @media (max-width: 767px) {
   .u-header .u-image-1 {
-    margin-left: 238px;
+    margin-top: 401px;
   }
 
   .u-header .u-text-1 {
+    margin-top: -54px;
     margin-right: 67px;
     margin-left: 63px;
   }
@@ -43181,12 +43186,11 @@ a.u-link.u-text-hover-grey-90:hover {
 }
 @media (max-width: 575px) {
   .u-header .u-sheet-1 {
-    min-height: 632px;
+    min-height: 633px;
   }
 
   .u-header .u-image-1 {
     margin-top: 209px;
-    margin-left: auto;
   }
 
   .u-header .u-text-1 {
@@ -43199,6 +43203,7 @@ a.u-link.u-text-hover-grey-90:hover {
 
   .u-header .u-text-2 {
     width: auto;
+    margin-top: 0;
     margin-left: 0;
     margin-right: 0;
   }
@@ -43212,6 +43217,7 @@ a.u-link.u-text-hover-grey-90:hover {
 
   .u-header .u-group-elements-1 {
     min-height: 50px;
+    margin-top: -2px;
     margin-right: initial;
     margin-left: initial;
     width: auto;
@@ -43219,7 +43225,7 @@ a.u-link.u-text-hover-grey-90:hover {
 
   .u-header .u-text-3 {
     width: 78px;
-    margin-top: 25px;
+    margin-top: 24px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -43252,8 +43258,8 @@ a.u-link.u-text-hover-grey-90:hover {
   }
 
   .u-header .u-line-2 {
-    margin-top: 3px;
-    margin-bottom: -3px;
+    margin-top: -2px;
+    margin-bottom: 7px;
     margin-right: initial;
     margin-left: initial;
     width: auto;
