@@ -44228,31 +44228,31 @@ a.u-link.u-text-hover-grey-90:hover {
 }
 
 .u-footer .u-sheet-1 {
-  min-height: 120px;
+  min-height: 184px;
+}
+
+.u-footer .u-line-1 {
+  width: 300px;
+  border-style: solid;
+  transform-origin: left center;
+  margin: 16px auto 0;
 }
 
 .u-footer .u-text-1 {
-  width: 417px;
-  margin: 49px auto;
+  font-size: 1rem;
+  width: 410px;
+  margin: 9px auto 28px;
 }
-@media (max-width: 1199px) {
-  .u-footer .u-sheet-1 {
-    min-height: 99px;
-  }
-}
-@media (max-width: 991px) {
-  .u-footer .u-sheet-1 {
-    min-height: 76px;
-  }
-}
-@media (max-width: 767px) {
-  .u-footer .u-sheet-1 {
-    min-height: 57px;
-  }
-}
+
+
+
 @media (max-width: 575px) {
   .u-footer .u-sheet-1 {
-    min-height: 36px;
+    min-height: 194px;
+  }
+
+  .u-footer .u-line-1 {
+    margin-top: 0;
   }
 
   .u-footer .u-text-1 {
