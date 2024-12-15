@@ -43,7 +43,6 @@
 .u-section-1 .u-list-1 {
   width: 533px;
   height: auto;
-  min-height: 523px;
   margin: 16px auto 0;
 }
 
@@ -636,34 +635,5 @@
   .u-section-1 .u-text-30 {
     margin-right: 0;
     margin-left: 0;
-  }
-}.u-section-2 .u-sheet-1 {
-  min-height: 186px;
-}
-
-.u-section-2 .u-line-1 {
-  width: 300px;
-  border-style: solid;
-  transform-origin: left center;
-  margin: 8px auto 0;
-}
-
-.u-section-2 .u-text-1 {
-  font-size: 1rem;
-  width: 410px;
-  margin: 10px auto 37px;
-}
-
-@media (max-width: 575px) {
-  .u-section-2 .u-sheet-1 {
-    min-height: 204px;
-  }
-
-  .u-section-2 .u-line-1 {
-    margin-top: 0;
-  }
-
-  .u-section-2 .u-text-1 {
-    width: 340px;
   }
 }
