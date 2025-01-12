@@ -43752,6 +43752,7 @@ a.u-link.u-text-hover-grey-90:hover {
         
         
         
+        
         --theme-sheet-width-xl: 941px;
         --theme-sheet-width-lg: 721px;
         --theme-sheet-width-md: 720px;
@@ -43875,6 +43876,7 @@ a.u-link.u-text-hover-grey-90:hover {
         {
         margin-top: 20px;
         margin-bottom: 20px;
+        line-height: 1.4;
         }
         blockquote
         {
@@ -44495,18 +44497,16 @@ a.u-link.u-text-hover-grey-90:hover {
 
 @media (max-width: 575px) {
   .u-footer .u-sheet-1 {
-    min-height: 215px;
+    min-height: 203px;
   }
 
   .u-footer .u-line-1 {
-    margin-top: 0;
+    margin-top: 10px;
   }
 
   .u-footer .u-text-1 {
     width: auto;
-    margin-top: 13px;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 18px 0 20px;
   }
 }
 
