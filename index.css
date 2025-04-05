@@ -46,7 +46,7 @@
 
 .u-section-1 .u-social-icons-1 {
   min-height: 16px;
-  width: 323px;
+  width: 375px;
   min-width: 132px;
   height: 54px;
   margin: 0 auto;
@@ -92,6 +92,10 @@
   .u-section-1 .u-layout-wrap-1 {
     margin-top: 13px;
     margin-left: 94px;
+  }
+
+  .u-section-1 .u-social-icons-1 {
+    width: 358px;
   }
 
   .u-section-1 .u-custom-html-1 {
