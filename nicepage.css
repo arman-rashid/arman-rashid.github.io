@@ -46208,7 +46208,11 @@ a.u-link.u-text-hover-color-var:hover {
 }
 @media (max-width: 767px) {
   .u-footer .u-sheet-1 {
-    min-height: 57px;
+    min-height: 182px;
+  }
+
+  .u-footer .u-text-1 {
+    margin-top: 12px;
   }
 }
 @media (max-width: 575px) {
