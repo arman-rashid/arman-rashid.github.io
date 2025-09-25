@@ -1819,8 +1819,8 @@
   width: 725px;
   min-height: 218px;
   height: auto;
-  --animation-custom_in-translate_x: 300px;
-  --animation-custom_in-translate_y: 0px;
+  --animation-custom_in-translate_x: 0px;
+  --animation-custom_in-translate_y: 300px;
   --animation-custom_in-opacity: 0;
   --animation-custom_in-rotate: 0deg;
   --animation-custom_in-scale: 1;
@@ -3152,7 +3152,6 @@
 
   .u-section-7 .u-list-1 {
     margin-top: 20px;
-    margin-bottom: initial;
   }
 
   .u-section-7 .u-repeater-1 {
