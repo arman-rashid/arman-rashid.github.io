@@ -22453,6 +22453,7 @@ a.pswp__share--download:hover {
 .u-btn .u-icon,
 .u-table-cell .u-icon,
 .u-tab-link .u-icon,
+.u-nav-link .u-icon,
 .u-accordion-link-text .u-icon {
   position: relative;
   display: inline;
@@ -22466,6 +22467,7 @@ a.pswp__share--download:hover {
 .u-btn .u-icon.u-file-icon > img[src],
 .u-table-cell .u-icon.u-file-icon > img[src],
 .u-tab-link .u-icon.u-file-icon > img[src],
+.u-nav-link .u-icon.u-file-icon > img[src],
 .u-accordion-link-text .u-icon.u-file-icon > img[src] {
   display: inline-block;
   height: 1em;
@@ -22473,11 +22475,12 @@ a.pswp__share--download:hover {
   line-height: 1;
   vertical-align: -0.15em;
 }
-.u-text .u-icon > svg,
-.u-btn .u-icon > svg,
-.u-table-cell .u-icon > svg,
-.u-tab-link .u-icon > svg,
-.u-accordion-link-text .u-icon > svg {
+.u-text .u-icon > svg:not(.u-svg-content),
+.u-btn .u-icon > svg:not(.u-svg-content),
+.u-table-cell .u-icon > svg:not(.u-svg-content),
+.u-tab-link .u-icon > svg:not(.u-svg-content),
+.u-nav-link .u-icon > svg:not(.u-svg-content),
+.u-accordion-link-text .u-icon > svg:not(.u-svg-content) {
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -22488,6 +22491,7 @@ a.pswp__share--download:hover {
 .u-btn .u-icon > svg + img,
 .u-table-cell .u-icon > svg + img,
 .u-tab-link .u-icon > svg + img,
+.u-nav-link .u-icon > svg + img,
 .u-accordion-link-text .u-icon > svg + img {
   position: absolute !important;
   left: calc(50% - 0.5em) !important;
@@ -22782,6 +22786,9 @@ a.pswp__share--download:hover {
   position: relative;
   display: block;
   cursor: pointer;
+}
+.u-product-variant-colors-circle.active {
+  border-width: 2px;
 }
 .u-rotation-parent > * {
   position: absolute;
