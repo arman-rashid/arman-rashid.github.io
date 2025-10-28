@@ -1180,7 +1180,7 @@
   }
 
   .u-section-3 .u-list-1 {
-    margin-top: 0;
+    margin-bottom: initial;
   }
 
   .u-section-3 .u-text-2 {
@@ -1270,7 +1270,7 @@
   }
 
   .u-section-3 .u-list-1 {
-    margin-top: 20px;
+    margin-bottom: 0;
   }
 
   .u-section-3 .u-text-2 {
