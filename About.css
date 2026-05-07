@@ -1179,10 +1179,6 @@
     width: 720px;
   }
 
-  .u-section-3 .u-list-1 {
-    margin-bottom: initial;
-  }
-
   .u-section-3 .u-text-2 {
     margin-left: 161px;
   }
@@ -1267,10 +1263,6 @@
 @media (max-width: 767px) {
   .u-section-3 .u-line-1 {
     width: 540px;
-  }
-
-  .u-section-3 .u-list-1 {
-    margin-bottom: 0;
   }
 
   .u-section-3 .u-text-2 {
