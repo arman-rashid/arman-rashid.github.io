@@ -524,41 +524,49 @@
             gap: 8px;
             background: #f5c842;
             color: #0a0a0a;
-            font-weight: 600;
-            font-size: 0.95rem;
-            padding: 14px 34px;
+            font-weight: 700;
+            font-size: 1.02rem;
+            letter-spacing: 0.2px;
+            padding: 17px 38px;
             border-radius: 60px;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
             cursor: pointer;
             transition: 0.3s ease;
-            box-shadow: 0 0 30px rgba(245, 200, 66, 0.15);
+            box-shadow: 0 4px 14px rgba(245, 200, 66, 0.25), 0 0 40px rgba(245, 200, 66, 0.18);
             text-decoration: none;
         }
         .btn-primary:hover {
             background: #ffdf7e;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(245, 200, 66, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 44px rgba(245, 200, 66, 0.4);
             color: #0a0a0a;
+        }
+        .btn-primary:active {
+            transform: translateY(-1px);
         }
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 14px 34px;
+            font-weight: 600;
+            font-size: 1.02rem;
+            padding: 17px 38px;
             border-radius: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
             cursor: pointer;
             transition: 0.3s ease;
             text-decoration: none;
         }
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(245, 200, 66, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+        .btn-secondary:active {
+            transform: translateY(-1px);
         }
         .hero-image {
             display: flex;
@@ -571,8 +579,8 @@
         }
         .hero-image .profile-ring {
             position: relative;
-            width: 340px;
-            height: 340px;
+            width: 420px;
+            height: 420px;
             border-radius: 24px;
             background: radial-gradient(circle at 30% 30%, rgba(245, 200, 66, 0.08), transparent 70%);
             padding: 8px;
@@ -1284,8 +1292,8 @@
                 gap: 40px;
             }
             .hero-image .profile-ring {
-                width: 280px;
-                height: 280px;
+                width: 340px;
+                height: 340px;
             }
         }
         @media (max-width: 820px) {
@@ -1299,8 +1307,8 @@
                 justify-content: center;
             }
             .hero-image .profile-ring {
-                width: 220px;
-                height: 220px;
+                width: 280px;
+                height: 280px;
             }
             .about-grid,
             .contact-wrap {
@@ -1367,6 +1375,35 @@
                 min-width: 220px;
                 flex: 0 0 220px;
             }
+            .hero-image .profile-ring {
+                width: 240px;
+                height: 240px;
+            }
+        }
+
+        /* === MOBILE PERFORMANCE: lighter blur, fixed nav is the biggest repaint cost on scroll === */
+        @media (max-width: 820px) {
+            .navbar {
+                backdrop-filter: blur(8px) saturate(140%);
+                -webkit-backdrop-filter: blur(8px) saturate(140%);
+            }
+            .glass-card,
+            .glass-card-strong,
+            .glass-card-light {
+                backdrop-filter: blur(6px) saturate(110%);
+                -webkit-backdrop-filter: blur(6px) saturate(110%);
+            }
+            .glass-card:hover,
+            .glass-card-strong:hover {
+                transform: none;
+            }
+        }
+        @media (max-width: 820px) and (pointer: coarse) {
+            .glass-card::before,
+            .glass-card-strong::before,
+            .glass-card-light::before {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1426,7 +1463,7 @@
             </div>
             <div class="hero-image">
                 <div class="profile-ring">
-                    <img src="images/IMG2026050517082861.jpg" alt="Umar Rashid" />
+                    <img src="images/IMG2026050517082861.jpg" alt="Umar Rashid" fetchpriority="high" decoding="async" />
                     <span class="floating-dot"></span>
                     <span class="floating-dot"></span>
                     <span class="floating-dot"></span>
@@ -1485,27 +1522,27 @@
                         <h3 style="color:#fff; font-weight:600; margin-bottom:16px;">Education</h3>
                         <div class="edu-timeline">
                             <div class="edu-item">
-                                <img class="edu-logo" src="images/zyro-image.png" alt="school" />
+                                <img loading="lazy" decoding="async" class="edu-logo" src="images/zyro-image.png" alt="school" />
                                 <span class="year">Secondary</span>
                                 <div class="detail"><h4>Distinction</h4><p>J&K State Board of School Education, Srinagar</p></div>
                             </div>
                             <div class="edu-item">
-                                <img class="edu-logo" src="images/University_of_Kashmir_logo.png" alt="university" />
+                                <img loading="lazy" decoding="async" class="edu-logo" src="images/University_of_Kashmir_logo.png" alt="university" />
                                 <span class="year">Bachelors</span>
                                 <div class="detail"><h4>1st position at college level</h4><p>B.Sc in Chemistry, Zoology, Botany · University of Kashmir</p></div>
                             </div>
                             <div class="edu-item">
-                                <img class="edu-logo" src="images/University_of_Kashmir_logo.png" alt="university" />
+                                <img loading="lazy" decoding="async" class="edu-logo" src="images/University_of_Kashmir_logo.png" alt="university" />
                                 <span class="year">Masters</span>
                                 <div class="detail"><h4>Gold Medalist</h4><p>M.Sc. Chemistry · University of Kashmir</p></div>
                             </div>
                             <div class="edu-item">
-                                <img class="edu-logo" src="images/IISc_Master_Seal.png" alt="iisc" />
+                                <img loading="lazy" decoding="async" class="edu-logo" src="images/IISc_Master_Seal.png" alt="iisc" />
                                 <span class="year">Ph.D</span>
                                 <div class="detail"><h4>Inorganic &amp; Physical Chemistry</h4><p>Indian Institute of Science (IISc.), Bangalore</p></div>
                             </div>
                             <div class="edu-item">
-                                <img class="edu-logo" src="images/Logo_KIT.svg.png" alt="kit" />
+                                <img loading="lazy" decoding="async" class="edu-logo" src="images/Logo_KIT.svg.png" alt="kit" />
                                 <span class="year">Employment</span>
                                 <div class="detail"><h4>Research Fellow</h4><p>Physics Institute (PHI) · IQMT · Karlsruhe Institute of Technology</p></div>
                             </div>
@@ -1523,7 +1560,7 @@
             <h2 class="section-title reveal">Exploring Quantum Transport at <span class="highlight">Nanoscale</span></h2>
             <div class="glass-card-strong reveal">
                 <div class="research-overview-grid">
-                    <img src="images/1.4pp.png" alt="Nanoscale Molecular Junctions" />
+                    <img loading="lazy" decoding="async" src="images/1.4pp.png" alt="Nanoscale Molecular Junctions" />
                     <div>
                         <h3 style="color:#fff; font-weight:600; margin-bottom:12px; font-size:1.4rem;">Nanoscale Molecular Junctions – An Electrochemical Approach</h3>
                         <p style="color:#cbc7c0; font-size:1rem; margin-bottom:16px;">
@@ -1556,21 +1593,21 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/EGaIn1.jpg" alt="EGaIn Setup" />
+                            <img loading="lazy" decoding="async" src="images/EGaIn1.jpg" alt="EGaIn Setup" />
                             <div>
                                 <p><strong>Large area based molecular junction setup / EGaIn Setup</strong><br />
                                     This setup is capable of measurement of picoamp electrical current generated upon applying potential (Conductance) or temperature gradient (Thermopower) across the top EGaIn and bottom flat metal Electrode (Template stripped Au, Ag).</p>
                             </div>
                         </div>
                         <div class="accordion-body-inner">
-                            <img src="images/View1.jpg" alt="MCBJ Setup" />
+                            <img loading="lazy" decoding="async" src="images/View1.jpg" alt="MCBJ Setup" />
                             <div>
                                 <p><strong>Mechanically controlled break junction setup</strong><br />
                                     Capable of measuring femtoamp current across single metal|molecule|metal junctions. Inbuilt piezo and bipotentiostatic configuration. Owing to the open design, effect of external stimuli on molecular conductance are also studied using this setup.</p>
                             </div>
                         </div>
                         <div class="accordion-body-inner">
-                            <img src="images/Assembly.png" alt="STM-BJ Setup" />
+                            <img loading="lazy" decoding="async" src="images/Assembly.png" alt="STM-BJ Setup" />
                             <div>
                                 <p><strong>Scanning tunneling Microscope-Break junction</strong><br />
                                     Similar to MCBJ due to formation of single molecular junctions. However junctions are created vertically between top metal electrode and bottom flat electrode. This architecture allows heating of bottom electrode to measure thermopower and spin dependent charge transport studies.</p>
@@ -1587,7 +1624,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/EGAIN.jpg" alt="EGaIn Setup" />
+                            <img loading="lazy" decoding="async" src="images/EGAIN.jpg" alt="EGaIn Setup" />
                             <div>
                                 <p><strong>Studying electron transport through self assembled monolayers using EGaIn as top electrode and template stripped metal as bottom electrode</strong><br />
                                     will allow us to characterize the effect of length of molecule, intra and inter molecular interactions, metal molecular interaction, effect of change of metal electrodes on the transport properties of molecular monolayers. Effect of external conditions like humidity, presence of other gases, light are also explored.</p>
@@ -1604,7 +1641,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/egain5.jpg" alt="Thermopower Setup" />
+                            <img loading="lazy" decoding="async" src="images/egain5.jpg" alt="Thermopower Setup" />
                             <div>
                                 <p><strong>Studying thermopower generated across Self assembled molecular monolayers using EGaIn setup</strong><br />
                                     After IV/Conductance characterization of target molecule Self assembled monolayer based molecular junctions, the next logical step is to measure the thermopower generated upon application of external temperature gradient, since thermopower studies can reveal more information concerning the mechanism of charge transport through the molecular system like type of majority carriers, HOMO or LUMO mediated charge transport etc.</p>
@@ -1621,7 +1658,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/Picture1.png" alt="MCBJ/STM" />
+                            <img loading="lazy" decoding="async" src="images/Picture1.png" alt="MCBJ/STM" />
                             <div>
                                 <p><strong>Electron transport study across single molecules using MCBJ and STM setup: Effect of molecular architecture and external stimuli</strong><br />
                                     Going further at single molecular level, the electronic transport studies using MCBJ and STM setups will be used to give insight to the effect of molecular architecture on the transport properties of single molecules. These studies will unveil the Quantum interference effects of electronics waves through molecular orbital. These studies will give further insight on how atomic-detailed nano-scaled structural modification in molecules can affect the performance, energy consumption and longevity of molecular-scale devices.</p>
@@ -1638,7 +1675,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/untitled1.png" alt="AI/ML" />
+                            <img loading="lazy" decoding="async" src="images/untitled1.png" alt="AI/ML" />
                             <div>
                                 <p><strong>Applying Artificial intelligence and Machine learning to Molecular electronics</strong><br />
                                     Statistical analysis of the molecular conductance or thermopower data gives the population property of the system. However, as the molecular junctions are dynamic and every time a new junction geometry is formed. Depending upon the molecular system a particular anchoring chemistry might not always be probable. However all these properties can't be extracted by the statistical analysis of molecular electronics data. Machine learning can extract every possible bit of information by analyzing each of the molecular trace individuals. I am using Principle component analysis, K-means++, GAL, and T-SNE machine learning tools to cluster the data into groups having similar features. Each group has similar properties like a group of molecular conductance traces with high conductance or a group with low conductance or just a group of tunneling traces where no molecule was trapped.</p>
@@ -1655,7 +1692,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/Picture9.jpg" alt="Reaction dynamics" />
+                            <img loading="lazy" decoding="async" src="images/Picture9.jpg" alt="Reaction dynamics" />
                             <div>
                                 <p><strong>Studying and modulating Reaction dynamic at single molecular level in realtime</strong><br />
                                     Real time conductance measurement with reactants attached to electrodes should guide us towards the electronic property of intermediates involved. Using break junction techniques to mechanically stretch a electrically connected molecule forcing it to isomerise to a stable form. The isomerisation is followed in real-time using conductance measurements opening a new era of single molecule mechanochemistry. Measuring conductance at high sampling rate allows us to probe reaction intermediates and metastable states as well.</p>
@@ -1672,7 +1709,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/Screenshot2024-10-01130433.png" alt="Flicker noise" />
+                            <img loading="lazy" decoding="async" src="images/Screenshot2024-10-01130433.png" alt="Flicker noise" />
                             <div>
                                 <p><strong>Quantifying the 1/f noise in molecular junctions: Flicker noise power measurements</strong><br />
                                     Flicker noise or pink noise arise in molecular junctions due to the rearrangement of atom in connecting electrodes as the junction is evolving by pulling the electrodes apart. Flicker noise can differentiate between through bond or through space tunneling mechanism and becomes an efficient tool to detect molecular stacking conductance plateau in single molecule conductance measurements. Using flicker noise as a probe, the coupling strength of different anchoring groups can be evaluated which is necessary to design stable molecular junctions with improved junction lifetimes.</p>
@@ -1689,7 +1726,7 @@
                     </div>
                     <div class="accordion-body">
                         <div class="accordion-body-inner">
-                            <img src="images/STM2.jpg" alt="STM Thermopower" />
+                            <img loading="lazy" decoding="async" src="images/STM2.jpg" alt="STM Thermopower" />
                             <div>
                                 <p><strong>Study of Thermopower generated across single molecules using STM setup: Paving the way for highly efficient, renewable energy</strong><br />
                                     This work will offer an unprecedented opportunity to contribute to the existing knowledge of efficiently harnessing solar and thermal energy. The study of heat transport of different metals, and molecular junctions is a fundamental scientific and technological step forward in managing and controlling heat dissipation at the nanoscale electronics.</p>
@@ -1772,31 +1809,31 @@
             <div class="news-carousel">
                 <div class="news-track" id="newsTrack">
                     <div class="news-item glass-card-light">
-                        <img src="images/anie202513806-gra-0001-m.jpg" alt="Publication" />
+                        <img loading="lazy" decoding="async" src="images/anie202513806-gra-0001-m.jpg" alt="Publication" />
                         <h6>NEW PUBLICATION</h6>
                         <p>Quantum Interference Effect in Saturated Systems: Bipiperidines &amp; Dithiocarbamates</p>
                         <div class="news-date">Angew. Chem. Int. Ed. 2025</div>
                     </div>
                     <div class="news-item glass-card-light">
-                        <img src="images/Logo_KIT.svg.png" alt="KIT" />
+                        <img loading="lazy" decoding="async" src="images/Logo_KIT.svg.png" alt="KIT" />
                         <h6>New Position</h6>
                         <p>Joined Physikalisches Institut (PHI), IQMT, KIT</p>
                         <div class="news-date">01-Aug-2025</div>
                     </div>
                     <div class="news-item glass-card-light">
-                        <img src="images/IMG202506061236032.jpg" alt="Defense" />
+                        <img loading="lazy" decoding="async" src="images/IMG202506061236032.jpg" alt="Defense" />
                         <h6>Defended Doctoral Thesis</h6>
                         <p>Indian Institute of Science</p>
                         <div class="news-date">05-June-2025</div>
                     </div>
                     <div class="news-item glass-card-light">
-                        <img src="images/V4.png" alt="Publication" />
+                        <img loading="lazy" decoding="async" src="images/V4.png" alt="Publication" />
                         <h6>NEW PUBLICATION</h6>
                         <p>Mapping extended ground state reactivity of a photoswitchable molecule</p>
                         <div class="news-date">J. Am. Chem. Soc. 2024</div>
                     </div>
                     <div class="news-item glass-card-light">
-                        <img src="images/paper6.jpeg" alt="Publication" />
+                        <img loading="lazy" decoding="async" src="images/paper6.jpeg" alt="Publication" />
                         <h6>NEW PUBLICATION</h6>
                         <p>Au–Thiol Interface through the Lens of Flicker Noise</p>
                         <div class="news-date">J. Am. Chem. Soc. 2024</div>
@@ -1818,7 +1855,7 @@
             <div class="pub-grid">
 
                 <div class="pub-item glass-card-light reveal reveal-delay-1">
-                    <img class="pub-img" src="images/images_large_ja6c05830_0006.jpeg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/images_large_ja6c05830_0006.jpeg" alt="cover" />
                     <div class="pub-info">
                         <h4>Oriented Electric Field‑Driven Cis‑Azobenzene Selective Diborylation Reaction</h4>
                         <div class="authors">Sreelakshmi PA, Mondal RR, Rask L, Leitherer S, Obel OB, <span class="gold">U. Rashid</span>, Hamill JM, Mikkelsen KV, Geetharani K, Kaliginedi V</div>
@@ -1828,7 +1865,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-2">
-                    <img class="pub-img" src="images/anie202513806-gra-0001-m.jpg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/anie202513806-gra-0001-m.jpg" alt="cover" />
                     <div class="pub-info">
                         <h4>Quantum Interference in Saturated Systems: Bipiperidines &amp; Dithiocarbamates</h4>
                         <div class="authors"><span class="gold">U. Rashid</span>, Daaoub AHS, Sreelakshmi PA, Sangtarash S, Sadeghi H, Kaliginedi V</div>
@@ -1838,7 +1875,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-3">
-                    <img class="pub-img" src="images/V4.png" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/V4.png" alt="cover" />
                     <div class="pub-info">
                         <h4>Mapping Extended Ground‑State Reactivity of a Photoswitchable Molecule</h4>
                         <div class="authors"><span class="gold">U. Rashid</span>, Sandonas LM, Chatir E, Ziani Z, Sreelakshmi PA, Cobo S, Gutierrez R, Cuniberti G, Kaliginedi V</div>
@@ -1848,7 +1885,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-4">
-                    <img class="pub-img" src="images/images_large_ja4c12423_0008.jpeg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/images_large_ja4c12423_0008.jpeg" alt="cover" />
                     <div class="pub-info">
                         <h4>Electric Field‑Induced Prototropic Tautomerism in Enzyme‑like Nanopocket</h4>
                         <div class="authors">Sreelakshmi PA, Mahashaya R, Leitherer S, <span class="gold">U. Rashid</span>, Hamill JM, Nair M, Rajamalli P, Kaliginedi V</div>
@@ -1858,7 +1895,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal">
-                    <img class="pub-img" src="images/paper6.jpeg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper6.jpeg" alt="cover" />
                     <div class="pub-info">
                         <h4>Au–Thiol Interface Chemistry via Single‑Molecule Flicker Noise</h4>
                         <div class="authors"><span class="gold">U. Rashid</span>, Bro‑Jørgensen W, Harilal KB, Sreelakshmi PA, Mondal RR, Pisharam VC, Parida KN, Geetharani K, Hamill JM, Kaliginedi V</div>
@@ -1868,7 +1905,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-1">
-                    <img class="pub-img" src="images/paper5.jpg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper5.jpg" alt="cover" />
                     <div class="pub-info">
                         <h4>Dithienylethene‑Based Single Molecular Photothermal Actuator</h4>
                         <div class="authors"><span class="gold">U. Rashid</span>, Chatir E, Sandonas LM, Sreelakshmi PA, Dianat A, Gutierrez R, Cuniberti G, Cobo S, Kaliginedi V</div>
@@ -1878,7 +1915,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-2">
-                    <img class="pub-img" src="images/paper4.png" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper4.png" alt="cover" />
                     <div class="pub-info">
                         <h4>Extraordinary Electrical Conductance of Non‑conducting Polymers</h4>
                         <div class="authors">Kumar S, Biswas S, <span class="gold">U. Rashid</span>, Mony KS, Vergauwe RMA, Kaliginedi V, Thomas A</div>
@@ -1888,7 +1925,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-3">
-                    <img class="pub-img" src="images/paper3.png" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper3.png" alt="cover" />
                     <div class="pub-info">
                         <h4>One‑class Classification for Single‑molecule Transport Studies</h4>
                         <div class="authors">Bro‑Jørgensen W, Hamill JM, Mezei G, Lawson B, <span class="gold">U. Rashid</span>, Halbritter A, Kamenetska M, Kaliginedi V, Solomon GC</div>
@@ -1898,7 +1935,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal reveal-delay-4">
-                    <img class="pub-img" src="images/paper2.jpg" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper2.jpg" alt="cover" />
                     <div class="pub-info">
                         <h4>Modulating charge transport via electrochemical gating</h4>
                         <div class="authors">Akhtar A, <span class="gold">U. Rashid</span> (co-first), Seth C, Kumar S, Broekmann P, Kaliginedi V</div>
@@ -1908,7 +1945,7 @@
                 </div>
 
                 <div class="pub-item glass-card-light reveal">
-                    <img class="pub-img" src="images/paper1.png" alt="cover" />
+                    <img loading="lazy" decoding="async" class="pub-img" src="images/paper1.png" alt="cover" />
                     <div class="pub-info">
                         <h4>Imidazolium Based Surface Active Ionic Liquids for Quercetin</h4>
                         <div class="authors">Butt FA, Bhat MM, <span class="gold">U. Rashid</span>, Lone IA, Bhat PA, Bhat SA, Rather MA, Rather GM, Bhat MA</div>
@@ -2001,15 +2038,72 @@
                         </p>
                     </div>
                 </div>
-                <form class="contact-form reveal reveal-delay-2 glass-card-strong" style="padding:32px;" action="https://service.nicepagesrv.com/form/v4/form-process" method="POST">
+                <form class="contact-form reveal reveal-delay-2 glass-card-strong" id="contactForm" style="padding:32px;">
+                    <!-- Get a free access key (no account needed) at https://web3forms.com by entering umarorarman@gmail.com, then paste it below -->
+                    <input type="hidden" name="access_key" value="bf17f117-8672-41e4-bcc0-71cfd4219d21" />
+                    <input type="hidden" name="subject" value="New message from your website" />
+                    <!-- honeypot spam trap, keep hidden -->
+                    <input type="checkbox" name="botcheck" style="display:none;" tabindex="-1" autocomplete="off" />
+
                     <input type="text" name="name" placeholder="Your name" required />
                     <input type="email" name="email" placeholder="Email address" required />
                     <textarea name="message" placeholder="Your message…" required></textarea>
-                    <button type="submit" class="btn-primary">Send message →</button>
+                    <button type="submit" class="btn-primary" id="contactSubmitBtn">Send message →</button>
+                    <p id="contactFormStatus" style="margin-top:14px; font-size:0.9rem; display:none;"></p>
                 </form>
             </div>
         </div>
     </section>
+
+    <script>
+        // ===== CONTACT FORM (Web3Forms) =====
+        (function contactForm() {
+            const form = document.getElementById('contactForm');
+            if (!form) return;
+            const btn = document.getElementById('contactSubmitBtn');
+            const status = document.getElementById('contactFormStatus');
+            const btnDefaultText = btn.textContent;
+
+            function showStatus(message, ok) {
+                status.style.display = 'block';
+                status.textContent = message;
+                status.style.color = ok ? '#8fe08f' : '#f28b82';
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const accessKey = form.access_key.value.trim();
+                if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY_HERE') {
+                    showStatus('Form isn\'t set up yet — add a Web3Forms access key in the HTML. Meanwhile, email umar.rashid@kit.edu directly.', false);
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = 'Sending…';
+                status.style.display = 'none';
+
+                try {
+                    const res = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showStatus('Thanks — your message has been sent! I\'ll get back to you soon.', true);
+                        form.reset();
+                    } else {
+                        showStatus('Something went wrong sending your message. Please email umar.rashid@kit.edu directly.', false);
+                    }
+                } catch (err) {
+                    showStatus('Network error — please email umar.rashid@kit.edu directly.', false);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = btnDefaultText;
+                }
+            });
+        })();
+    </script>
 
     <!-- ===== FOOTER ===== -->
     <footer>
@@ -2036,15 +2130,29 @@
             const ctx = canvas.getContext('2d');
             let w, h;
             const nodes = [];
-            const COUNT = 75;
-            const MAX_DIST = 160;
+
+            // Mobile/touch devices get far fewer nodes and no glow, since the
+            // O(n^2) edge pass + shadowBlur is the main source of scroll jank there.
+            const isSmallOrTouch = window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const COUNT = isSmallOrTouch ? 24 : 75;
+            const MAX_DIST = isSmallOrTouch ? 110 : 160;
+            const USE_GLOW = !isSmallOrTouch;
 
             function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
+                const dpr = Math.min(window.devicePixelRatio || 1, isSmallOrTouch ? 1.5 : 2);
+                w = window.innerWidth;
+                h = window.innerHeight;
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                canvas.style.width = w + 'px';
+                canvas.style.height = h + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
             window.addEventListener('resize', resize);
             resize();
+
+            if (prefersReducedMotion) return;
 
             class Node {
                 constructor() {
@@ -2076,10 +2184,12 @@
                     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                     ctx.fillStyle = `rgba(245, 200, 66, 0.9)`;
                     ctx.fill();
-                    ctx.shadowColor = 'rgba(245, 200, 66, 0.3)';
-                    ctx.shadowBlur = 8;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
+                    if (USE_GLOW) {
+                        ctx.shadowColor = 'rgba(245, 200, 66, 0.3)';
+                        ctx.shadowBlur = 8;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
                 }
             }
 
@@ -2102,8 +2212,10 @@
                                 ctx.lineTo(nodes[j].x, nodes[j].y);
                                 ctx.strokeStyle = `rgba(245, 200, 66, ${opacity})`;
                                 ctx.lineWidth = 1.2 + 0.8 * (1 - dist / MAX_DIST);
-                                ctx.shadowColor = `rgba(245, 200, 66, ${opacity * 0.3})`;
-                                ctx.shadowBlur = 6;
+                                if (USE_GLOW) {
+                                    ctx.shadowColor = `rgba(245, 200, 66, ${opacity * 0.3})`;
+                                    ctx.shadowBlur = 6;
+                                }
                                 ctx.stroke();
                                 ctx.shadowBlur = 0;
                             }
@@ -2112,13 +2224,22 @@
                 }
             }
 
+            let rafId = null;
             function animate() {
                 ctx.clearRect(0, 0, w, h);
                 nodes.forEach(node => { node.update(); });
                 drawEdges();
                 nodes.forEach(node => { node.draw(); });
-                requestAnimationFrame(animate);
+                rafId = requestAnimationFrame(animate);
             }
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = null;
+                } else if (!rafId) {
+                    animate();
+                }
+            });
             animate();
         })();
 
