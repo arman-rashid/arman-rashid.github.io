@@ -396,7 +396,7 @@
         section {
             position: relative;
             z-index: 2;
-            padding: 60px 0 80px;
+            padding: 100px 0 80px;
         }
         .section-label {
             display: inline-block;
@@ -453,6 +453,7 @@
             display: flex;
             align-items: center;
             padding-top: 80px;
+            padding-bottom: 40px;
             overflow: hidden;
             position: relative;
         }
@@ -609,6 +610,16 @@
             transform: scale(0.92);
             animation: scaleFade 1.2s ease forwards 0.4s;
             position: relative;
+        }
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.45) 0%, rgba(168, 85, 247, 0.28) 30%, rgba(236, 72, 153, 0.12) 55%, transparent 75%);
+            filter: blur(50px);
+            z-index: -1;
+            pointer-events: none;
         }
         .hero-image .profile-ring {
             position: relative;
@@ -972,8 +983,26 @@
             margin-top: 32px;
             border-radius: 24px;
         }
+        .quotes-slider::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 180%;
+            background: radial-gradient(ellipse, rgba(147, 51, 234, 0.18) 0%, rgba(236, 72, 153, 0.08) 45%, transparent 70%);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .quotes-track {
+            position: relative;
+            z-index: 1;
+        }
         .quotes-track {
             display: flex;
+            gap: 24px;
             transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .quote-slide {
@@ -1076,7 +1105,7 @@
         }
         .news-nav {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             gap: 12px;
             margin-top: 16px;
         }
@@ -1497,7 +1526,6 @@
                         <span class="hero-badge"><span class="gold">✦</span> Molecular Electronics</span>
                         <span class="hero-badge"><span class="gold">✦</span> Quantum Transport</span>
                         <span class="hero-badge"><span class="gold">✦</span> Nanoscale Junctions</span>
-			<span class="hero-badge"><span class="gold">✦</span> Plasmonics</span>
                     </div>
                     <div class="hero-actions">
                         <a href="#about" class="btn-primary">Explore my work →</a>
@@ -1524,7 +1552,7 @@
     </section>
 
     <!-- ===== ABOUT ===== -->
-    <section id="about" style="background: rgba(255,255,255,0.005);">
+    <section id="about" style="background: rgba(255,255,255,0.005); padding-top: 60px;">
         <div class="container">
             <span class="section-label reveal">About me</span>
             <h2 class="section-title reveal">Research &amp; <span class="highlight">Journey</span></h2>
@@ -2085,7 +2113,7 @@
                         </p>
                         <p style="color:#98948d; margin-top:16px;">
                             <span style="color:#fff;">📍</span> Physics Institute (PHI) · KIT<br />
-                            <span style="color:#fff;">📧</span> <a href="mailto:umar.rashid@kit.edu">umar.rashid@kit.edu</a>
+                            <span style="color:#fff;">📧</span> <a href="mailto:umarorarman@gmail.com">umarorarman@gmail.com</a>
                         </p>
                         <p style="color:#98948d; margin-top:8px;">
                             <span style="color:#fff;">🔗</span> <a href="https://www.phi.kit.edu/english/scientists_2430.php" target="_blank">PHI profile</a> ·
@@ -2146,7 +2174,7 @@
                     });
                     const data = await res.json();
                     if (data.success) {
-                        showStatus('Thanks — I have recieved your massge! I\'ll get back to you soon.', true);
+                        showStatus('Thanks — your message has been sent! I\'ll get back to you soon.', true);
                         form.reset();
                     } else {
                         showStatus('Something went wrong sending your message. Please email umarorrashid@gmail.com directly.', false);
@@ -2359,11 +2387,19 @@
             let current = 0;
             const total = dots.length;
 
+            function getStep() {
+                const firstSlide = track.querySelector('.quote-slide');
+                if (!firstSlide) return 0;
+                const style = window.getComputedStyle(track);
+                const gap = parseFloat(style.columnGap || style.gap) || 0;
+                return firstSlide.getBoundingClientRect().width + gap;
+            }
+
             function goTo(index) {
                 if (index < 0) index = total - 1;
                 if (index >= total) index = 0;
                 current = index;
-                track.style.transform = `translateX(-${current * 100}%)`;
+                track.style.transform = `translateX(-${current * getStep()}px)`;
                 dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
             }
 
@@ -2377,6 +2413,7 @@
             slider.addEventListener('mouseleave', () => {
                 interval = setInterval(() => goTo(current + 1), 5000);
             });
+            window.addEventListener('resize', () => goTo(current));
         })();
 
         // ===== NEWS CAROUSEL =====
@@ -2385,7 +2422,14 @@
             const prevBtn = document.getElementById('newsPrev');
             const nextBtn = document.getElementById('newsNext');
             let scrollPos = 0;
-            const itemWidth = 304;
+
+            function getStep() {
+                const firstItem = track.querySelector('.news-item');
+                if (!firstItem) return 304;
+                const style = window.getComputedStyle(track);
+                const gap = parseFloat(style.columnGap || style.gap) || 0;
+                return firstItem.getBoundingClientRect().width + gap;
+            }
 
             function getMaxScroll() {
                 const containerWidth = track.parentElement.offsetWidth;
@@ -2399,8 +2443,8 @@
                 track.style.transform = `translateX(-${scrollPos}px)`;
             }
 
-            nextBtn.addEventListener('click', () => scrollTo(scrollPos + itemWidth * 2));
-            prevBtn.addEventListener('click', () => scrollTo(scrollPos - itemWidth * 2));
+            nextBtn.addEventListener('click', () => scrollTo(scrollPos + getStep() * 2));
+            prevBtn.addEventListener('click', () => scrollTo(scrollPos - getStep() * 2));
 
             window.addEventListener('resize', () => {
                 scrollTo(scrollPos);
