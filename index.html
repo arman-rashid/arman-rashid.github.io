@@ -728,11 +728,14 @@
             color: #f5c842;
             font-weight: 500;
         }
+
+        /* — MORE GAP BEFORE SKILL PILLS — */
         .skill-pills {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin: 16px 0 20px;
+            margin: 28px 0 20px;
+            /* increased top margin from 16px → 28px */
         }
         .skill-pill {
             background: rgba(255, 255, 255, 0.04);
@@ -748,15 +751,17 @@
             color: #fff;
         }
 
-        /* --- FULL-WIDTH STATS --- */
+        /* --- FULL-WIDTH STATS — TIGHTER SPACING --- */
         .stats-fullwidth {
             width: 100vw;
             margin-left: calc(-50vw + 50%);
-            padding: 50px 24px;
+            padding: 20px 24px;
+            /* reduced from 50px → 20px */
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.03));
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            margin-top: 40px;
+            margin-top: 16px;
+            /* reduced from 40px → 16px */
         }
         .stats-fullwidth .container {
             max-width: 1400px;
@@ -828,7 +833,8 @@
         }
         @media (max-width: 820px) {
             .stats-fullwidth {
-                padding: 40px 16px;
+                padding: 24px 16px;
+                /* slightly reduced on mobile */
                 margin-left: 0;
                 width: 100%;
             }
@@ -839,14 +845,14 @@
             .stat-card .number {
                 font-size: 2.4rem;
             }
+            .stat-card {
+                padding: 20px 12px;
+            }
         }
         @media (max-width: 480px) {
             .about-stats {
                 grid-template-columns: 1fr 1fr;
                 gap: 12px;
-            }
-            .stat-card {
-                padding: 20px 12px;
             }
             .stat-card .number {
                 font-size: 2rem;
@@ -1466,6 +1472,10 @@
             .contact-wrap {
                 grid-template-columns: 1fr;
             }
+            /* reduce section padding on mobile for tighter feel */
+            section {
+                padding: 60px 0 40px;
+            }
             .nav-links {
                 position: fixed;
                 top: 0;
@@ -1614,7 +1624,7 @@
     </section>
 
     <!-- ===== ABOUT ===== -->
-    <section id="about" style="background: rgba(255,255,255,0.005); padding-top: 60px;">
+    <section id="about" style="background: rgba(255,255,255,0.005); padding-top: 60px; padding-bottom: 40px;">
         <div class="container">
             <span class="section-label reveal">About me</span>
             <h2 class="section-title reveal">Research &amp; <span class="highlight">Journey</span></h2>
@@ -1641,6 +1651,7 @@
                             Below, you can find more details about my academic journey and research interests.
                         </p>
                     </div>
+                    <!-- skill pills now have more top margin (28px) -->
                     <div class="skill-pills">
                         <span class="skill-pill">LabVIEW</span>
                         <span class="skill-pill">Python</span>
@@ -1654,7 +1665,6 @@
                         <span class="skill-pill">Ultra-high vacuum</span>
                         <span class="skill-pill">Scanning probe microscopy</span>
                     </div>
-                    <!-- stats moved to full-width section below -->
                 </div>
                 <div class="reveal reveal-delay-2">
                     <div class="glass-card-strong">
@@ -1691,7 +1701,7 @@
             </div>
         </div>
 
-        <!-- ===== FULL-WIDTH STATS ===== -->
+        <!-- ===== FULL-WIDTH STATS — now with tighter spacing ===== -->
         <div class="stats-fullwidth reveal">
             <div class="container">
                 <div class="about-stats">
