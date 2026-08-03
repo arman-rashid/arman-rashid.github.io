@@ -1,0 +1,6 @@
+{
+  "total_citations": NUMBER,
+  "citations_since_2021": NUMBER,
+  "h_index": NUMBER,
+  "i10_index": NUMBER
+}
