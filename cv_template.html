@@ -25,6 +25,7 @@
     font-family:'IBM Plex Sans',sans-serif;
     color:var(--ink);
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden; /* prevent horizontal scroll */
   }
   .page{
     max-width:920px;
@@ -33,11 +34,14 @@
     box-shadow:0 8px 40px rgba(0,0,0,0.18);
     display:grid;
     grid-template-columns:260px 1fr;
+    overflow:hidden; /* contain child overflow */
   }
   .sidebar{
     background:var(--ink);
     color:var(--paper);
     padding:40px 28px 40px;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
   }
   .photo-wrap{
     width:120px;height:120px;border-radius:50%;
@@ -79,7 +83,7 @@
   .contact-list a:hover{color:#d4af5a;border-color:#d4af5a;}
   .contact-list li{word-break:break-word;}
 
-  .edu-item{margin-bottom:14px;font-size:12px;line-height:1.55;}
+  .edu-item{margin-bottom:14px;font-size:12px;line-height:1.55;word-wrap:break-word;}
   .edu-year{
     font-family:'IBM Plex Mono',monospace;
     color:#d4af5a;font-size:11px;
@@ -99,7 +103,12 @@
     background:var(--teal);border-radius:50%;
   }
 
-  .main{padding:44px 46px 50px;}
+  .main{
+    padding:44px 46px 50px;
+    min-width:0; /* allow flexbox to shrink */
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+  }
   .kicker{
     font-family:'IBM Plex Mono',monospace;
     font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
@@ -117,12 +126,21 @@
   .trace{width:100%;height:22px;margin:0 0 26px;display:block;}
   .trace path{fill:none;stroke:var(--rule);stroke-width:1.4;}
 
-  .lede{font-size:13.5px;line-height:1.75;color:var(--ink-soft);}
+  .lede{font-size:13.5px;line-height:1.75;color:var(--ink-soft);word-wrap:break-word;}
   .lede strong{color:var(--ink);}
 
-  .statrow{display:flex;gap:0;margin-top:20px;border-top:1px solid var(--rule);}
+  .statrow{
+    display:flex;
+    flex-wrap:wrap; /* allow wrapping if too many */
+    gap:0;
+    margin-top:20px;
+    border-top:1px solid var(--rule);
+  }
   .statrow div{
-    flex:1;padding:14px 4px 0;text-align:center;
+    flex:1 1 0; /* allow shrinking */
+    min-width:60px;
+    padding:14px 4px 0;
+    text-align:center;
     border-right:1px solid var(--rule);
   }
   .statrow div:last-child{border-right:none;}
@@ -132,7 +150,7 @@
   }
   .statrow div{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);}
 
-  .expertise p{font-size:13px;line-height:1.75;color:var(--ink-soft);margin:0;}
+  .expertise p{font-size:13px;line-height:1.75;color:var(--ink-soft);margin:0;word-wrap:break-word;}
 
   .current-pos{
     background:var(--teal-soft);
@@ -141,6 +159,7 @@
     font-size:13px;
     color:var(--ink);
     margin-bottom:6px;
+    word-wrap:break-word;
   }
   .current-pos b{color:var(--teal);}
 
@@ -151,6 +170,7 @@
     border-bottom:1px solid var(--rule);
     font-size:12.8px;line-height:1.55;
     position:relative;color:var(--ink-soft);
+    word-wrap:break-word;
   }
   .awards li:last-child{border-bottom:none;}
   .awards li::before{
@@ -173,12 +193,13 @@
     font-family:'IBM Plex Mono',monospace;
     color:var(--copper);font-size:12px;padding-top:1px;
   }
-  .pub-title{color:var(--ink);font-weight:600;margin-bottom:3px;}
-  .pub-authors{color:var(--ink-soft);}
+  .pub-title{color:var(--ink);font-weight:600;margin-bottom:3px;word-wrap:break-word;}
+  .pub-authors{color:var(--ink-soft);word-wrap:break-word;}
   .pub-authors b{color:var(--ink);font-weight:600;}
   .pub-venue{
     font-family:'IBM Plex Mono',monospace;
     font-size:11.3px;color:var(--teal);margin-top:3px;
+    word-wrap:break-word;
   }
   .pub-flag{
     display:inline-block;margin-top:4px;font-size:10.5px;
@@ -196,7 +217,7 @@
     color:var(--teal);margin:0 0 8px;
   }
   .skillgrid ul{list-style:none;margin:0 0 18px;padding:0;}
-  .skillgrid li{padding-left:12px;position:relative;margin-bottom:5px;}
+  .skillgrid li{padding-left:12px;position:relative;margin-bottom:5px;word-wrap:break-word;}
   .skillgrid li::before{content:"—";position:absolute;left:0;color:var(--rule);}
 
   @media print{
@@ -206,6 +227,15 @@
   @media (max-width:760px){
     .page{grid-template-columns:1fr;}
     .skillgrid{grid-template-columns:1fr;}
+    .main{padding:24px 16px;}
+    .sidebar{padding:24px 16px;}
+    .statrow div{
+      flex-basis:50%;
+      border-bottom:1px solid var(--rule);
+    }
+    .statrow div:nth-child(even){border-right:none;}
+    .statrow div:nth-child(odd){border-right:1px solid var(--rule);}
+    .statrow div:nth-last-child(-n+2){border-bottom:none;}
   }
 </style>
 </head>
