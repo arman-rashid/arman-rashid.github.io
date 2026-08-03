@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Umar Rashid — Curriculum Vitae</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2f4f7;
+    --ink:#10141f;
+    --ink-soft:#4a5266;
+    --rule:#d9dde5;
+    --copper:#b8902f;
+    --teal:#2f6f94;
+    --teal-soft:#e4eef4;
+    --copper-soft:#f4ecd8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#dde3e8;
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:920px;
+    margin:32px auto;
+    background:var(--paper);
+    box-shadow:0 8px 40px rgba(0,0,0,0.18);
+    display:grid;
+    grid-template-columns:260px 1fr;
+  }
+  .sidebar{
+    background:var(--ink);
+    color:var(--paper);
+    padding:40px 28px 40px;
+  }
+  .photo-wrap{
+    width:120px;height:120px;border-radius:50%;
+    overflow:hidden;margin:0 auto 22px;
+    border:2px solid var(--copper);
+    box-shadow:0 0 0 5px rgba(161,85,46,0.18);
+  }
+  .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+  .name{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:26px;
+    text-align:center;
+    line-height:1.15;
+    margin:0 0 4px;
+  }
+  .role{
+    text-align:center;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#d4af5a;
+    font-weight:500;
+    margin:0 0 26px;
+  }
+  .side-block{margin-bottom:26px;}
+  .side-h{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:#7f97a8;
+    margin:0 0 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .side-h::after{content:"";flex:1;height:1px;background:#2a3242;}
+  .contact-list{list-style:none;margin:0;padding:0;font-size:12.5px;line-height:1.9;color:#c9cfdb;}
+  .contact-list a{color:#c9cfdb;text-decoration:none;border-bottom:1px dotted #556077;}
+  .contact-list a:hover{color:#d4af5a;border-color:#d4af5a;}
+  .contact-list li{word-break:break-word;}
+
+  .edu-item{margin-bottom:14px;font-size:12px;line-height:1.55;}
+  .edu-year{
+    font-family:'IBM Plex Mono',monospace;
+    color:#d4af5a;font-size:11px;
+  }
+  .edu-deg{font-weight:600;color:#eef1f6;}
+  .edu-inst{color:#8f9ab0;}
+
+  .lang-row{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;}
+  .lang-pill{
+    border:1px solid #2f3a4d;padding:3px 10px;border-radius:20px;color:#c9cfdb;
+  }
+
+  .skills-list{list-style:none;margin:0;padding:0;font-size:12px;line-height:2;color:#c9cfdb;}
+  .skills-list li{position:relative;padding-left:14px;}
+  .skills-list li::before{
+    content:"";position:absolute;left:0;top:8px;width:5px;height:5px;
+    background:var(--teal);border-radius:50%;
+  }
+
+  .main{padding:44px 46px 50px;}
+  .kicker{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--copper);margin:0 0 6px;
+  }
+  h2.sec{
+    font-family:'Fraunces',serif;
+    font-weight:600;font-size:19px;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  .section{margin-bottom:34px;}
+  .section:first-of-type{margin-top:0;}
+
+  .trace{width:100%;height:22px;margin:0 0 26px;display:block;}
+  .trace path{fill:none;stroke:var(--rule);stroke-width:1.4;}
+
+  .lede{font-size:13.5px;line-height:1.75;color:var(--ink-soft);}
+  .lede strong{color:var(--ink);}
+
+  .statrow{display:flex;gap:0;margin-top:20px;border-top:1px solid var(--rule);}
+  .statrow div{
+    flex:1;padding:14px 4px 0;text-align:center;
+    border-right:1px solid var(--rule);
+  }
+  .statrow div:last-child{border-right:none;}
+  .statrow span{
+    display:block;font-family:'Fraunces',serif;font-weight:600;
+    font-size:22px;color:var(--teal);line-height:1;margin-bottom:4px;
+  }
+  .statrow div{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);}
+
+  .expertise p{font-size:13px;line-height:1.75;color:var(--ink-soft);margin:0;}
+
+  .current-pos{
+    background:var(--teal-soft);
+    border-left:3px solid var(--teal);
+    padding:12px 16px;
+    font-size:13px;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .current-pos b{color:var(--teal);}
+
+  .awards{list-style:none;margin:0;padding:0;counter-reset:award;}
+  .awards li{
+    counter-increment:award;
+    padding:9px 0 9px 30px;
+    border-bottom:1px solid var(--rule);
+    font-size:12.8px;line-height:1.55;
+    position:relative;color:var(--ink-soft);
+  }
+  .awards li:last-child{border-bottom:none;}
+  .awards li::before{
+    content:counter(award);
+    position:absolute;left:0;top:9px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;color:var(--copper);
+    width:20px;text-align:right;
+  }
+  .awards li b{color:var(--ink);font-weight:600;}
+
+  .pubs{list-style:none;margin:0;padding:0;}
+  .pub{
+    display:grid;grid-template-columns:34px 1fr;
+    padding:12px 0;border-bottom:1px solid var(--rule);
+    font-size:12.6px;line-height:1.6;
+  }
+  .pub:last-child{border-bottom:none;}
+  .pub-num{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--copper);font-size:12px;padding-top:1px;
+  }
+  .pub-title{color:var(--ink);font-weight:600;margin-bottom:3px;}
+  .pub-authors{color:var(--ink-soft);}
+  .pub-authors b{color:var(--ink);font-weight:600;}
+  .pub-venue{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.3px;color:var(--teal);margin-top:3px;
+  }
+  .pub-flag{
+    display:inline-block;margin-top:4px;font-size:10.5px;
+    background:var(--copper-soft);color:var(--copper);
+    padding:2px 8px;border-radius:3px;letter-spacing:0.03em;
+  }
+
+  .skillgrid{
+    display:grid;grid-template-columns:1fr 1fr;gap:0 34px;
+    font-size:12.6px;color:var(--ink-soft);line-height:1.7;
+  }
+  .skillgrid h4{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--teal);margin:0 0 8px;
+  }
+  .skillgrid ul{list-style:none;margin:0 0 18px;padding:0;}
+  .skillgrid li{padding-left:12px;position:relative;margin-bottom:5px;}
+  .skillgrid li::before{content:"—";position:absolute;left:0;color:var(--rule);}
+
+  @media print{
+    body{background:var(--paper);}
+    .page{box-shadow:none;margin:0;max-width:none;}
+  }
+  @media (max-width:760px){
+    .page{grid-template-columns:1fr;}
+    .skillgrid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="photo-wrap">
+      images/IMG2026050517082861.jpg
+      <img src="images/IMG2026050517082861.jpg" alt="Umar Rashid">
+    </div>
+    <div class="name">Umar Rashid</div>
+    <div class="role">Research Fellow — PHI &amp; IQMT, KIT</div>
+
+    <div class="side-block">
+      <div class="side-h">Contact</div>
+      <ul class="contact-list">
+        <li>+91 90188 99853</li>
+        <li><a href="mailto:umar.rashid@kit.edu">umar.rashid@kit.edu</a></li>
+        <li><a href="mailto:umarorarman@gmail.com">umarorarman@gmail.com</a></li>
+        <li><a href="https://arman-rashid.github.io/" target="_blank" rel="noopener">arman-rashid.github.io</a></li>
+        <li><a href="https://scholar.google.com/citations?user=jS72zagAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+        <li><a href="https://in.linkedin.com/in/umar-rashid-746b381a4" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://x.com/Umair_rashid" target="_blank" rel="noopener">X / Twitter</a></li>
+      </ul>
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">Education</div>
+      <div class="edu-item">
+        <span class="edu-year">Secondary</span><br>
+        <span class="edu-deg">Distinction</span><br>
+        <span class="edu-inst">J&K State Board of School Education, Srinagar</span>
+      </div>
+<div class="edu-item">
+        <span class="edu-year">Bachelors</span><br>
+        <span class="edu-deg">1st position at college level</span><br>
+        <span class="edu-inst">B.Sc in Chemistry, Zoology, Botany · University of Kashmir</span>
+      </div>
+<div class="edu-item">
+        <span class="edu-year">Masters</span><br>
+        <span class="edu-deg">Gold Medalist</span><br>
+        <span class="edu-inst">M.Sc. Chemistry · University of Kashmir</span>
+      </div>
+<div class="edu-item">
+        <span class="edu-year">Ph.D</span><br>
+        <span class="edu-deg">Inorganic & Physical Chemistry</span><br>
+        <span class="edu-inst">Indian Institute of Science (IISc.), Bangalore</span>
+      </div>
+<div class="edu-item">
+        <span class="edu-year">Employment</span><br>
+        <span class="edu-deg">Research Fellow</span><br>
+        <span class="edu-inst">Physics Institute (PHI) · IQMT · Karlsruhe Institute of Technology</span>
+      </div>
+
+      <!-- each edu-item will be inserted here -->
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">Languages</div>
+      <div class="lang-row">
+        <span class="lang-pill">English</span>
+        <span class="lang-pill">Urdu</span>
+        <span class="lang-pill">Kashmiri</span>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-h">Software &amp; Tools</div>
+      <ul class="skills-list">
+        <li>LabVIEW (pro), Python, MATLAB</li>
+        <li>Origin, Gaussian, SIESTA</li>
+        <li>Cryogenics, ultra-high vacuum</li>
+        <li>AutoCAD Inventor, SolidWorks, 3D printing</li>
+        <li>Adobe Illustrator, Animate, Inkscape</li>
+        <li>Microsoft Office</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="section">
+      <div class="kicker">Current Position</div>
+      <div class="current-pos">
+        <b>Research Fellow</b> — Physics Institute (PHI) &amp; Institute of Quantum Materials and Technologies (IQMT), Karlsruhe Institute of Technology (KIT), Germany — since Aug 2025
+      </div>
+    </div>
+
+    <svg class="trace" viewBox="0 0 860 22" preserveAspectRatio="none"><path d="M0,11 L60,11 L64,4 L70,4 L74,18 L80,18 L84,11 L220,11 L224,15 L230,15 L234,7 L240,7 L244,11 L420,11 L424,3 L430,3 L434,19 L440,19 L444,11 L620,11 L624,14 L630,14 L634,6 L640,6 L644,11 L860,11"/></svg>
+
+    <div class="section">
+      <div class="kicker">Research Focus</div>
+      <h2 class="sec">Instrumentation &amp; methodology for molecular electronics</h2>
+      <p class="lede">Designing novel methods to explore charge transport across
+      <strong>metal(carbon) │ molecule (or SAM) │ metal(carbon)</strong> junctions under external bias
+      or temperature gradient, and evaluating how transport through single molecules and hybrid
+      assemblies is modulated by external stimuli — light, magnetic field, and chemical gating. At KIT,
+      this work centers on a liquid-helium-temperature scanning tunnelling microscope, developing
+      advanced instrumentation to study light–matter interactions and quantum transport at the
+      nanoscale.</p>
+      <div class="statrow">
+        <div><span>…</span>Publications</div>
+<div><span>4</span>JournalCovers</div>
+<div><span>3</span>Fellowships</div>
+<div><span>5</span>Countries</div>
+<div><span>…</span>Citations</div>
+<div><span>…</span>Citationssince 2021</div>
+<div><span>…</span>h‑index</div>
+<div><span>…</span>i10‑index</div>
+
+        <!-- each stat will be inserted as <div><span>N</span>Label</div> -->
+      </div>
+    </div>
+
+    <div class="section expertise">
+      <h2 class="sec">Technical Expertise &amp; Research Skills</h2>
+      <p>During his PhD, Umar independently built specialized lab equipment, including an EGaIn-based system for studying molecular junctions and STM / MCBJ break-junction setups for measuring electrical properties at the nanoscale, designed using AutoCAD Inventor. He developed and 3D-printed multiple prototypes before converging on the most stable designs, and wrote custom LabVIEW software to control the instruments and automate data analysis — including algorithms to extract meaningful correlations and key metrics from noisy data, work that has since been published. While LabVIEW remains his primary tool, he is comfortable moving to Python for future projects. He is also familiar with quantum-mechanical calculations from his master's work, mainly using Gaussian with some early work in SIESTA, though transport calculations were outside the scope of his PhD, which focused on experiment. His chemistry background spans UV-Vis and fluorescence spectroscopy, atomic force microscopy, electrochemical methods, and early-stage synthesis, complemented by an undergraduate foundation in biology and biochemistry. Overall, he combines hands-on engineering — building instruments and writing control software — with depth across chemistry and biology, allowing him to work across materials science and the life sciences.</p>
+      <p><!-- expertise_paragraph from JSON --></p>
+    </div>
+
+    <svg class="trace" viewBox="0 0 860 22" preserveAspectRatio="none"><path d="M0,11 L60,11 L64,4 L70,4 L74,18 L80,18 L84,11 L220,11 L224,15 L230,15 L234,7 L240,7 L244,11 L420,11 L424,3 L430,3 L434,19 L440,19 L444,11 L620,11 L624,14 L630,14 L634,6 L640,6 L644,11 L860,11"/></svg>
+
+    <div class="section">
+      <h2 class="sec">Skill Highlights</h2>
+      <div class="skillgrid">
+        <div>
+          <h4>General &amp; Design</h4>
+          <ul>
+            <li>Microsoft Office</li>
+<li>Adobe Illustrator, Animate, Inkscape</li>
+<li>3D design — Autodesk 3D, Inventor, SolidWorks</li>
+<li>Theoretical calculations — Gaussian, Quantum Espresso</li>
+<li>Origin</li>
+<li>AFM / STM</li>
+<li>Programming — LabVIEW (pro), Python, MATLAB</li>
+            <li>Microsoft Office</li>
+            <!-- etc -->
+          </ul>
+        </div>
+        <div>
+          <h4>Instrumentation &amp; Spectroscopy</h4>
+          <ul>
+            <li>UV-visible, ATR-FTIR spectroscopy</li>
+<li>Spectrofluorimetry</li>
+<li>Electrochemistry — potentiometry, voltammetry, conductometry</li>
+<li>X-ray diffraction</li>
+<li>Instrumentation development — STM-BJ, MCBJ, ensemble molecular junctions</li>
+<li>XPS, UPS</li>
+            <li>UV-visible, ATR-FTIR spectroscopy</li>
+            <!-- etc -->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="sec">Awards &amp; Honors</h2>
+      <ol class="awards">
+        <li><b>🏅 Gold Medalist – M.Sc. Chemistry</b> — Rank 1st, University of Kashmir & all affiliated colleges</li>
+<li><b>🎓 Prime Minister Research Fellowship (PMRF)</b> — Ministry of Education, Govt. of India</li>
+<li><b>📜 DST‑INSPIRE Fellowship</b> — Innovation in Science Pursuit for Inspired Research</li>
+<li><b>🏆 Vasudevamurthy‑Soundararajan Award</b> — Best performance in coursework & best student seminar, IISc.</li>
+<li><b>📄 Best Poster Award</b> — International Conference on Spin in Molecular Systems, IISc.</li>
+<li><b>🗣️ Best Oral Presentation</b> — IPC‑Day Symposium 2023, IISc.</li>
+<li><b>🏅 JRF‑NET (CSIR)</b> — Council of Scientific and Industrial Research, Govt. of India</li>
+<li><b>📊 GATE Qualified</b> — National Coordination Board – GATE, Ministry of Education</li>
+<li><b>📖 J&K State Level Eligibility Test (JKSET)</b> — University of Jammu/Kashmir, accredited by UGC</li>
+<li><b>🏅 Best Presentation Award (RAM-90)</b> — International Conference on Recent Advances in Materials, JNCASR</li>
+<li><b>🏅 State board scholarship for School toppers</b> — School topper – J&K State Board of School Education</li>
+<li><b>🏅 B.Sc college topper Award</b> — 1st position at college level – Govt. Degree College Bijbehara</li>
+
+        <!-- each award as <li><b>...</b> — details</li> -->
+      </ol>
+    </div>
+
+    <svg class="trace" viewBox="0 0 860 22" preserveAspectRatio="none"><path d="M0,11 L60,11 L64,4 L70,4 L74,18 L80,18 L84,11 L220,11 L224,15 L230,15 L234,7 L240,7 L244,11 L420,11 L424,3 L430,3 L434,19 L440,19 L444,11 L620,11 L624,14 L630,14 L634,6 L640,6 L644,11 L860,11"/></svg>
+
+    <div class="section" style="margin-bottom:0;">
+      <h2 class="sec">Publications</h2>
+      <ol class="pubs">
+        <li class="pub">
+          <span class="pub-num">01</span>
+          <div>
+            <div class="pub-title">Oriented Electric Field‑Driven Cis‑Azobenzene Selective Diborylation Reaction</div>
+            <div class="pub-authors">Sreelakshmi PA, Mondal RR, Rask L, Leitherer S, Obel OB,U. Rashid, Hamill JM, Mikkelsen KV, Geetharani K, Kaliginedi V</div>
+            <div class="pub-venue">J. Am. Chem. Soc. 2026, 148, 23, 24357–24366 <span class="pub-flag">Featured - Hot Article</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">02</span>
+          <div>
+            <div class="pub-title">Quantum Interference in Saturated Systems: Bipiperidines & Dithiocarbamates</div>
+            <div class="pub-authors">U. Rashid, Daaoub AHS, Sreelakshmi PA, Sangtarash S, Sadeghi H, Kaliginedi V</div>
+            <div class="pub-venue">Angew. Chem. Int. Ed. 2025, e202513806 <span class="pub-flag">Featured - Hot Topic</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">03</span>
+          <div>
+            <div class="pub-title">Mapping Extended Ground‑State Reactivity of a Photoswitchable Molecule</div>
+            <div class="pub-authors">U. Rashid, Sandonas LM, Chatir E, Ziani Z, Sreelakshmi PA, Cobo S, Gutierrez R, Cuniberti G, Kaliginedi V</div>
+            <div class="pub-venue">J. Am. Chem. Soc. 2025, 147, 1, 830–840 </div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">04</span>
+          <div>
+            <div class="pub-title">Electric Field‑Induced Prototropic Tautomerism in Enzyme‑like Nanopocket</div>
+            <div class="pub-authors">Sreelakshmi PA, Mahashaya R, Leitherer S,U. Rashid, Hamill JM, Nair M, Rajamalli P, Kaliginedi V</div>
+            <div class="pub-venue">J. Am. Chem. Soc. 2024, 146, 51, 35242–35251 <span class="pub-flag">Featured - Front Cover</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">05</span>
+          <div>
+            <div class="pub-title">Au–Thiol Interface Chemistry via Single‑Molecule Flicker Noise</div>
+            <div class="pub-authors">U. Rashid, Bro‑Jørgensen W, Harilal KB, Sreelakshmi PA, Mondal RR, Pisharam VC, Parida KN, Geetharani K, Hamill JM, Kaliginedi V</div>
+            <div class="pub-venue">J. Am. Chem. Soc. 2024, 146, 13, 9063–9073 <span class="pub-flag">Featured - Front Cover</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">06</span>
+          <div>
+            <div class="pub-title">Dithienylethene‑Based Single Molecular Photothermal Actuator</div>
+            <div class="pub-authors">U. Rashid, Chatir E, Sandonas LM, Sreelakshmi PA, Dianat A, Gutierrez R, Cuniberti G, Cobo S, Kaliginedi V</div>
+            <div class="pub-venue">Angew. Chem. Int. Ed. 2023, 62, e202218767 <span class="pub-flag">Featured - Hot Topic: Robotics</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">07</span>
+          <div>
+            <div class="pub-title">Extraordinary Electrical Conductance of Non‑conducting Polymers</div>
+            <div class="pub-authors">Kumar S, Biswas S,U. Rashid, Mony KS, Vergauwe RMA, Kaliginedi V, Thomas A</div>
+            <div class="pub-venue">J. Am. Chem. Soc. 2024, 146, 28, 18999–19008 <span class="pub-flag">Featured - Front Cover</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">08</span>
+          <div>
+            <div class="pub-title">One‑class Classification for Single‑molecule Transport Studies</div>
+            <div class="pub-authors">Bro‑Jørgensen W, Hamill JM, Mezei G, Lawson B,U. Rashid, Halbritter A, Kamenetska M, Kaliginedi V, Solomon GC</div>
+            <div class="pub-venue">ACS Nanosci. Au 2024, 4, 4, 250–262 </div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">09</span>
+          <div>
+            <div class="pub-title">Modulating charge transport via electrochemical gating</div>
+            <div class="pub-authors">Akhtar A,U. Rashid(co-first), Seth C, Kumar S, Broekmann P, Kaliginedi V</div>
+            <div class="pub-venue">Electrochimica Acta, 2021, 388, 138540 <span class="pub-flag">Equal contribution with first author</span></div>
+          </div>
+        </li>
+<li class="pub">
+          <span class="pub-num">10</span>
+          <div>
+            <div class="pub-title">Imidazolium Based Surface Active Ionic Liquids for Quercetin</div>
+            <div class="pub-authors">Butt FA, Bhat MM,U. Rashid, Lone IA, Bhat PA, Bhat SA, Rather MA, Rather GM, Bhat MA</div>
+            <div class="pub-venue">Catal. Lett. 2022, 152, 1276–1285 <span class="pub-flag">Master's thesis</span></div>
+          </div>
+        </li>
+
+        <!-- each pub as <li class="pub"><span class="pub-num">01</span><div> ... </div></li> -->
+      </ol>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
