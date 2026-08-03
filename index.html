@@ -1700,10 +1700,11 @@
             </div>
         </div>
 
-        <!-- ===== FULL-WIDTH STATS — now with tighter spacing ===== -->
+        <!-- ===== FULL-WIDTH STATS — now with Scholar metrics ===== -->
         <div class="stats-fullwidth reveal">
             <div class="container">
                 <div class="about-stats">
+                    <!-- existing stats -->
                     <div class="stat-card">
                         <span class="number">10+</span>
                         <span class="label">Publications</span>
@@ -1719,6 +1720,23 @@
                     <div class="stat-card">
                         <span class="number">5</span>
                         <span class="label">Countries</span>
+                    </div>
+                    <!-- NEW Scholar metrics -->
+                    <div class="stat-card">
+                        <span class="number" id="total-citations">…</span>
+                        <span class="label">Citations</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number" id="citations-since-2021">…</span>
+                        <span class="label">Citations <span class="gold">since 2021</span></span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number" id="h-index">…</span>
+                        <span class="label">h‑index</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number" id="i10-index">…</span>
+                        <span class="label">i10‑index</span>
                     </div>
                 </div>
             </div>
@@ -2567,6 +2585,22 @@
                 glass.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)';
                 image.style.transform = 'translate(0, 0)';
             });
+        })();
+
+        // ===== FETCH SCHOLAR STATS =====
+        (async function loadScholarStats() {
+            try {
+                const response = await fetch('scholar_stats.json?t=' + Date.now());
+                if (!response.ok) throw new Error('Network error');
+                const data = await response.json();
+                document.getElementById('total-citations').textContent = data.total_citations ?? '—';
+                document.getElementById('citations-since-2021').textContent = data.citations_since_2021 ?? '—';
+                document.getElementById('h-index').textContent = data.h_index ?? '—';
+                document.getElementById('i10-index').textContent = data.i10_index ?? '—';
+            } catch (e) {
+                console.warn('Could not load scholar stats:', e);
+                // Optionally keep placeholder "…" or show fallback values
+            }
         })();
     </script>
 
