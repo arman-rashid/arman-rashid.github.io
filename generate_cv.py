@@ -1,64 +1,90 @@
 #!/usr/bin/env python3
 """
-Generate CV from live website data and manual JSON.
-Fetches the main index.html, extracts dynamic content,
-and renders cv_template.html with placeholders replaced.
+Generate CV from local index.html and manual JSON.
+Reads the local index.html, extracts dynamic content,
+reads images from the local filesystem, and renders cv_template.html.
 """
 import json
-import re
 import sys
 import base64
+import mimetypes
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
 
 # ---------- CONFIG ----------
-WEBSITE_URL = "https://arman-rashid.github.io/"  # change to your live site
 MANUAL_JSON = "cv_manual.json"
 TEMPLATE_FILE = "cv_template.html"
-OUTPUT_FILE = "cv.html"  # this will be your CV
+OUTPUT_FILE = "cv.html"
+WEBSITE_URL = "https://arman-rashid.github.io/"  # fallback if local file missing
 
 # ---------- HELPERS ----------
-def fetch_html(url):
-    """Fetch HTML from URL; fallback to local file if fails."""
+def fetch_html():
+    """Read local index.html first, fallback to live URL."""
+    local_file = Path("index.html")
+    if local_file.exists():
+        print("📂 Using local index.html", file=sys.stderr)
+        return local_file.read_text(encoding="utf-8")
+    
+    # Fallback: fetch from live site
     try:
-        resp = requests.get(url, timeout=15)
+        print("🌐 Fetching from live URL (fallback)", file=sys.stderr)
+        resp = requests.get(WEBSITE_URL, timeout=15)
         resp.raise_for_status()
         return resp.text
     except Exception as e:
-        print(f"⚠️  Failed to fetch live site: {e}", file=sys.stderr)
-        # fallback: read local index.html if present
-        local_file = Path("index.html")
-        if local_file.exists():
-            print("📂 Using local index.html as fallback", file=sys.stderr)
-            return local_file.read_text(encoding="utf-8")
-        raise SystemExit("❌ No data source available.")
+        print(f"❌ Failed to fetch: {e}", file=sys.stderr)
+        raise SystemExit("No data source available.")
 
-def extract_photo(soup):
-    """Extract profile image src (base64 or URL)."""
+def extract_photo(soup, base_dir="."):
+    """
+    Extract profile image from .profile-ring img.
+    If src is a local path (e.g., images/...), read it from disk and encode to base64.
+    """
     img = soup.select_one(".profile-ring img")
     if not img:
         return ""
-    src = img.get("src", "")
+    src = img.get("src", "").strip()
+    
+    # If already base64, return as-is
     if src.startswith("data:image"):
         return src
+    
+    # If it's a relative local path, read from filesystem
+    if not src.startswith("http"):
+        img_path = Path(base_dir) / src
+        if img_path.exists():
+            try:
+                mime_type, _ = mimetypes.guess_type(str(img_path))
+                if not mime_type:
+                    mime_type = "image/jpeg"
+                with open(img_path, "rb") as f:
+                    b64 = base64.b64encode(f.read()).decode()
+                return f"data:{mime_type};base64,{b64}"
+            except Exception as e:
+                print(f"⚠️  Could not read local image {img_path}: {e}", file=sys.stderr)
+                return src
+    
+    # If it's a full URL, fetch it and encode
     if src.startswith("http"):
         try:
             resp = requests.get(src, timeout=10)
             resp.raise_for_status()
             b64 = base64.b64encode(resp.content).decode()
             ext = src.split(".")[-1].lower()
-            mime = "image/jpeg" if ext in ("jpg","jpeg") else "image/png"
+            mime = "image/jpeg" if ext in ("jpg", "jpeg") else "image/png"
             return f"data:{mime};base64,{b64}"
-        except:
+        except Exception as e:
+            print(f"⚠️  Could not fetch remote image: {e}", file=sys.stderr)
             return src
+    
     return src
 
 def extract_stats(soup):
-    """Return list of (number, label) from .stat-card in the full-width stats."""
+    """Return list of (number, label) from .stat-card - only first 4."""
     stats = []
     cards = soup.select(".stats-fullwidth .stat-card")
-    for card in cards:
+    for card in cards[:4]:
         num = card.select_one(".number")
         label = card.select_one(".label")
         if num and label:
@@ -164,21 +190,26 @@ def render_awards(awards):
 
 # ---------- MAIN ----------
 def main():
+    # 1. Load manual JSON
     with open(MANUAL_JSON, "r", encoding="utf-8") as f:
         manual = json.load(f)
 
-    html = fetch_html(WEBSITE_URL)
+    # 2. Fetch HTML (local first, fallback to web)
+    html = fetch_html()
     soup = BeautifulSoup(html, "html.parser")
 
-    photo_b64 = extract_photo(soup)
+    # 3. Extract dynamic data (photo from local filesystem)
+    photo_b64 = extract_photo(soup, base_dir=".")
     stats = extract_stats(soup)
     edu = extract_education(soup)
     pubs = extract_publications(soup)
     awards = extract_awards(soup)
 
+    # 4. Read template
     with open(TEMPLATE_FILE, "r", encoding="utf-8") as f:
         template = f.read()
 
+    # 5. Replace placeholders
     template = template.replace("<!-- PHOTO_BASE64 -->", photo_b64)
     template = template.replace("<!-- STATS -->", render_stats(stats))
     template = template.replace("<!-- EDUCATION -->", render_education(edu))
@@ -193,6 +224,7 @@ def main():
     template = template.replace("<!-- SKILLS_GENERAL -->", gen_li)
     template = template.replace("<!-- SKILLS_INSTR -->", instr_li)
 
+    # 6. Write output
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(template)
 
