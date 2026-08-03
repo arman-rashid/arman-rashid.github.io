@@ -1,6 +1,6 @@
 {
-  "total_citations": NUMBER,
-  "citations_since_2021": NUMBER,
-  "h_index": NUMBER,
-  "i10_index": NUMBER
+  "total_citations": 193,
+  "citations_since_2021": 193,
+  "h_index": 8,
+  "i10_index": 7
 }
