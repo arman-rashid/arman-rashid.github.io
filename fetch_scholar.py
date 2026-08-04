@@ -6,6 +6,7 @@ Run this weekly via GitHub Action.
 """
 import json
 import sys
+from datetime import datetime, timezone
 from scholarly import scholarly
 
 SCHOLAR_ID = "jS72zagAAAAJ"
@@ -38,6 +39,7 @@ def get_scholar_stats(user_id):
             "h_index": h_index,
             "i10_index": i10_index,
             "num_publications": num_publications,
+            "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         }
     except Exception as e:
         print(f"Error fetching scholar data: {e}", file=sys.stderr)
