@@ -80,6 +80,14 @@ def extract_photo(soup, base_dir="."):
     
     return src
 
+def render_stats_note(scholar_stats):
+    """Small note under the stats row showing when Scholar data last synced."""
+    last_updated = (scholar_stats or {}).get("last_updated")
+    if last_updated:
+        return f"Stats synced from Google Scholar on {last_updated} · auto-updated weekly via GitHub Actions"
+    return "Stats synced from Google Scholar · auto-updated weekly via GitHub Actions"
+
+
 def load_scholar_stats(path="scholar_stats.json"):
     """Load scholar_stats.json if present, else return empty dict."""
     p = Path(path)
@@ -256,6 +264,7 @@ def main():
     # 5. Replace placeholders
     template = template.replace("<!-- PHOTO_BASE64 -->", photo_b64)
     template = template.replace("<!-- STATS -->", render_stats(stats))
+    template = template.replace("<!-- STATS_NOTE -->", render_stats_note(scholar_stats))
     template = template.replace("<!-- EDUCATION -->", render_education(edu))
     template = template.replace("<!-- PUBLICATIONS -->", render_publications(pubs))
     template = template.replace("<!-- AWARDS -->", render_awards(awards))
