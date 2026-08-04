@@ -1,60 +1,164 @@
 #!/usr/bin/env python3
 """
-Fetch Google Scholar stats and save to JSON.
-Includes: total citations, citations since 2021, h-index, i10-index, and number of publications.
-Run this weekly via GitHub Action.
+Fetch Google Scholar statistics and save them to a JSON file.
+
+Statistics collected:
+    - Total citations
+    - Citations since 2021
+    - h-index
+    - i10-index
+    - Number of publications
+    - Last update timestamp (UTC)
+
+Designed for scheduled execution (e.g. GitHub Actions).
 """
+
+from __future__ import annotations
+
 import json
+import logging
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
 from scholarly import scholarly
 
+# ---------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------
+
 SCHOLAR_ID = "jS72zagAAAAJ"
-OUTPUT_FILE = "scholar_stats.json"
+OUTPUT_FILE = Path("scholar_stats.json")
+CITATION_START_YEAR = 2021
 
-def get_scholar_stats(user_id):
-    try:
-        # Search for the author
-        search_query = scholarly.search_author_id(user_id)
-        author = scholarly.fill(search_query, sections=['basics', 'indices', 'cites_per_year', 'publications'])
-        
-        total_citations = author.get('citedby', 0)
-        h_index = author.get('hindex', 0)
-        i10_index = author.get('i10index', 0)
-        
-        # Citations per year – sum from 2021 onward
-        cites_per_year = author.get('cites_per_year', {})
-        citations_since_2021 = sum(
-            count for year, count in cites_per_year.items()
-            if int(year) >= 2021
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s",
+)
+
+
+# ---------------------------------------------------------------------
+# Scholar functions
+# ---------------------------------------------------------------------
+
+def fetch_author(author_id: str) -> dict[str, Any]:
+    """
+    Retrieve and fully populate a Google Scholar author profile.
+
+    Parameters
+    ----------
+    author_id
+        Google Scholar author ID.
+
+    Returns
+    -------
+    dict
+        Filled author dictionary.
+
+    Raises
+    ------
+    Exception
+        Any exception raised by scholarly is propagated to the caller.
+    """
+    author = scholarly.search_author_id(author_id)
+
+    return scholarly.fill(
+        author,
+        sections=[
+            "basics",
+            "indices",
+            "cites_per_year",
+            "publications",
+        ],
+    )
+
+
+def calculate_recent_citations(
+    cites_per_year: dict[Any, int],
+    start_year: int,
+) -> int:
+    """
+    Sum citations beginning with a given year.
+    """
+    total = 0
+
+    for year, count in cites_per_year.items():
+        try:
+            if int(year) >= start_year:
+                total += count
+        except (TypeError, ValueError):
+            continue
+
+    return total
+
+
+def extract_statistics(author: dict[str, Any]) -> dict[str, Any]:
+    """
+    Convert a Scholar author record into a simplified statistics dictionary.
+    """
+    cites_per_year = author.get("cites_per_year", {})
+    publications = author.get("publications", [])
+
+    return {
+        "total_citations": author.get("citedby", 0),
+        "citations_since_2021": calculate_recent_citations(
+            cites_per_year,
+            CITATION_START_YEAR,
+        ),
+        "h_index": author.get("hindex", 0),
+        "i10_index": author.get("i10index", 0),
+        "num_publications": len(publications),
+        "last_updated": datetime.now(
+            timezone.utc
+        ).strftime("%Y-%m-%d"),
+    }
+
+
+def save_statistics(stats: dict[str, Any], output_file: Path) -> None:
+    """
+    Save statistics to a JSON file.
+    """
+    with output_file.open("w", encoding="utf-8") as file:
+        json.dump(
+            stats,
+            file,
+            indent=2,
+            ensure_ascii=False,
         )
-        
-        # Number of publications – count the list
-        publications = author.get('publications', [])
-        num_publications = len(publications)
-        
-        return {
-            "total_citations": total_citations,
-            "citations_since_2021": citations_since_2021,
-            "h_index": h_index,
-            "i10_index": i10_index,
-            "num_publications": num_publications,
-            "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        }
-    except Exception as e:
-        print(f"Error fetching scholar data: {e}", file=sys.stderr)
-        return None
 
-def main():
-    stats = get_scholar_stats(SCHOLAR_ID)
-    if stats is None:
-        # Keep existing file if we can't fetch new data
-        print("No new data – leaving existing JSON untouched.", file=sys.stderr)
-        sys.exit(1)
 
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(stats, f, indent=2)
-    print(f"Scholar stats written to {OUTPUT_FILE}")
+# ---------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------
+
+def main() -> int:
+    """
+    Entry point.
+    """
+    try:
+        logging.info("Fetching Google Scholar profile...")
+
+        author = fetch_author(SCHOLAR_ID)
+        stats = extract_statistics(author)
+
+        save_statistics(stats, OUTPUT_FILE)
+
+        logging.info(
+            "Scholar statistics written to %s",
+            OUTPUT_FILE,
+        )
+
+        return 0
+
+    except Exception as exc:
+        logging.error("Unable to fetch Scholar data: %s", exc)
+
+        # Do not overwrite an existing JSON file.
+        logging.info("Existing JSON file has been left unchanged.")
+
+        return 1
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
