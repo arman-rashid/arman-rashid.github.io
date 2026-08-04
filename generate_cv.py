@@ -80,17 +80,60 @@ def extract_photo(soup, base_dir="."):
     
     return src
 
-def extract_stats(soup):
-    """Return list of (number, label) from .stat-card - only first 4."""
+def load_scholar_stats(path="scholar_stats.json"):
+    """Load scholar_stats.json if present, else return empty dict."""
+    p = Path(path)
+    if not p.exists():
+        print(f"⚠️  {path} not found; JS-driven stats will show as '—'", file=sys.stderr)
+        return {}
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"⚠️  Could not parse {path}: {e}", file=sys.stderr)
+        return {}
+
+
+# Maps the stat-card's span id -> key in scholar_stats.json.
+# These numbers are populated client-side by JS in index.html, so a static
+# HTML scrape only ever sees the placeholder "…" - we must pull them from
+# scholar_stats.json directly instead.
+_SCHOLAR_STAT_IDS = {
+    "num-publications": "num_publications",
+    "total-citations": "total_citations",
+    "citations-since-2021": "citations_since_2021",
+    "h-index": "h_index",
+    "i10-index": "i10_index",
+}
+
+
+def extract_stats(soup, scholar_stats=None):
+    """Return list of (number, label) from ALL .stat-card entries.
+
+    Cards whose number is written directly in the HTML are read as-is.
+    Cards whose number is filled in by JS at runtime (identified by their
+    span id) are instead read from scholar_stats.json.
+    """
+    scholar_stats = scholar_stats or {}
     stats = []
     cards = soup.select(".stats-fullwidth .stat-card")
-    for card in cards[:4]:
-        num = card.select_one(".number")
-        label = card.select_one(".label")
-        if num and label:
-            n = num.get_text(strip=True)
-            lbl = label.get_text(strip=True)
-            stats.append((n, lbl))
+    for card in cards:
+        num_el = card.select_one(".number")
+        label_el = card.select_one(".label")
+        if not (num_el and label_el):
+            continue
+
+        span_id = num_el.get("id")
+        if span_id in _SCHOLAR_STAT_IDS:
+            n = scholar_stats.get(_SCHOLAR_STAT_IDS[span_id])
+            n = str(n) if n is not None else "—"
+        else:
+            n = num_el.get_text(strip=True)
+
+        # separator=" " avoids concatenating nested spans, e.g.
+        # "Journal" + "Covers" -> "JournalCovers"
+        lbl = label_el.get_text(separator=" ", strip=True)
+        stats.append((n, lbl))
     return stats
 
 def extract_education(soup):
@@ -199,8 +242,9 @@ def main():
     soup = BeautifulSoup(html, "html.parser")
 
     # 3. Extract dynamic data (photo from local filesystem)
+    scholar_stats = load_scholar_stats()
     photo_b64 = extract_photo(soup, base_dir=".")
-    stats = extract_stats(soup)
+    stats = extract_stats(soup, scholar_stats)
     edu = extract_education(soup)
     pubs = extract_publications(soup)
     awards = extract_awards(soup)
