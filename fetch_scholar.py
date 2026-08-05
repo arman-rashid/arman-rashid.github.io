@@ -19,6 +19,39 @@ logging.basicConfig(
 
 
 
+def setup_proxy():
+    """Route scholarly's requests through free rotating proxies.
+
+    Google Scholar aggressively blocks the fixed IP ranges used by GitHub
+    Actions runners, so requests made directly from the workflow are often
+    blocked/captcha'd. scholarly ships a free-proxy pool (no paid service
+    needed) that rotates the source IP for us. If it fails to find a
+    working proxy (e.g. all free proxies are currently dead), fall back to
+    a direct connection rather than hard-failing the whole run.
+    """
+
+    from scholarly import scholarly, ProxyGenerator
+
+    pg = ProxyGenerator()
+
+    try:
+        success = pg.FreeProxies()
+    except Exception as e:
+        logging.warning(f"Could not set up free proxy pool: {e}")
+        success = False
+
+    if success:
+        scholarly.use_proxy(pg)
+        logging.info("Using a free rotating proxy for Scholar requests.")
+    else:
+        logging.warning(
+            "No working free proxy found; continuing without a proxy "
+            "(requests may get blocked by Google)."
+        )
+
+    return pg if success else None
+
+
 def get_profile_stats():
 
     from scholarly import scholarly
@@ -40,7 +73,29 @@ def get_profile_stats():
 
 
 
-def get_citations_since_2021():
+def get_working_free_proxy(attempts=5):
+    """Return a {'http':..., 'https':...} proxies dict from a free proxy,
+    or None if none could be found. Uses the same free-proxy pool that
+    scholarly's ProxyGenerator.FreeProxies() draws from."""
+
+    try:
+        from fp.fp import FreeProxy
+    except Exception as e:
+        logging.warning(f"free-proxy package not available: {e}")
+        return None
+
+    for _ in range(attempts):
+        try:
+            proxy = FreeProxy(rand=True, timeout=1).get()
+        except Exception:
+            continue
+        if proxy:
+            return {"http": proxy, "https": proxy}
+
+    return None
+
+
+def get_citations_since_2021(proxies=None):
 
     url = (
         "https://scholar.google.com/"
@@ -62,6 +117,7 @@ def get_citations_since_2021():
     r = requests.get(
         url,
         headers=headers,
+        proxies=proxies,
         timeout=20
     )
 
@@ -113,11 +169,15 @@ def get_citations_since_2021():
 
 def main():
 
+    setup_proxy()
+
     author = get_profile_stats()
 
 
     citations_since_2021 = (
-        get_citations_since_2021()
+        get_citations_since_2021(
+            proxies=get_working_free_proxy()
+        )
     )
 
 

@@ -826,6 +826,14 @@
             color: #f5c842;
             font-weight: 500;
         }
+        .stats-note {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            color: #6f6b64;
+            text-align: center;
+            margin-top: 18px;
+        }
         @media (max-width: 820px) {
             .stats-fullwidth {
                 padding: 24px 16px;
@@ -1730,6 +1738,7 @@
                         <span class="label">i10‑index</span>
                     </div>
                 </div>
+                <div class="stats-note" id="stats-note">Stats synced from Google Scholar · auto-updated weekly via GitHub Actions</div>
             </div>
         </div>
     </section>
@@ -2576,6 +2585,10 @@
                 document.getElementById('citations-since-2021').textContent = data.citations_since_2021 ?? '—';
                 document.getElementById('h-index').textContent = data.h_index ?? '—';
                 document.getElementById('i10-index').textContent = data.i10_index ?? '—';
+                const noteEl = document.getElementById('stats-note');
+                if (noteEl && data.last_updated) {
+                    noteEl.textContent = `Stats synced from Google Scholar on ${data.last_updated} · auto-updated weekly via GitHub Actions`;
+                }
             } catch (e) {
                 console.warn('Could not load scholar stats:', e);
             }
