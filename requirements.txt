@@ -1,3 +1,4 @@
 scholarly
+free-proxy
 requests
 beautifulsoup4

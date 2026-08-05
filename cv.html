@@ -241,12 +241,39 @@
   .pdf-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.28);}
   .pdf-btn:active{transform:translateY(0);}
 
+  @page{
+    size:A4;
+    margin:10mm;
+  }
   @media print{
-    body{background:var(--paper);}
-    .page{box-shadow:none;margin:0;max-width:none;}
+    *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      color-adjust:exact !important;
+    }
+    html,body{background:var(--paper);}
+    .page{
+      box-shadow:none;margin:0;max-width:none;
+      /* force the two-column layout: the printable page width is often
+         narrower than 760px, which would otherwise trigger the mobile
+         single-column layout below and reflow the whole document */
+      display:grid !important;
+      grid-template-columns:260px 1fr !important;
+    }
+    .sidebar{background:var(--ink) !important;color:var(--paper) !important;}
+    .skillgrid{grid-template-columns:1fr 1fr !important;}
+    .statrow{
+      break-inside:avoid;
+      flex-wrap:nowrap !important;
+    }
+    .statrow div{
+      flex-basis:auto !important;
+      border-bottom:none !important;
+      border-right:1px solid var(--rule) !important;
+    }
+    .statrow div:last-child{border-right:none !important;}
     .no-print{display:none !important;}
     .section{break-inside:avoid;}
-    .statrow{break-inside:avoid;}
     .side-block{break-inside:avoid;}
   }
   @media (max-width:760px){
@@ -371,7 +398,7 @@
 <div><span>3</span>Fellowships</div>
 <div><span>5</span>Countries</div>
 <div><span>194</span>Citations</div>
-<div><span>0</span>Citations since 2021</div>
+<div><span>194</span>Citations since 2021</div>
 <div><span>8</span>h‑index</div>
 <div><span>7</span>i10‑index</div>
 
