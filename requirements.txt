@@ -1,4 +1,4 @@
 scholarly
-free-proxy==1.2.1
+free-proxy==1.7.4
 requests
 beautifulsoup4
