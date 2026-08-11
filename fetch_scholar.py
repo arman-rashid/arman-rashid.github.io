@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import json
 import os
-import requests
 import logging
-from bs4 import BeautifulSoup
+import requests
 from datetime import datetime, timezone
 
 SCHOLAR_ID = "jS72zagAAAAJ"
 OUTPUT_FILE = "scholar_stats.json"
+SERPAPI_URL = "https://serpapi.com/search.json"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -15,125 +15,97 @@ logging.basicConfig(
 )
 
 
-def setup_proxy():
-    """Route scholarly's requests through free rotating proxies.
-
-    Google Scholar aggressively blocks the fixed IP ranges used by GitHub
-    Actions runners, so requests made directly from the workflow are often
-    blocked/captcha'd. scholarly ships a free-proxy pool (no paid service
-    needed) that rotates the source IP for us. If it fails to find a
-    working proxy (e.g. all free proxies are currently dead), fall back to
-    a direct connection rather than hard-failing the whole run.
-    """
-    from scholarly import scholarly, ProxyGenerator
-
-    pg = ProxyGenerator()
-    try:
-        success = pg.FreeProxies()
-    except Exception as e:
-        logging.warning(f"Could not set up free proxy pool: {e}")
-        success = False
-
-    if success:
-        scholarly.use_proxy(pg)
-        logging.info("Using a free rotating proxy for Scholar requests.")
-    else:
-        logging.warning(
-            "No working free proxy found; continuing without a proxy "
-            "(requests may get blocked by Google)."
+def get_api_key():
+    key = os.environ.get("a163598bd2e93e8b439ce22c3b8253df46d02a0db0f6e0e93328819d5bf561c1")
+    if not key:
+        raise RuntimeError(
+            "SERPAPI_KEY environment variable not set. "
+            "Add it as a GitHub Actions secret and pass it into the workflow step."
         )
-    return pg if success else None
+    return key
 
 
-def get_profile_stats():
-    from scholarly import scholarly
+def fetch_author_data(api_key):
+    """Single call to SerpApi's google_scholar_author engine.
+    num=100 pulls up to 100 articles in one page (sorted by year desc),
+    which comfortably covers a normal-sized publication list without
+    needing pagination.
+    """
+    params = {
+        "engine": "google_scholar_author",
+        "author_id": SCHOLAR_ID,
+        "hl": "en",
+        "num": 100,
+        "sort": "pubdate",
+        "api_key": api_key,
+    }
+    r = requests.get(SERPAPI_URL, params=params, timeout=30)
+    r.raise_for_status()
+    data = r.json()
 
-    author = scholarly.search_author_id(SCHOLAR_ID)
-    author = scholarly.fill(
-        author,
-        sections=["basics", "indices", "publications"]
-    )
-    return author
+    if "error" in data:
+        raise RuntimeError(f"SerpApi error: {data['error']}")
+
+    return data
 
 
-def get_working_free_proxy(attempts=5):
-    """Return a {'http':..., 'https':...} proxies dict from a free proxy,
-    or None if none could be found. Uses the same free-proxy pool that
-    scholarly's ProxyGenerator.FreeProxies() draws from."""
-    try:
-        from fp.fp import FreeProxy
-    except Exception as e:
-        logging.warning(f"free-proxy package not available: {e}")
-        return None
+def extract_cited_by_table(data):
+    """cited_by.table has rows like:
+    [{"citations": {"all": N, "since_20XX": M}},
+     {"h_index": {"all": N, "since_20XX": M}},
+     {"i10_index": {"all": N, "since_20XX": M}}]
+    The 'since_20XX' key name shifts every year (rolling ~5yr window),
+    so find it dynamically rather than hardcoding a year.
+    """
+    table = data.get("cited_by", {}).get("table", [])
+    result = {"total_citations": 0, "h_index": 0, "i10_index": 0}
 
-    for _ in range(attempts):
+    for entry in table:
+        if "citations" in entry:
+            result["total_citations"] = entry["citations"].get("all", 0)
+        elif "h_index" in entry:
+            result["h_index"] = entry["h_index"].get("all", 0)
+        elif "i10_index" in entry:
+            result["i10_index"] = entry["i10_index"].get("all", 0)
+
+    return result
+
+
+def compute_citations_since_2021(data):
+    articles = data.get("articles", [])
+    total = 0
+    for article in articles:
         try:
-            proxy = FreeProxy(rand=True, timeout=1).get()
-        except Exception:
-            continue
-        if proxy:
-            return {"http": proxy, "https": proxy}
-    return None
-
-
-def get_citations_since_2021(proxies=None):
-    url = (
-        "https://scholar.google.com/"
-        "citations"
-        f"?user={SCHOLAR_ID}"
-        "&hl=en"
-        "&view_op=list_works"
-        "&pagesize=100"
-        "&as_ylo=2021"
-    )
-    headers = {"User-Agent": "Mozilla/5.0"}
-
-    r = requests.get(url, headers=headers, proxies=proxies, timeout=20)
-    if r.status_code != 200:
-        return 0
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    citations = 0
-    rows = soup.find_all("tr", class_="gsc_a_tr")
-    for row in rows:
-        cells = row.find_all("td")
-        if len(cells) < 2:
-            continue
-        try:
-            cited = cells[1].text.strip()
-            if cited:
-                citations += int(cited)
-        except Exception:
-            pass
-    return citations
+            year = int(article.get("year", 0))
+        except (TypeError, ValueError):
+            year = 0
+        if year >= 2021:
+            cited = article.get("cited_by", {}).get("value", 0)
+            try:
+                total += int(cited)
+            except (TypeError, ValueError):
+                pass
+    return total
 
 
 def fetch_fresh_stats():
-    """Does the actual network work. Raises on failure; caller decides
-    what to do about it."""
-    setup_proxy()
-    author = get_profile_stats()
-    citations_since_2021 = get_citations_since_2021(
-        proxies=get_working_free_proxy()
-    )
+    api_key = get_api_key()
+    data = fetch_author_data(api_key)
 
-    return {
-        "total_citations": author.get("citedby", 0),
-        "citations_since_2021": citations_since_2021,
-        "h_index": author.get("hindex", 0),
-        "i10_index": author.get("i10index", 0),
-        "num_publications": len(author.get("publications", [])),
-        "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-    }
+    stats = extract_cited_by_table(data)
+    stats["citations_since_2021"] = compute_citations_since_2021(data)
+    stats["num_publications"] = len(data.get("articles", []))
+    stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    return stats
 
 
 def main():
     try:
         stats = fetch_fresh_stats()
     except Exception as e:
-        # Google Scholar blocks CI/proxy IPs unpredictably. Don't let a
-        # blocked request take down the whole CV build — keep whatever
-        # stats we last successfully fetched instead.
+        # Don't let a transient API hiccup take down the whole CV build —
+        # keep whatever stats we last successfully fetched instead.
         logging.error(f"Failed to fetch fresh Scholar stats: {e}")
         if os.path.exists(OUTPUT_FILE):
             logging.warning(
