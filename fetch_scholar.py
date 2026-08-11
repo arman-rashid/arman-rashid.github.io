@@ -16,7 +16,7 @@ logging.basicConfig(
 
 
 def get_api_key():
-    key = os.environ.get("a163598bd2e93e8b439ce22c3b8253df46d02a0db0f6e0e93328819d5bf561c1")
+    key = os.environ.get("SERPAPI_KEY")
     if not key:
         raise RuntimeError(
             "SERPAPI_KEY environment variable not set. "
