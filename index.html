@@ -30,7 +30,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&family=Allura&display=swap" rel="stylesheet" />
     <style>
         /* === RESET & BASE === */
         *,
@@ -434,6 +434,13 @@
             font-size: 1.25rem;
             letter-spacing: -0.02em;
             color: #f5c842;
+        }
+        .logo span {
+            font-family: 'Allura', cursive;
+            font-weight: 400;
+            font-size: 2.1rem;
+            letter-spacing: 0.02em;
+            line-height: 1;
         }
         .logo img {
             width: 42px;
@@ -1713,20 +1720,20 @@
         /* dark is the default palette (no data-theme attribute yet / JS disabled) */
         :root,
         html[data-theme="dark"] {
-            --neu-bg: #201f23;
-            --neu-surface: #232227;
-            --neu-surface-raised: #26252a;
-            --neu-light: rgba(255, 255, 255, 0.05);
-            --neu-light-strong: rgba(255, 255, 255, 0.07);
-            --neu-dark: rgba(0, 0, 0, 0.55);
-            --neu-dark-strong: rgba(0, 0, 0, 0.68);
-            --neu-accent: #e3b24a;
-            --neu-accent-hover: #ffdf7e;
-            --neu-accent-dim: rgba(227, 178, 74, 0.35);
-            --neu-text: #f1efe9;
-            --neu-text-secondary: #cbc7c0;
-            --neu-text-muted: #98948d;
-            --neu-text-faint: #726e67;
+            --neu-bg: #17161a;
+            --neu-surface: #1b1a1f;
+            --neu-surface-raised: #201f25;
+            --neu-light: rgba(255, 255, 255, 0.07);
+            --neu-light-strong: rgba(255, 255, 255, 0.1);
+            --neu-dark: rgba(0, 0, 0, 0.75);
+            --neu-dark-strong: rgba(0, 0, 0, 0.9);
+            --neu-accent: #eab54c;
+            --neu-accent-hover: #ffe08a;
+            --neu-accent-dim: rgba(234, 181, 76, 0.4);
+            --neu-text: #f8f6f1;
+            --neu-text-secondary: #d2cec6;
+            --neu-text-muted: #99958d;
+            --neu-text-faint: #67635c;
         }
         html[data-theme="light"] {
             --neu-bg: #e7e8ec;
