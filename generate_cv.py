@@ -183,7 +183,12 @@ def extract_publications(soup):
             journal_text = ""
         pubs.append({
             "title": title.get_text(strip=True) if title else "",
-            "authors": authors.get_text(strip=True) if authors else "",
+            # decode_contents() (not get_text()) keeps inner tags like
+            # <span class="gold">U. Rashid</span> so the CV can bold the
+            # author's own name, and it preserves whitespace around tags
+            # that get_text(strip=True) otherwise swallows (e.g. "Obel OB,
+            # <span>U. Rashid</span>" losing the space before the span).
+            "authors": authors.decode_contents().strip() if authors else "",
             "journal": journal_text,
             "flag": flag,
         })
