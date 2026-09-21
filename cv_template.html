@@ -7,11 +7,12 @@
 <meta name="description" content="Curriculum vitae of Umar Rashid, research fellow in molecular electronics and nanoscale transport at the Karlsruhe Institute of Technology.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --desk:#dde3e9;
     --sheet:#fdfdfe;
+    --night:#0e1b2f;
     --ink:#0f1b2d;
     --ink-2:#465267;
     --ink-3:#5e697c;
@@ -20,6 +21,7 @@
     --teal:#0f6d88;
     --teal-soft:#e3f0f4;
     --gold:#c99a2e;
+    --gold-light:#e2bf62;
     --gold-ink:#7a5808;
     --gold-soft:#f7edd2;
     --rail:132px;
@@ -44,59 +46,43 @@
     box-shadow:0 1px 2px rgba(15,27,45,.08),0 18px 50px rgba(15,27,45,.14);
   }
 
-  /* ---------- masthead ---------- */
+  /* ---------- masthead: a night-blue band over an Au(111)-style atomic lattice ---------- */
+  .band{
+    position:relative;overflow:hidden;
+    margin:-60px -68px 0;padding:60px 68px 26px;
+    background:var(--night);color:#c3cdde;
+  }
+  .band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--gold);}
+  .lattice{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+  .band > *:not(.lattice){position:relative;}
+
   .masthead{display:grid;grid-template-columns:minmax(0,1fr) 112px;column-gap:36px;align-items:start;}
   .name{
-    font-family:var(--serif);font-weight:400;font-size:62px;line-height:1;
-    letter-spacing:-.022em;margin:0 0 16px;
+    font-family:var(--serif);font-weight:300;font-size:64px;line-height:1;
+    letter-spacing:-.022em;margin:0 0 18px;color:#f6f8fb;
   }
-  .position{font-size:14.5px;line-height:1.5;color:var(--ink-2);max-width:64ch;margin:0 0 18px;}
-  .contact{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 22px;font-size:12.5px;color:var(--ink-2);}
+  .position{font-size:14.5px;line-height:1.5;color:#c3cdde;max-width:64ch;margin:0 0 20px;}
+  .contact{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 22px;font-size:12.5px;color:#b3bfd2;}
   .contact + .contact{margin-top:5px;}
-  .portrait{width:112px;height:112px;border:1px solid var(--gold);border-radius:50%;padding:5px;}
+  .band a{text-decoration-color:rgba(255,255,255,.28);}
+  .band a:hover{color:var(--gold-light);text-decoration-color:currentColor;}
+  .band a:focus-visible{outline-color:var(--gold-light);}
+  .portrait{width:112px;height:112px;border:1px solid var(--gold);border-radius:50%;padding:5px;background:var(--night);}
   .portrait img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:47% 12%;}
 
-  /* ---------- signature: a single-molecule conductance trace ---------- */
-  .trace-fig{margin:34px 0 0;}
-  .fig{display:block;width:100%;height:auto;}
-  .f-grid{stroke:var(--rule);stroke-width:.7;stroke-dasharray:1 3;}
-  .f-axis,.f-arrow{stroke:var(--ink-3);stroke-width:.9;}
-  .f-arrow{fill:none;}
-  .f-tick,.f-cap{font-family:var(--sans);font-size:9.5px;fill:var(--ink-3);}
-  .f-sup{font-size:6.5px;}
-  .f-note{font-family:var(--serif);font-style:italic;font-size:12.5px;fill:var(--teal);}
-  .f-trace{fill:none;stroke:var(--ink);stroke-width:1.35;stroke-linejoin:round;stroke-linecap:round;}
-  .f-mol{fill:none;stroke:var(--teal);stroke-width:2.3;stroke-linejoin:round;stroke-linecap:round;}
-  .f-band{fill:var(--teal);opacity:.09;}
-  .f-guide{stroke:var(--teal);stroke-width:.9;stroke-dasharray:3 3;opacity:.7;}
-  .f-hist{fill:var(--teal);fill-opacity:.16;stroke:var(--teal);stroke-width:1;stroke-linejoin:round;}
-
-  /* one orchestrated moment: the trace is drawn, the plateau lights up, the histogram fills in */
-  @keyframes draw{from{stroke-dasharray:1;stroke-dashoffset:1;}to{stroke-dasharray:1;stroke-dashoffset:0;}}
-  @keyframes fade{from{opacity:0;}}
-  @keyframes grow{from{transform:scaleX(0);}}
-  .draw{animation:draw 2.4s linear .2s both;}
-  .draw-mol{animation:draw var(--dd,.9s) linear calc(.2s + var(--d0,.66s)) both;}
-  .f-band{animation:fade .6s ease .9s both;}
-  .f-note{animation:fade .6s ease 1.2s both;}
-  .f-guide{animation:fade .5s ease 2.0s both;}
-  .f-hist{transform-box:fill-box;transform-origin:0 50%;animation:grow .9s ease-out 2.1s both;}
-  @media (prefers-reduced-motion:reduce){
-    .draw,.draw-mol,.f-band,.f-note,.f-guide,.f-hist{animation:none;}
-  }
-
-  /* ---------- scholar stats (filled in by generate_cv.py) ---------- */
-  .statrow{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;padding-top:16px;border-top:1px solid var(--rule);}
-  .statrow > div{display:flex;align-items:baseline;gap:7px;font-size:12px;color:var(--ink-2);white-space:nowrap;}
+  /* scholar stats (filled in by generate_cv.py) */
+  .statrow{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);}
+  .statrow > div{display:flex;align-items:baseline;gap:7px;font-size:12px;color:#a9b6ca;white-space:nowrap;}
   .statrow span{
-    font-family:var(--serif);font-size:25px;line-height:1;color:var(--ink);
+    font-family:var(--serif);font-size:26px;font-weight:400;line-height:1;color:#f6f8fb;
     font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.01em;
   }
-  .stats-note{margin:9px 0 0;font-size:10.5px;color:var(--ink-3);}
+  .stats-note{margin:10px 0 0;font-size:10.5px;color:#8493a9;}
 
   /* ---------- sections: titles live in the left rail ---------- */
   .sec{margin-top:38px;padding-top:32px;border-top:1px solid var(--rule);}
   .sec::after{content:"";display:block;clear:both;}
+  .band + .sec{margin-top:0;padding-top:46px;border-top:0;}
   .sec-head{float:left;width:var(--rail);}
   .sec-h{font-family:var(--serif);font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-.01em;margin:0;}
   .sec-sub{margin:8px 0 0;font-size:11.5px;line-height:1.45;color:var(--ink-3);}
@@ -150,10 +136,10 @@
     position:fixed;top:20px;right:20px;z-index:10;
     display:flex;align-items:center;gap:8px;
     font:500 12.5px var(--sans);
-    background:var(--ink);color:#fff;border:0;border-radius:99px;padding:10px 18px 10px 14px;
-    cursor:pointer;box-shadow:0 6px 18px rgba(15,27,45,.25);
+    background:var(--gold);color:var(--night);border:0;border-radius:99px;padding:10px 18px 10px 14px;
+    cursor:pointer;box-shadow:0 6px 18px rgba(15,27,45,.28);
   }
-  .pdf-btn:hover{background:var(--teal);}
+  .pdf-btn:hover{background:var(--gold-light);}
 
   @page{size:A4;margin:12mm 14mm 13mm;}
   @media print{
@@ -163,20 +149,21 @@
     body{font-size:12px;line-height:1.5;}
     .sheet{margin:0;padding:0;max-width:none;box-shadow:none;background:#fff;}
     .no-print{display:none !important;}
-    .draw,.draw-mol,.f-band,.f-note,.f-guide,.f-hist{animation:none !important;}
 
+    .band{margin:0;padding:26px 28px 16px;}
+    .band::after{height:2px;}
     .name{font-size:52px;margin-bottom:12px;}
     .position{font-size:13px;margin-bottom:12px;}
     .contact{font-size:11.5px;}
     .portrait{width:96px;height:96px;padding:4px;}
     .masthead{grid-template-columns:minmax(0,1fr) 96px;}
-    .trace-fig{margin-top:20px;}
-    .statrow{margin-top:14px;padding-top:12px;gap:6px 18px;}
+    .statrow{margin-top:18px;padding-top:12px;gap:6px 18px;}
     .statrow > div{font-size:10.5px;gap:5px;}
     .statrow span{font-size:21px;}
     .stats-note{font-size:9.5px;margin-top:6px;}
 
     .sec{margin-top:20px;padding-top:18px;}
+    .band + .sec{margin-top:0;padding-top:24px;}
     .sec-h{font-size:19px;}
     .sec-sub{font-size:10.5px;}
     .prose p{font-size:14px;line-height:1.5;margin-bottom:.6em;}
@@ -199,7 +186,7 @@
     .exp{margin-top:14px;padding-top:14px;}
     .exp p{font-size:11px;line-height:1.5;margin-bottom:.5em;}
 
-    .masthead,.trace-fig,.statrow,.sec-keep{break-inside:avoid;}
+    .band,.sec-keep{break-inside:avoid;}
     .sec-head{break-after:avoid;}
     .pub,.edu-item,.awards li,.skills > div,.exp p{break-inside:avoid;}
     a{text-decoration:none;}
@@ -207,16 +194,18 @@
 
   @media (max-width:680px){
     .sheet{margin:0;padding:28px 20px 44px;box-shadow:none;}
+    .band{margin:-28px -20px 0;padding:28px 20px 22px;}
+    .lattice{height:230px;opacity:.6;}
     .masthead{grid-template-columns:1fr;row-gap:20px;}
     .portrait{order:-1;justify-self:start;width:88px;height:88px;padding:4px;}
     .name{font-size:44px;}
+    .band + .sec{padding-top:34px;}
     .sec{margin-top:30px;padding-top:26px;}
     .sec-head{float:none;width:auto;margin-bottom:16px;}
     .sec-body{margin-left:0;}
     .edu-item{grid-template-columns:84px minmax(0,1fr);column-gap:14px;}
     .awards{columns:1;}
     .skills{grid-template-columns:1fr;row-gap:14px;}
-    .f-tick,.f-cap,.f-note{display:none;}
     .pdf-btn{top:12px;right:12px;padding:9px 14px 9px 11px;}
   }
 </style>
@@ -224,54 +213,32 @@
 <body>
 <main class="sheet">
 
-  <header class="masthead">
-    <div class="id">
-      <h1 class="name">Umar Rashid</h1>
-      <p class="position">Research Fellow at the Physics Institute (PHI) and the Institute of Quantum Materials and Technologies (IQMT), Karlsruhe Institute of Technology, since August 2025.</p>
-      <ul class="contact">
-        <li><a href="mailto:umar.rashid@kit.edu">umar.rashid@kit.edu</a></li>
-        <li><a href="mailto:umarorarman@gmail.com">umarorarman@gmail.com</a></li>
-        <li>+91 90188 99853</li>
-      </ul>
-      <ul class="contact">
-        <li><a href="https://arman-rashid.github.io/" target="_blank" rel="noopener">arman-rashid.github.io</a></li>
-        <li><a href="https://scholar.google.com/citations?user=jS72zagAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
-        <li><a href="https://in.linkedin.com/in/umar-rashid-746b381a4" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="https://x.com/Umair_rashid" target="_blank" rel="noopener">X</a></li>
-      </ul>
+  <header class="band">
+<svg class="lattice" viewBox="0 0 920 340" preserveAspectRatio="xMaxYMin slice" aria-hidden="true" focusable="false"><path d="M420.2 181.0h.01M393.9 133.7h.01M404.2 144.7h.01M414.4 155.7h.01M424.6 166.6h.01M434.8 177.6h.01M445.1 188.6h.01M455.3 199.5h.01M465.5 210.5h.01M475.8 221.5h.01M388.1 108.4h.01M398.3 119.4h.01M408.5 130.3h.01M418.8 141.3h.01M429.0 152.3h.01M439.2 163.3h.01M449.5 174.2h.01M459.7 185.2h.01M469.9 196.2h.01M480.2 207.1h.01M490.4 218.1h.01M500.6 229.1h.01M510.8 240.0h.01M382.2 83.1h.01M392.5 94.1h.01M402.7 105.0h.01M412.9 116.0h.01M423.2 127.0h.01M433.4 137.9h.01M443.6 148.9h.01M453.8 159.9h.01M464.1 170.8h.01M474.3 181.8h.01M484.5 192.8h.01M494.8 203.8h.01M505.0 214.7h.01M515.2 225.7h.01M525.5 236.7h.01M535.7 247.6h.01M386.6 68.7h.01M396.9 79.7h.01M407.1 90.7h.01M417.3 101.7h.01M427.5 112.6h.01M437.8 123.6h.01M448.0 134.6h.01M458.2 145.5h.01M468.5 156.5h.01M478.7 167.5h.01M488.9 178.4h.01M499.2 189.4h.01M509.4 200.4h.01M519.6 211.4h.01M529.8 222.3h.01M540.1 233.3h.01M550.3 244.3h.01M560.5 255.2h.01M391.0 54.4h.01M401.2 65.4h.01M411.5 76.3h.01M421.7 87.3h.01M431.9 98.3h.01M442.2 109.2h.01M452.4 120.2h.01M462.6 131.2h.01M472.8 142.2h.01M483.1 153.1h.01M493.3 164.1h.01M503.5 175.1h.01M513.8 186.0h.01M524.0 197.0h.01M534.2 208.0h.01M544.5 219.0h.01M554.7 229.9h.01M564.9 240.9h.01M575.1 251.9h.01M585.4 262.8h.01M405.6 51.0h.01M415.9 62.0h.01M426.1 73.0h.01M436.3 83.9h.01M446.5 94.9h.01M456.8 105.9h.01M467.0 116.8h.01M477.2 127.8h.01M487.5 138.8h.01M497.7 149.8h.01M507.9 160.7h.01M518.2 171.7h.01M528.4 182.7h.01M538.6 193.6h.01M548.8 204.6h.01M559.1 215.6h.01M569.3 226.5h.01M579.5 237.5h.01M589.8 248.5h.01M600.0 259.5h.01M610.2 270.4h.01M410.0 36.7h.01M420.2 47.6h.01M430.5 58.6h.01M440.7 69.6h.01M450.9 80.6h.01M461.2 91.5h.01M471.4 102.5h.01M481.6 113.5h.01M491.8 124.4h.01M502.1 135.4h.01M512.3 146.4h.01M522.5 157.4h.01M532.8 168.3h.01M543.0 179.3h.01M553.2 190.3h.01M563.5 201.2h.01M573.7 212.2h.01M583.9 223.2h.01M594.1 234.1h.01M604.4 245.1h.01M614.6 256.1h.01M624.8 267.1h.01M635.1 278.0h.01M414.4 22.3h.01M424.6 33.3h.01M434.9 44.3h.01M445.1 55.2h.01M455.3 66.2h.01M465.5 77.2h.01M475.8 88.2h.01M486.0 99.1h.01M496.2 110.1h.01M506.5 121.1h.01M567.8 186.9h.01M578.1 197.9h.01M588.3 208.8h.01M598.5 219.8h.01M608.8 230.8h.01M619.0 241.7h.01M629.2 252.7h.01M639.5 263.7h.01M649.7 274.6h.01M659.9 285.6h.01M429.0 19.0h.01M439.2 29.9h.01M449.5 40.9h.01M459.7 51.9h.01M469.9 62.8h.01M480.2 73.8h.01M490.4 84.8h.01M500.6 95.8h.01M602.9 205.5h.01M613.1 216.4h.01M623.4 227.4h.01M633.6 238.4h.01M643.8 249.3h.01M654.1 260.3h.01M664.3 271.3h.01M674.5 282.2h.01M433.4 4.6h.01M443.6 15.6h.01M453.9 26.6h.01M464.1 37.5h.01M474.3 48.5h.01M484.5 59.5h.01M494.8 70.4h.01M505.0 81.4h.01M627.8 213.0h.01M638.0 224.0h.01M648.2 235.0h.01M658.5 246.0h.01M668.7 256.9h.01M678.9 267.9h.01M689.1 278.9h.01M699.4 289.8h.01M448.0 1.2h.01M458.2 12.2h.01M468.5 23.2h.01M478.7 34.2h.01M488.9 45.1h.01M499.2 56.1h.01M509.4 67.1h.01M652.6 220.6h.01M662.8 231.6h.01M673.1 242.6h.01M683.3 253.6h.01M693.5 264.5h.01M703.8 275.5h.01M714.0 286.5h.01M462.6 -2.1h.01M472.9 8.8h.01M483.1 19.8h.01M493.3 30.8h.01M503.5 41.7h.01M513.8 52.7h.01M677.5 228.2h.01M687.7 239.2h.01M697.9 250.2h.01M708.1 261.2h.01M718.4 272.1h.01M728.6 283.1h.01M738.8 294.1h.01M487.5 5.5h.01M497.7 16.4h.01M507.9 27.4h.01M518.2 38.4h.01M702.3 235.8h.01M712.5 246.8h.01M722.8 257.8h.01M733.0 268.7h.01M743.2 279.7h.01M753.5 290.7h.01M502.1 2.1h.01M512.3 13.1h.01M522.5 24.0h.01M532.8 35.0h.01M716.9 232.5h.01M727.1 243.4h.01M737.4 254.4h.01M747.6 265.4h.01M757.8 276.3h.01M768.1 287.3h.01M516.7 -1.3h.01M526.9 9.7h.01M537.2 20.7h.01M741.8 240.1h.01M752.0 251.0h.01M762.2 262.0h.01M772.5 273.0h.01M782.7 283.9h.01M792.9 294.9h.01M541.5 6.3h.01M551.8 17.3h.01M756.4 236.7h.01M766.6 247.7h.01M776.8 258.6h.01M787.1 269.6h.01M797.3 280.6h.01M807.5 291.5h.01M556.2 2.9h.01M781.2 244.3h.01M791.5 255.3h.01M801.7 266.2h.01M811.9 277.2h.01M822.1 288.2h.01M570.8 -0.4h.01M795.8 240.9h.01M806.1 251.9h.01M816.3 262.8h.01M826.5 273.8h.01M836.8 284.8h.01M847.0 295.8h.01M820.7 248.5h.01M830.9 259.5h.01M841.1 270.4h.01M851.4 281.4h.01M861.6 292.4h.01M835.3 245.1h.01M845.5 256.1h.01M855.8 267.1h.01M866.0 278.0h.01M876.2 289.0h.01M849.9 241.8h.01M860.1 252.7h.01M870.4 263.7h.01M880.6 274.7h.01M890.8 285.6h.01M864.5 238.4h.01M874.8 249.4h.01M885.0 260.3h.01M895.2 271.3h.01M905.5 282.3h.01M879.1 235.0h.01M889.4 246.0h.01M899.6 256.9h.01M909.8 267.9h.01M920.1 278.9h.01M893.8 231.6h.01M904.0 242.6h.01M914.2 253.6h.01M908.4 228.3h.01M918.6 239.2h.01M923.0 224.9h.01" fill="none" stroke="#d9b04a" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.07"/><path d="M516.7 132.0h.01M526.9 143.0h.01M537.2 154.0h.01M547.4 164.9h.01M557.6 175.9h.01M510.9 106.7h.01M521.1 117.7h.01M531.3 128.7h.01M541.5 139.6h.01M551.8 150.6h.01M562.0 161.6h.01M572.2 172.5h.01M582.5 183.5h.01M592.7 194.5h.01M515.2 92.4h.01M525.5 103.3h.01M535.7 114.3h.01M545.9 125.3h.01M556.2 136.3h.01M566.4 147.2h.01M576.6 158.2h.01M586.8 169.2h.01M597.1 180.1h.01M607.3 191.1h.01M617.5 202.1h.01M519.6 78.0h.01M529.9 89.0h.01M540.1 100.0h.01M550.3 110.9h.01M560.5 121.9h.01M570.8 132.9h.01M581.0 143.9h.01M591.2 154.8h.01M601.5 165.8h.01M611.7 176.8h.01M621.9 187.7h.01M632.2 198.7h.01M642.4 209.7h.01M524.0 63.7h.01M534.2 74.7h.01M544.5 85.6h.01M554.7 96.6h.01M564.9 107.6h.01M575.2 118.5h.01M616.1 162.4h.01M626.3 173.4h.01M636.5 184.4h.01M646.8 195.3h.01M657.0 206.3h.01M667.2 217.3h.01M528.4 49.3h.01M538.6 60.3h.01M548.9 71.3h.01M559.1 82.3h.01M569.3 93.2h.01M651.2 181.0h.01M661.4 192.0h.01M671.6 202.9h.01M681.8 213.9h.01M692.1 224.9h.01M543.0 46.0h.01M553.2 56.9h.01M563.5 67.9h.01M573.7 78.9h.01M676.0 188.6h.01M686.2 199.6h.01M696.5 210.5h.01M706.7 221.5h.01M547.4 31.6h.01M557.6 42.6h.01M567.9 53.6h.01M578.1 64.5h.01M700.8 196.2h.01M711.1 207.1h.01M721.3 218.1h.01M731.5 229.1h.01M562.0 28.2h.01M572.2 39.2h.01M582.5 50.2h.01M725.7 203.8h.01M735.9 214.7h.01M746.1 225.7h.01M566.4 13.9h.01M576.6 24.9h.01M586.9 35.8h.01M750.5 211.4h.01M760.8 222.3h.01M771.0 233.3h.01M581.0 10.5h.01M591.2 21.5h.01M601.5 32.5h.01M765.1 208.0h.01M775.4 219.0h.01M785.6 229.9h.01M595.6 7.2h.01M605.9 18.1h.01M616.1 29.1h.01M790.0 215.6h.01M800.2 226.6h.01M810.5 237.5h.01M610.2 3.8h.01M620.5 14.8h.01M804.6 212.2h.01M814.8 223.2h.01M825.1 234.2h.01M624.9 0.4h.01M635.1 11.4h.01M819.2 208.8h.01M829.5 219.8h.01M839.7 230.8h.01M639.5 -3.0h.01M649.7 8.0h.01M833.8 205.5h.01M844.1 216.4h.01M854.3 227.4h.01M664.3 4.6h.01M858.7 213.1h.01M868.9 224.0h.01M678.9 1.3h.01M873.3 209.7h.01M883.5 220.7h.01M693.5 -2.1h.01M887.9 206.3h.01M898.1 217.3h.01M902.5 202.9h.01M912.8 213.9h.01M917.1 199.6h.01" fill="none" stroke="#d9b04a" stroke-width="2.8" stroke-linecap="round" stroke-opacity="0.13"/><path d="M585.4 129.5h.01M595.6 140.5h.01M605.8 151.4h.01M579.5 104.2h.01M589.8 115.2h.01M600.0 126.1h.01M610.2 137.1h.01M620.5 148.1h.01M630.7 159.0h.01M640.9 170.0h.01M583.9 89.8h.01M594.2 100.8h.01M604.4 111.8h.01M614.6 122.8h.01M624.8 133.7h.01M635.1 144.7h.01M645.3 155.7h.01M655.5 166.6h.01M665.8 177.6h.01M588.3 75.5h.01M598.5 86.5h.01M608.8 97.4h.01M619.0 108.4h.01M629.2 119.4h.01M639.5 130.4h.01M649.7 141.3h.01M659.9 152.3h.01M670.2 163.3h.01M680.4 174.2h.01M690.6 185.2h.01M592.7 61.2h.01M602.9 72.1h.01M613.2 83.1h.01M623.4 94.1h.01M684.8 159.9h.01M695.0 170.9h.01M705.2 181.8h.01M715.5 192.8h.01M597.1 46.8h.01M607.3 57.8h.01M617.5 68.8h.01M627.8 79.7h.01M709.6 167.5h.01M719.8 178.5h.01M730.1 189.4h.01M740.3 200.4h.01M611.7 43.4h.01M621.9 54.4h.01M632.2 65.4h.01M734.5 175.1h.01M744.7 186.1h.01M754.9 197.0h.01M626.3 40.1h.01M636.5 51.0h.01M759.3 182.7h.01M769.5 193.7h.01M779.8 204.6h.01M630.7 25.7h.01M640.9 36.7h.01M651.2 47.7h.01M773.9 179.3h.01M784.2 190.3h.01M794.4 201.2h.01M645.3 22.3h.01M655.5 33.3h.01M665.8 44.3h.01M798.8 186.9h.01M809.0 197.9h.01M659.9 19.0h.01M670.2 29.9h.01M813.4 183.5h.01M823.6 194.5h.01M674.5 15.6h.01M684.8 26.6h.01M828.0 180.2h.01M838.2 191.1h.01M848.5 202.1h.01M689.2 12.2h.01M699.4 23.2h.01M842.6 176.8h.01M852.8 187.8h.01M863.1 198.7h.01M703.8 8.9h.01M714.0 19.8h.01M867.5 184.4h.01M877.7 195.3h.01M718.4 5.5h.01M728.6 16.4h.01M882.1 181.0h.01M892.3 192.0h.01M733.0 2.1h.01M743.2 13.1h.01M896.7 177.6h.01M906.9 188.6h.01M747.6 -1.3h.01M757.9 9.7h.01M901.1 163.3h.01M911.3 174.3h.01M921.5 185.2h.01M772.5 6.3h.01M915.7 159.9h.01M787.1 3.0h.01M801.7 -0.4h.01M811.9 10.5h.01M826.5 7.2h.01M841.2 3.8h.01M851.4 14.8h.01M855.8 0.4h.01M866.0 11.4h.01M870.4 -3.0h.01M880.6 8.0h.01M890.9 19.0h.01M895.2 4.6h.01M905.5 15.6h.01M915.7 26.6h.01M909.9 1.3h.01M920.1 12.2h.01" fill="none" stroke="#d9b04a" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.21"/><path d="M633.6 105.0h.01M643.8 116.0h.01M654.1 127.0h.01M664.3 138.0h.01M674.5 148.9h.01M638.0 90.7h.01M648.2 101.7h.01M658.5 112.6h.01M668.7 123.6h.01M678.9 134.6h.01M689.2 145.5h.01M699.4 156.5h.01M642.4 76.4h.01M652.6 87.3h.01M662.8 98.3h.01M673.1 109.3h.01M683.3 120.2h.01M693.5 131.2h.01M703.8 142.2h.01M714.0 153.1h.01M724.2 164.1h.01M646.8 62.0h.01M657.0 73.0h.01M667.2 83.9h.01M677.5 94.9h.01M687.7 105.9h.01M718.4 138.8h.01M728.6 149.8h.01M738.8 160.7h.01M749.1 171.7h.01M661.4 58.6h.01M671.6 69.6h.01M681.9 80.6h.01M743.2 146.4h.01M753.5 157.4h.01M763.7 168.3h.01M676.0 55.3h.01M686.2 66.2h.01M768.1 154.0h.01M778.3 165.0h.01M788.5 175.9h.01M680.4 40.9h.01M690.6 51.9h.01M700.9 62.9h.01M782.7 150.6h.01M792.9 161.6h.01M803.2 172.6h.01M695.0 37.5h.01M705.2 48.5h.01M807.5 158.2h.01M817.8 169.2h.01M709.6 34.2h.01M719.9 45.1h.01M822.2 154.8h.01M832.4 165.8h.01M724.2 30.8h.01M734.5 41.8h.01M836.8 151.5h.01M847.0 162.4h.01M857.2 173.4h.01M738.9 27.4h.01M749.1 38.4h.01M851.4 148.1h.01M861.6 159.1h.01M871.8 170.0h.01M753.5 24.0h.01M763.7 35.0h.01M866.0 144.7h.01M876.2 155.7h.01M886.5 166.7h.01M768.1 20.7h.01M778.3 31.6h.01M880.6 141.3h.01M890.8 152.3h.01M782.7 17.3h.01M792.9 28.3h.01M803.2 39.2h.01M895.2 138.0h.01M905.5 148.9h.01M797.3 13.9h.01M807.5 24.9h.01M817.8 35.9h.01M899.6 123.6h.01M909.8 134.6h.01M920.1 145.6h.01M822.2 21.5h.01M832.4 32.5h.01M842.6 43.5h.01M914.2 120.2h.01M836.8 18.1h.01M847.0 29.1h.01M857.2 40.1h.01M867.5 51.1h.01M918.6 105.9h.01M861.6 25.7h.01M871.9 36.7h.01M882.1 47.7h.01M892.3 58.6h.01M902.5 69.6h.01M912.8 80.6h.01M876.2 22.4h.01M886.5 33.3h.01M896.7 44.3h.01M906.9 55.3h.01M917.2 66.2h.01M901.1 30.0h.01M911.3 40.9h.01M921.5 51.9h.01" fill="none" stroke="#d9b04a" stroke-width="4.2" stroke-linecap="round" stroke-opacity="0.32"/><path d="M697.9 116.9h.01M708.2 127.8h.01M692.1 91.5h.01M702.3 102.5h.01M712.5 113.5h.01M722.8 124.5h.01M733.0 135.4h.01M696.5 77.2h.01M706.7 88.2h.01M716.9 99.1h.01M727.2 110.1h.01M737.4 121.1h.01M747.6 132.1h.01M757.8 143.0h.01M711.1 73.8h.01M721.3 84.8h.01M731.5 95.8h.01M741.8 106.7h.01M752.0 117.7h.01M762.2 128.7h.01M772.5 139.6h.01M715.5 59.5h.01M725.7 70.5h.01M735.9 81.4h.01M746.2 92.4h.01M756.4 103.4h.01M766.6 114.3h.01M776.8 125.3h.01M787.1 136.3h.01M797.3 147.2h.01M730.1 56.1h.01M740.3 67.1h.01M750.5 78.0h.01M760.8 89.0h.01M771.0 100.0h.01M781.2 111.0h.01M791.5 121.9h.01M801.7 132.9h.01M811.9 143.9h.01M744.7 52.7h.01M754.9 63.7h.01M765.2 74.7h.01M775.4 85.6h.01M785.6 96.6h.01M795.8 107.6h.01M806.1 118.6h.01M816.3 129.5h.01M826.5 140.5h.01M759.3 49.4h.01M769.5 60.3h.01M779.8 71.3h.01M790.0 82.3h.01M800.2 93.2h.01M810.5 104.2h.01M820.7 115.2h.01M830.9 126.2h.01M841.2 137.1h.01M773.9 46.0h.01M784.2 57.0h.01M794.4 67.9h.01M804.6 78.9h.01M814.8 89.9h.01M825.1 100.8h.01M835.3 111.8h.01M845.5 122.8h.01M855.8 133.7h.01M788.5 42.6h.01M798.8 53.6h.01M809.0 64.6h.01M819.2 75.5h.01M829.5 86.5h.01M839.7 97.5h.01M849.9 108.4h.01M860.2 119.4h.01M870.4 130.4h.01M813.4 50.2h.01M823.6 61.2h.01M833.9 72.1h.01M844.1 83.1h.01M854.3 94.1h.01M864.5 105.1h.01M874.8 116.0h.01M885.0 127.0h.01M828.0 46.8h.01M838.2 57.8h.01M848.5 68.8h.01M858.7 79.7h.01M868.9 90.7h.01M879.2 101.7h.01M889.4 112.7h.01M852.9 54.4h.01M863.1 65.4h.01M873.3 76.4h.01M883.5 87.3h.01M893.8 98.3h.01M904.0 109.3h.01M877.7 62.0h.01M887.9 73.0h.01M898.2 84.0h.01M908.4 94.9h.01" fill="none" stroke="#d9b04a" stroke-width="5.0" stroke-linecap="round" stroke-opacity="0.46"/></svg>
+    <div class="masthead">
+      <div class="id">
+        <h1 class="name">Umar Rashid</h1>
+        <p class="position">Research Fellow at the Physics Institute (PHI) and the Institute of Quantum Materials and Technologies (IQMT), Karlsruhe Institute of Technology, since August 2025.</p>
+        <ul class="contact">
+          <li><a href="mailto:umar.rashid@kit.edu">umar.rashid@kit.edu</a></li>
+          <li><a href="mailto:umarorarman@gmail.com">umarorarman@gmail.com</a></li>
+          <li>+91 90188 99853</li>
+        </ul>
+        <ul class="contact">
+          <li><a href="https://arman-rashid.github.io/" target="_blank" rel="noopener">arman-rashid.github.io</a></li>
+          <li><a href="https://scholar.google.com/citations?user=jS72zagAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+          <li><a href="https://in.linkedin.com/in/umar-rashid-746b381a4" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://x.com/Umair_rashid" target="_blank" rel="noopener">X</a></li>
+        </ul>
+      </div>
+      <div class="portrait"><img src="<!-- PHOTO_BASE64 -->" alt="Umar Rashid"></div>
     </div>
-    <div class="portrait"><img src="<!-- PHOTO_BASE64 -->" alt="Umar Rashid"></div>
+
+    <div class="statrow">
+      <!-- STATS -->
+    </div>
+    <p class="stats-note"><!-- STATS_NOTE --></p>
   </header>
-
-  <figure class="trace-fig">
-<svg class="fig" viewBox="0 0 800 168" role="img" aria-labelledby="fig-t" preserveAspectRatio="xMidYMid meet">
-  <title id="fig-t">Schematic single-molecule conductance trace: a plateau where one molecule bridges the electrodes, and the histogram it produces.</title>
-  <line class="f-grid" stroke="#d3dae3" stroke-width=".7" stroke-dasharray="1 3" x1="64" x2="777" y1="22.0" y2="22.0"/><text class="f-tick" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="56" y="25.2" text-anchor="end">1</text><line class="f-grid" stroke="#d3dae3" stroke-width=".7" stroke-dasharray="1 3" x1="64" x2="777" y1="57.0" y2="57.0"/><text class="f-tick" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="56" y="60.2" text-anchor="end">10<tspan class="f-sup" font-size="6.5" dy="-3.5">−2</tspan></text><line class="f-grid" stroke="#d3dae3" stroke-width=".7" stroke-dasharray="1 3" x1="64" x2="777" y1="92.0" y2="92.0"/><text class="f-tick" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="56" y="95.2" text-anchor="end">10<tspan class="f-sup" font-size="6.5" dy="-3.5">−4</tspan></text><line class="f-grid" stroke="#d3dae3" stroke-width=".7" stroke-dasharray="1 3" x1="64" x2="777" y1="127.0" y2="127.0"/><text class="f-tick" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="56" y="130.2" text-anchor="end">10<tspan class="f-sup" font-size="6.5" dy="-3.5">−6</tspan></text>
-  <line class="f-axis" stroke="#5e697c" stroke-width=".9" x1="64" x2="64" y1="12" y2="136"/>
-  <line class="f-axis" stroke="#5e697c" stroke-width=".9" x1="64" x2="524" y1="136" y2="136"/>
-  <line class="f-axis" stroke="#5e697c" stroke-width=".9" x1="572" x2="572" y1="12" y2="136"/>
-  <line class="f-axis" stroke="#5e697c" stroke-width=".9" x1="572" x2="777" y1="136" y2="136"/>
-  <path class="f-arrow" fill="none" stroke="#5e697c" stroke-width=".9" d="M518,132.8 L524,136 L518,139.2"/>
-
-  <rect class="f-band" fill="#0f6d88" opacity=".09" x="183" y="76.3" width="189" height="18" rx="2"/>
-  <line class="f-guide" stroke="#0f6d88" stroke-width=".9" stroke-dasharray="3 3" opacity=".7" x1="378" x2="742.6" y1="85.3" y2="85.3"/>
-  <path class="f-hist" fill="#0f6d88" fill-opacity=".16" stroke="#0f6d88" stroke-width="1" stroke-linejoin="round" d="M572,16.0 L585.2,16.0 L586.7,17.2 L592.2,18.4 L604.3,19.6 L619.9,20.8 L627.5,22.0 L620.2,23.2 L605.0,24.4 L593.2,25.6 L588.1,26.8 L586.9,28.0 L586.9,29.2 L587.1,30.4 L587.4,31.6 L587.7,32.8 L588.0,34.0 L588.4,35.2 L588.7,36.4 L589.1,37.6 L589.4,38.8 L589.8,40.0 L590.2,41.2 L590.6,42.4 L590.9,43.6 L591.3,44.8 L591.7,46.0 L592.0,47.2 L592.4,48.4 L592.7,49.6 L593.1,50.8 L593.4,52.0 L593.7,53.2 L593.9,54.4 L594.2,55.6 L594.4,56.8 L594.6,58.0 L594.7,59.2 L594.8,60.4 L594.9,61.6 L595.0,62.8 L595.0,64.0 L595.0,65.2 L594.9,66.4 L594.8,67.6 L594.7,68.8 L594.6,70.0 L594.4,71.2 L594.2,72.4 L594.0,73.6 L594.0,74.8 L594.7,76.0 L597.2,77.2 L603.9,78.4 L617.8,79.6 L641.7,80.8 L674.5,82.0 L709.7,83.2 L735.7,84.4 L742.0,85.6 L725.8,86.8 L693.8,88.0 L657.6,89.2 L627.3,90.4 L607.1,91.6 L595.9,92.8 L590.7,94.0 L588.5,95.2 L587.6,96.4 L587.2,97.6 L586.9,98.8 L586.6,100.0 L586.4,101.2 L586.1,102.4 L585.9,103.6 L585.7,104.8 L585.5,106.0 L585.4,107.2 L585.2,108.4 L585.1,109.6 L585.0,110.8 L584.9,112.0 L584.8,113.2 L584.7,114.4 L584.8,115.6 L585.3,116.8 L586.4,118.0 L588.6,119.2 L592.5,120.4 L597.7,121.6 L603.6,122.8 L608.3,124.0 L610.2,125.2 L608.5,126.4 L603.9,127.6 L598.1,128.8 L592.6,130.0 L588.6,131.2 L572,131.2 Z"/>
-
-  <path class="f-trace draw" fill="none" stroke="#0f1b2d" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round" pathLength="1" d="M64.0,21.7 L67.0,21.8 L70.0,22.1 L73.0,22.0 L76.0,21.6 L79.0,21.7 L82.0,21.9 L85.0,22.2 L88.0,21.8 L91.0,21.5 L93.0,29.9 L94.5,43.9 L97.0,46.8 L99.0,47.5 L102.0,49.4 L105.0,51.2 L108.0,52.9 L111.0,54.2 L114.0,55.4 L117.0,57.4 L120.0,58.5 L123.0,59.6 L126.0,60.6 L129.0,62.0 L132.0,63.3 L135.0,64.5 L138.0,65.8 L141.0,67.2 L144.0,68.7 L147.0,70.2 L150.0,71.4 L153.0,72.2 L156.0,73.7 L159.0,74.6 L162.0,75.9 L165.0,76.8 L168.0,78.2 L171.0,79.3 L174.0,80.7 L177.0,82.8 L180.0,83.9 L183.0,84.4 L185.5,84.0 L188.0,84.0 L190.5,84.3 L193.0,84.3 L195.5,84.5 L198.0,84.5 L200.5,84.2 L203.0,84.5 L205.5,84.3 L208.0,85.0 L210.5,84.8 L213.0,85.1 L215.5,85.1 L218.0,85.4 L220.5,85.1 L223.0,85.5 L225.5,85.4 L228.0,85.8 L230.5,85.9 L233.0,85.9 L235.5,85.5 L238.0,85.8 L240.5,85.9 L243.0,86.4 L245.5,86.1 L248.0,86.2 L250.5,86.3 L253.0,86.3 L255.5,86.3 L258.0,86.3 L260.5,86.0 L263.0,85.7 L265.5,85.6 L268.0,85.9 L270.5,87.5 L273.0,87.8 L275.5,88.0 L278.0,88.2 L280.5,88.3 L283.0,88.2 L285.5,88.3 L288.0,88.8 L290.5,88.4 L293.0,88.1 L295.5,88.7 L298.0,88.6 L300.5,88.8 L303.0,88.9 L305.5,88.3 L308.0,89.1 L310.5,89.5 L313.0,89.3 L315.5,89.3 L318.0,89.1 L320.5,88.7 L323.0,88.6 L325.5,88.6 L328.0,89.0 L330.5,89.1 L333.0,89.0 L335.5,88.7 L338.0,88.3 L340.5,88.5 L343.0,88.8 L345.5,88.5 L348.0,87.8 L350.5,87.6 L353.0,87.8 L355.5,88.0 L358.0,88.6 L360.5,88.2 L363.0,88.2 L365.5,88.5 L368.0,88.4 L370.5,87.7 L374.0,92.0 L376.0,106.0 L379.0,118.2 L384.0,124.4 L388.0,125.9 L391.0,127.6 L394.0,127.6 L397.0,126.1 L400.0,125.7 L403.0,126.0 L406.0,128.0 L409.0,127.8 L412.0,127.3 L415.0,128.2 L418.0,127.5 L421.0,128.6 L424.0,127.4 L427.0,126.8 L430.0,127.5 L433.0,128.5 L436.0,128.5 L439.0,128.3 L442.0,126.5 L445.0,126.4 L448.0,126.5 L451.0,126.6 L454.0,127.6 L457.0,127.5 L460.0,128.3 L463.0,128.2 L466.0,127.8 L469.0,127.9 L472.0,128.2 L475.0,128.8 L478.0,128.0 L481.0,127.8 L484.0,126.8 L487.0,128.5 L490.0,129.4 L493.0,128.6 L496.0,128.0 L499.0,126.9 L502.0,127.5 L505.0,127.8 L508.0,129.5 L511.0,129.1 L514.0,128.0 L517.0,126.0 L520.0,127.9 L523.0,128.0"/>
-  <path class="f-mol draw-mol" fill="none" stroke="#0f6d88" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" pathLength="1" d="M180.0,83.9 L183.0,84.4 L185.5,84.0 L188.0,84.0 L190.5,84.3 L193.0,84.3 L195.5,84.5 L198.0,84.5 L200.5,84.2 L203.0,84.5 L205.5,84.3 L208.0,85.0 L210.5,84.8 L213.0,85.1 L215.5,85.1 L218.0,85.4 L220.5,85.1 L223.0,85.5 L225.5,85.4 L228.0,85.8 L230.5,85.9 L233.0,85.9 L235.5,85.5 L238.0,85.8 L240.5,85.9 L243.0,86.4 L245.5,86.1 L248.0,86.2 L250.5,86.3 L253.0,86.3 L255.5,86.3 L258.0,86.3 L260.5,86.0 L263.0,85.7 L265.5,85.6 L268.0,85.9 L270.5,87.5 L273.0,87.8 L275.5,88.0 L278.0,88.2 L280.5,88.3 L283.0,88.2 L285.5,88.3 L288.0,88.8 L290.5,88.4 L293.0,88.1 L295.5,88.7 L298.0,88.6 L300.5,88.8 L303.0,88.9 L305.5,88.3 L308.0,89.1 L310.5,89.5 L313.0,89.3 L315.5,89.3 L318.0,89.1 L320.5,88.7 L323.0,88.6 L325.5,88.6 L328.0,89.0 L330.5,89.1 L333.0,89.0 L335.5,88.7 L338.0,88.3 L340.5,88.5 L343.0,88.8 L345.5,88.5 L348.0,87.8 L350.5,87.6 L353.0,87.8 L355.5,88.0 L358.0,88.6 L360.5,88.2 L363.0,88.2 L365.5,88.5 L368.0,88.4 L370.5,87.7" style="--d0:0.66s;--dd:0.88s"/>
-
-  <text class="f-note" fill="#0f6d88" font-size="12.5" font-style="italic" font-family="Newsreader, Georgia, serif" x="277" y="69.3" text-anchor="middle">one molecule bridges the gap</text>
-  <text class="f-cap" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="64" y="160">Electrode displacement</text>
-  <text class="f-cap" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="572" y="160">Counts</text>
-  <text class="f-cap f-cap-r" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" x="777" y="49.1" text-anchor="end">conductance histogram</text>
-  <text class="f-cap" fill="#5e697c" font-size="9.5" font-family="Instrument Sans, sans-serif" transform="translate(16 74.5) rotate(-90)" text-anchor="middle">Conductance (G<tspan class="f-sup" font-size="6.5" dy="2.5">0</tspan>)</text>
-</svg>
-  </figure>
-
-  <div class="statrow">
-    <!-- STATS -->
-  </div>
-  <p class="stats-note"><!-- STATS_NOTE --></p>
 
   <section class="sec">
     <div class="sec-head"><h2 class="sec-h">Research</h2></div>
