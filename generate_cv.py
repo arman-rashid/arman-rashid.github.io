@@ -4,7 +4,9 @@ Generate CV from local index.html and manual JSON.
 Reads the local index.html, extracts dynamic content,
 reads images from the local filesystem, and renders cv_template.html.
 """
+import io
 import json
+import re
 import sys
 import base64
 import mimetypes
@@ -17,6 +19,13 @@ MANUAL_JSON = "cv_manual.json"
 TEMPLATE_FILE = "cv_template.html"
 OUTPUT_FILE = "cv.html"
 WEBSITE_URL = "https://arman-rashid.github.io/"  # fallback if local file missing
+
+# Awards listed first on the CV, in this order (case-insensitive substring match on the title).
+# Anything not matched keeps the site's order after these. Edit freely.
+AWARD_FIRST = [
+    "Prime Minister Research Fellowship", "INSPIRE", "JRF",
+    "Gold Medalist", "Vasudevamurthy", "Best Poster", "Best Oral", "Best Presentation",
+]
 
 # ---------- HELPERS ----------
 def fetch_html():
@@ -35,6 +44,23 @@ def fetch_html():
     except Exception as e:
         print(f"❌ Failed to fetch: {e}", file=sys.stderr)
         raise SystemExit("No data source available.")
+
+def _shrink_image(raw, max_w=420):
+    """Downscale a large portrait so the CV isn't ~250 KB heavier than needed.
+    Optional: silently returns the original bytes if Pillow isn't installed."""
+    try:
+        from PIL import Image
+        im = Image.open(io.BytesIO(raw))
+        im.load()
+        if im.mode not in ("RGB", "L") or im.width <= max_w:
+            return raw, None
+        im = im.resize((max_w, round(im.height * max_w / im.width)), Image.LANCZOS)
+        buf = io.BytesIO()
+        im.convert("RGB").save(buf, "JPEG", quality=84, optimize=True, progressive=True)
+        return buf.getvalue(), "image/jpeg"
+    except Exception:
+        return raw, None
+
 
 def extract_photo(soup, base_dir="."):
     """
@@ -59,8 +85,9 @@ def extract_photo(soup, base_dir="."):
                 if not mime_type:
                     mime_type = "image/jpeg"
                 with open(img_path, "rb") as f:
-                    b64 = base64.b64encode(f.read()).decode()
-                return f"data:{mime_type};base64,{b64}"
+                    raw, small_mime = _shrink_image(f.read())
+                b64 = base64.b64encode(raw).decode()
+                return f"data:{small_mime or mime_type};base64,{b64}"
             except Exception as e:
                 print(f"⚠️  Could not read local image {img_path}: {e}", file=sys.stderr)
                 return src
@@ -84,8 +111,8 @@ def render_stats_note(scholar_stats):
     """Small note under the stats row showing when Scholar data last synced."""
     last_updated = (scholar_stats or {}).get("last_updated")
     if last_updated:
-        return f"Stats synced from Google Scholar on {last_updated} · auto-updated weekly via GitHub Actions"
-    return "Stats synced from Google Scholar · auto-updated weekly via GitHub Actions"
+        return f"Source: Google Scholar, {last_updated}"
+    return "Source: Google Scholar"
 
 
 def load_scholar_stats(path="scholar_stats.json"):
@@ -142,6 +169,11 @@ def extract_stats(soup, scholar_stats=None):
         # "Journal" + "Covers" -> "JournalCovers"
         lbl = label_el.get_text(separator=" ", strip=True)
         stats.append((n, lbl))
+
+    # "204 Citations" next to "204 Citations since 2021" reads as a typo
+    totals = {n for n, l in stats if l.strip().lower() == "citations"}
+    stats = [(n, l) for n, l in stats
+             if not (l.lower().startswith("citations since") and n in totals)]
     return stats
 
 def extract_education(soup):
@@ -181,7 +213,12 @@ def extract_publications(soup):
                 journal_text = journal.get_text(strip=True)
         else:
             journal_text = ""
+        link = info.select_one("a[href*='doi.org']")
+        doi = link["href"].split("doi.org/", 1)[1] if link else ""
+        year_m = re.search(r"\b(?:19|20)\d{2}\b", journal_text)
         pubs.append({
+            "year": int(year_m.group(0)) if year_m else 0,
+            "doi": doi,
             "title": title.get_text(strip=True) if title else "",
             # decode_contents() (not get_text()) keeps inner tags like
             # <span class="gold">U. Rashid</span> so the CV can bold the
@@ -192,6 +229,7 @@ def extract_publications(soup):
             "journal": journal_text,
             "flag": flag,
         })
+    pubs.sort(key=lambda p: -p["year"])  # stable: newest first, site order kept within a year
     return pubs
 
 def extract_awards(soup):
@@ -202,9 +240,17 @@ def extract_awards(soup):
         title = card.select_one(".award-title")
         desc = card.select_one(".award-desc")
         if title:
-            t = title.get_text(strip=True)
+            t = re.sub(r"^[\W_]+", "", title.get_text(strip=True))  # drop leading emoji
             d = desc.get_text(strip=True) if desc else ""
             awards.append((t, d))
+
+    def rank(item):
+        low = item[0].lower()
+        for i, key in enumerate(AWARD_FIRST):
+            if key.lower() in low:
+                return i
+        return len(AWARD_FIRST)
+    awards.sort(key=rank)  # stable
     return awards
 
 def render_stats(stats):
@@ -215,34 +261,48 @@ def render_stats(stats):
 
 def render_education(edu):
     html = ""
-    for year, degree, inst in edu:
+    for year, degree, inst in reversed(edu):  # newest first
         html += f'''<div class="edu-item">
-        <span class="edu-year">{year}</span><br>
-        <span class="edu-deg">{degree}</span><br>
+        <span class="edu-year">{year}</span>
+        <span class="edu-deg">{degree}</span>
         <span class="edu-inst">{inst}</span>
       </div>\n'''
     return html
 
+def _flag_html(flag):
+    if not flag:
+        return ""
+    label = re.sub(r"^\s*featured\s*[-–—:]\s*", "", flag, flags=re.I)
+    low = label.lower()
+    kind = " flag-cover" if "cover" in low else " flag-hot" if "hot" in low else ""
+    return f'<span class="flag{kind}">{label}</span>'
+
 def render_publications(pubs):
     html = ""
-    for idx, p in enumerate(pubs, 1):
-        num = f"{idx:02d}"
-        flag_html = f'<span class="pub-flag">{p["flag"]}</span>' if p["flag"] else ""
+    for p in pubs:
+        doi = (f'<a class="doi" href="https://doi.org/{p["doi"]}" target="_blank" rel="noopener">'
+               f'doi:{p["doi"]}</a>') if p.get("doi") else ""
         html += f'''<li class="pub">
-          <span class="pub-num">{num}</span>
-          <div>
-            <div class="pub-title">{p["title"]}</div>
-            <div class="pub-authors">{p["authors"]}</div>
-            <div class="pub-venue">{p["journal"]} {flag_html}</div>
-          </div>
+          <div class="pub-title">{p["title"]}</div>
+          <div class="pub-authors">{p["authors"]}</div>
+          <div class="pub-venue"><span>{p["journal"]}</span>{_flag_html(p["flag"])}{doi}</div>
         </li>\n'''
     return html
 
 def render_awards(awards):
     html = ""
     for title, desc in awards:
-        html += f'<li><b>{title}</b> — {desc}</li>\n'
+        html += f'<li><span class="aw-t">{title}</span><span class="aw-d">{desc}</span></li>\n'
     return html
+
+def render_expertise(text):
+    """The JSON paragraph has several paragraphs glued together ('...platforms.Developed...').
+    Split at those glue points and at newlines so it reads as short paragraphs."""
+    parts = []
+    for block in text.split("\n"):
+        parts += re.split(r"(?<=[a-z)])\.(?=[A-Z])", block)
+    parts = [p.strip() + ("" if p.strip().endswith(".") else ".") for p in parts if p.strip()]
+    return "\n".join(f"<p>{p}</p>" for p in parts)
 
 # ---------- MAIN ----------
 def main():
@@ -273,7 +333,7 @@ def main():
     template = template.replace("<!-- EDUCATION -->", render_education(edu))
     template = template.replace("<!-- PUBLICATIONS -->", render_publications(pubs))
     template = template.replace("<!-- AWARDS -->", render_awards(awards))
-    template = template.replace("<!-- EXPERTISE -->", f'<p>{manual["expertise_paragraph"]}</p>')
+    template = template.replace("<!-- EXPERTISE -->", render_expertise(manual["expertise_paragraph"]))
 
     skills_general = manual["skills"].get("General & Design", [])
     skills_instr = manual["skills"].get("Instrumentation & Spectroscopy", [])
