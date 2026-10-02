@@ -4,6 +4,17 @@ on:
   schedule:
     - cron: '0 1 * * 1'   # every Monday at 01:00 UTC
   workflow_dispatch:      # manual trigger
+  push:                   # rebuild whenever the CV inputs change
+    branches: [main]
+    paths:
+      - index.html
+      - cv_template.html
+      - cv_manual.json
+      - generate_cv.py
+      - scholar_stats.json
+  workflow_run:           # rebuild right after the Scholar stats update
+    workflows: ["Update Google Scholar Stats"]
+    types: [completed]
 
 jobs:
   build:
