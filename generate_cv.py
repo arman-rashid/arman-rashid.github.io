@@ -13,6 +13,7 @@ import mimetypes
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
+from html import escape as html_escape
 
 # ---------- CONFIG ----------
 MANUAL_JSON = "cv_manual.json"
@@ -23,8 +24,8 @@ WEBSITE_URL = "https://arman-rashid.github.io/"  # fallback if local file missin
 # Awards listed first on the CV, in this order (case-insensitive substring match on the title).
 # Anything not matched keeps the site's order after these. Edit freely.
 AWARD_FIRST = [
-    "Prime Minister Research Fellowship", "INSPIRE", "JRF",
-    "Gold Medalist", "Vasudevamurthy", "Best Poster", "Best Oral", "Best Presentation",
+    "Prime Minister", "INSPIRE", "JRF",
+    "Gold Medal", "Vasudevamurthy", "Best Poster", "Best Oral", "Best Presentation",
 ]
 
 # ---------- HELPERS ----------
@@ -64,10 +65,10 @@ def _shrink_image(raw, max_w=420):
 
 def extract_photo(soup, base_dir="."):
     """
-    Extract profile image from .profile-ring img.
+    Extract profile image (.portrait img on the current site, .profile-ring img on the old one).
     If src is a local path (e.g., images/...), read it from disk and encode to base64.
     """
-    img = soup.select_one(".profile-ring img")
+    img = soup.select_one(".portrait img") or soup.select_one(".profile-ring img")
     if not img:
         return ""
     src = img.get("src", "").strip()
@@ -140,6 +141,57 @@ _SCHOLAR_STAT_IDS = {
     "h-index": "h_index",
     "i10-index": "i10_index",
 }
+
+
+# ---------- CURRENT SITE: data lives in <script type="application/json" id="site-data"> ----------
+# Stat ids on the current site whose numbers come from scholar_stats.json at runtime.
+_SITE_STAT_IDS = {"sCit": "total_citations", "sH": "h_index", "sPub": "num_publications"}
+
+
+def load_site_data(soup):
+    """Return the site's embedded JSON data, or None for the old markup."""
+    tag = soup.find("script", id="site-data")
+    if not tag or not tag.string:
+        return None
+    return json.loads(tag.string)
+
+
+def site_stats(soup, scholar_stats):
+    stats = []
+    for card in soup.select(".stats .stat"):
+        num_el, label_el = card.select_one(".stat-n"), card.select_one(".stat-l")
+        if not (num_el and label_el):
+            continue
+        key = _SITE_STAT_IDS.get(num_el.get("id"))
+        n = scholar_stats.get(key) if key else None
+        stats.append((str(n if n is not None else num_el.get("data-count", "—")), label_el.get_text(strip=True)))
+    return stats
+
+
+def site_publications(data):
+    pubs = []
+    for p in data.get("publications", []):
+        authors = html_escape(p.get("a", "")).replace("U. Rashid", "<b>U. Rashid</b>")
+        pubs.append({
+            "year": p.get("y", 0),
+            "doi": p.get("doi", ""),
+            "title": p.get("t", ""),
+            "authors": authors,
+            "journal": p.get("j", ""),
+            "flag": p.get("b") or p.get("alt") or "",
+        })
+    pubs.sort(key=lambda p: -p["year"])
+    return pubs
+
+
+def sort_awards(awards):
+    def rank(item):
+        low = item[0].lower()
+        for i, key in enumerate(AWARD_FIRST):
+            if key.lower() in low:
+                return i
+        return len(AWARD_FIRST)
+    return sorted(awards, key=rank)  # stable
 
 
 def extract_stats(soup, scholar_stats=None):
@@ -243,15 +295,7 @@ def extract_awards(soup):
             t = re.sub(r"^[\W_]+", "", title.get_text(strip=True))  # drop leading emoji
             d = desc.get_text(strip=True) if desc else ""
             awards.append((t, d))
-
-    def rank(item):
-        low = item[0].lower()
-        for i, key in enumerate(AWARD_FIRST):
-            if key.lower() in low:
-                return i
-        return len(AWARD_FIRST)
-    awards.sort(key=rank)  # stable
-    return awards
+    return sort_awards(awards)
 
 def render_stats(stats):
     html = ""
@@ -317,10 +361,18 @@ def main():
     # 3. Extract dynamic data (photo from local filesystem)
     scholar_stats = load_scholar_stats()
     photo_b64 = extract_photo(soup, base_dir=".")
-    stats = extract_stats(soup, scholar_stats)
-    edu = extract_education(soup)
-    pubs = extract_publications(soup)
-    awards = extract_awards(soup)
+    data = load_site_data(soup)
+    if data:
+        print("🧾 Using embedded site-data JSON", file=sys.stderr)
+        stats = site_stats(soup, scholar_stats)
+        edu = [tuple(e) for e in data.get("education", [])]
+        pubs = site_publications(data)
+        awards = sort_awards([(a[0], a[1]) for a in data.get("awards", [])])
+    else:
+        stats = extract_stats(soup, scholar_stats)
+        edu = extract_education(soup)
+        pubs = extract_publications(soup)
+        awards = extract_awards(soup)
 
     # 4. Read template
     with open(TEMPLATE_FILE, "r", encoding="utf-8") as f:
