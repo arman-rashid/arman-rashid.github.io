@@ -145,7 +145,7 @@ _SCHOLAR_STAT_IDS = {
 
 # ---------- CURRENT SITE: data lives in <script type="application/json" id="site-data"> ----------
 # Stat ids on the current site whose numbers come from scholar_stats.json at runtime.
-_SITE_STAT_IDS = {"sCit": "total_citations", "sH": "h_index", "sPub": "num_publications"}
+_SITE_STAT_IDS = {"sCit": "total_citations", "sH": "h_index", "sI10": "i10_index", "sPub": "num_publications"}
 
 
 def load_site_data(soup):
@@ -165,9 +165,6 @@ def site_stats(soup, scholar_stats):
         key = _SITE_STAT_IDS.get(num_el.get("id"))
         n = scholar_stats.get(key) if key else None
         stats.append((str(n if n is not None else num_el.get("data-count", "—")), label_el.get_text(strip=True)))
-        # the site doesn't show i10-index, but the CV does: slot it in right after h-index
-        if key == "h_index" and scholar_stats.get("i10_index") is not None:
-            stats.append((str(scholar_stats["i10_index"]), "i10-index"))
     return stats
 
 

@@ -268,8 +268,8 @@ section { position: relative; }
 @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .portrait { max-width: 460px; } .about-copy { grid-template-columns: 1fr; } }
 
 /* ───────── stats ───────── */
-.stats { display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: clamp(64px, 9vw, 120px); }
-.stat { padding: 28px 20px 24px; border-right: 1px solid var(--line); }
+.stats { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: clamp(64px, 9vw, 120px); }
+.stat { padding: 28px 16px 24px; border-right: 1px solid var(--line); }
 .stat:first-child { padding-left: 0; }
 .stat:last-child { border-right: 0; }
 .stat-n { font-family: var(--serif); font-size: clamp(38px, 4vw, 60px); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
@@ -277,10 +277,10 @@ section { position: relative; }
 .stats-note { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 14px; letter-spacing: .03em; display: flex; align-items: center; gap: 8px; }
 .stats-note::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); }
 @media (max-width: 900px) {
-  .stats { grid-template-columns: repeat(3, 1fr); }
-  .stat:nth-child(3) { border-right: 0; }
-  .stat:nth-child(4) { padding-left: 0; }
-  .stat:nth-child(n+4) { border-top: 1px solid var(--line); }
+  .stats { grid-template-columns: repeat(4, 1fr); }
+  .stat:nth-child(4) { border-right: 0; }
+  .stat:nth-child(5) { padding-left: 0; }
+  .stat:nth-child(n+5) { border-top: 1px solid var(--line); }
 }
 @media (max-width: 480px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
@@ -288,6 +288,7 @@ section { position: relative; }
   .stat:nth-child(odd) { border-right: 1px solid var(--line) !important; }
   .stat:nth-child(even) { padding-left: 16px !important; }
   .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .stat:last-child { grid-column: span 2; border-right: 0 !important; }
 }
 
 /* ───────── journey ───────── */
@@ -660,6 +661,7 @@ section { position: relative; }
     <div class="stats reveal">
       <div class="stat"><div class="stat-n" data-count="207" id="sCit">0</div><div class="stat-l">Citations</div></div>
       <div class="stat"><div class="stat-n" data-count="8" id="sH">0</div><div class="stat-l">h-index</div></div>
+      <div class="stat"><div class="stat-n" data-count="7" id="sI10">0</div><div class="stat-l">i10-index</div></div>
       <div class="stat"><div class="stat-n" data-count="13" id="sPub">0</div><div class="stat-l">Publications</div></div>
       <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Journal covers</div></div>
       <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Fellowships</div></div>
@@ -1286,7 +1288,7 @@ section { position: relative; }
   fetch('scholar_stats.json', { cache: 'no-cache' }).then((r) => r.ok ? r.json() : null).then((d) => {
     if (!d) return;
     const set = (id, v) => { const el = document.getElementById(id); if (el && v != null) { el.dataset.count = v; if (el.textContent !== '0') el.textContent = v; } };
-    set('sCit', d.total_citations); set('sH', d.h_index); set('sPub', d.num_publications);
+    set('sCit', d.total_citations); set('sH', d.h_index); set('sPub', d.num_publications); set('sI10', d.i10_index);
     if (d.last_updated) $('#statsNote').textContent = 'Synced from Google Scholar · updated ' + new Date(d.last_updated).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   }).catch(() => {});
 
