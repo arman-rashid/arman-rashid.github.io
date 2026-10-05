@@ -228,7 +228,7 @@ body::after {
 .marquee { border-bottom: 1px solid var(--line); overflow: hidden; background: var(--bg-2); }
 .marquee-track { display: flex; width: max-content; animation: slide 48s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
-.marquee span { font-family: var(--serif); font-size: clamp(24px, 3vw, 36px); padding: 18px 0; white-space: nowrap; display: flex; align-items: center; }
+.marquee span { font-family: var(--serif); font-size: clamp(15px, 1.5vw, 19px); padding: 11px 0; white-space: nowrap; display: flex; align-items: center; }
 .marquee span::after { content: '✦'; font-size: .5em; color: var(--accent); margin: 0 28px; }
 .marquee span:nth-child(even) { color: var(--muted); }
 @keyframes slide { to { transform: translateX(-50%); } }
@@ -301,7 +301,8 @@ section { position: relative; }
 .stop-logo { width: 56px; height: 56px; border-radius: 50%; background: var(--card); border: 1px solid var(--line-strong); display: grid; place-items: center; position: relative; z-index: 1; overflow: hidden; }
 .stop-logo img { width: 36px; height: 36px; object-fit: contain; }
 .stop.now .stop-logo { border-color: var(--accent); box-shadow: 0 0 0 6px var(--glow); }
-.stop-k { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-top: 22px; }
+.stop-k { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-top: 6px; line-height: 1.5; min-height: 3em; }
+.stop-y { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .04em; color: var(--ink-2); margin-top: 22px; font-variant-numeric: tabular-nums; }
 .stop h3 { font-family: var(--serif); font-weight: 600; font-size: 28px; line-height: 1.05; margin-top: 6px; }
 .stop p { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
 @media (max-width: 900px) {
@@ -310,9 +311,10 @@ section { position: relative; }
   .journey .fill { height: 0; transition: height 2.2s cubic-bezier(.2,.8,.2,1); }
   .journey.in .fill { width: 1px; height: 100%; }
   .stop { display: grid; grid-template-columns: 56px 1fr; column-gap: 20px; }
-  .stop-k { margin-top: 4px; }
+  .stop-y { margin-top: 2px; }
+  .stop-k { min-height: 0; }
   .stop > :not(.stop-logo) { grid-column: 2; }
-  .stop-logo { grid-row: span 3; }
+  .stop-logo { grid-row: span 4; }
 }
 
 /* ───────── research ───────── */
@@ -670,14 +672,14 @@ section { position: relative; }
     <p class="stats-note" id="statsNote">Synced from Google Scholar</p>
 
     <div style="margin-top: clamp(80px, 10vw, 130px)">
-      <div class="topics-h reveal" style="margin-bottom: 40px"><h3>The route here</h3><span class="mono" style="color:var(--muted)">2008 → now</span></div>
+      <div class="topics-h reveal" style="margin-bottom: 40px"><h3>The route here</h3><span class="mono" style="color:var(--muted)">2010 → now</span></div>
       <div class="journey reveal" id="journey">
         <div class="fill"></div>
-        <div class="stop"><div class="stop-logo"><img src="images/zyro-image.png" alt="" loading="lazy"></div><div class="stop-k">Secondary</div><h3>School board</h3><p>Distinction · J&amp;K State Board of School Education, Srinagar</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-k">B.Sc.</div><h3>Chem · Zoo · Bot</h3><p>1st position at college level · University of Kashmir</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-k">M.Sc. · Gold medal</div><h3>Chemistry</h3><p>Rank 1 across the university and affiliated colleges</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/IISc_Master_Seal.png" alt="" loading="lazy"></div><div class="stop-k">Ph.D. · PMRF</div><h3>IISc Bangalore</h3><p>Inorganic &amp; Physical Chemistry · defended June 2025</p></div>
-        <div class="stop now"><div class="stop-logo"><img src="images/Logo_KIT.svg.png" alt="" loading="lazy"></div><div class="stop-k">Now · since Aug 2025</div><h3>KIT, Karlsruhe</h3><p>Research Fellow · PHI &amp; IQMT</p></div>
+        <div class="stop"><div class="stop-logo"><img src="images/zyro-image.png" alt="" loading="lazy"></div><div class="stop-y">2010 – 2012</div><div class="stop-k">Secondary</div><h3>School board</h3><p>Distinction · J&amp;K State Board of School Education, Srinagar</p></div>
+        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-y">2012 – 2016</div><div class="stop-k">B.Sc.</div><h3>Science</h3><p>1st position at college level · University of Kashmir</p></div>
+        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-y">2016 – 2018</div><div class="stop-k">M.Sc. · Gold medal</div><h3>Chemistry</h3><p>Rank 1 across the university and affiliated colleges</p></div>
+        <div class="stop"><div class="stop-logo"><img src="images/IISc_Master_Seal.png" alt="" loading="lazy"></div><div class="stop-y">2019 – 2025</div><div class="stop-k">Ph.D. · PMRF · Molecular electronics</div><h3>IISc Bangalore</h3><p>Inorganic &amp; Physical Chemistry · defended June 2025</p></div>
+        <div class="stop now"><div class="stop-logo"><img src="images/Logo_KIT.svg.png" alt="" loading="lazy"></div><div class="stop-y">Aug 2025 – now</div><div class="stop-k">Now</div><h3>KIT, Karlsruhe</h3><p>Research Fellow · PHI &amp; IQMT</p></div>
       </div>
     </div>
   </div>
