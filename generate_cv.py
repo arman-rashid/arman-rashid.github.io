@@ -305,9 +305,10 @@ def render_stats(stats):
 
 def render_education(edu):
     html = ""
-    for year, degree, inst in reversed(edu):  # newest first
+    for year, degree, inst, *dates in reversed(edu):  # newest first
+        when = f'<br><span class="edu-dates">{dates[0]}</span>' if dates else ""
         html += f'''<div class="edu-item">
-        <span class="edu-year">{year}</span>
+        <span class="edu-year">{year}{when}</span>
         <span class="edu-deg">{degree}</span>
         <span class="edu-inst">{inst}</span>
       </div>\n'''
