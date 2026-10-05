@@ -505,7 +505,7 @@ section { position: relative; }
 @media (max-width: 760px) { .contact-cols { grid-template-columns: 1fr; gap: 32px; } }
 
 /* ───────── zoom interlude ───────── */
-.zoom { height: 520vh; border-bottom: 1px solid var(--line); background: var(--bg); }
+.zoom { height: 640vh; border-bottom: 1px solid var(--line); background: var(--bg); }
 .zoom-stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 #zc { position: absolute; inset: 0; width: 100%; height: 100%; }
 .zoom-stick::before {
@@ -1527,6 +1527,9 @@ section { position: relative; }
     // s = diameter in metres
     const objs = [
       { s: 1.7, n: 'You', f: 'The starting point. The microscope behind everything below is about your height, and runs at 4.2 K — colder than deep space.' },
+      { s: 0.19, n: 'Your hand', f: 'Steady enough to snip an STM tip by hand. Nowhere near steady enough for what comes next: the microscope holds that tip still to within a few picometres.' },
+      { s: 2.325e-2, n: 'A 1-euro coin', f: '23 mm across and polished to look mirror-smooth. At the scale we’re heading to, its surface is a mountain range.' },
+      { s: 3e-3, n: 'An ant', f: 'About 3 mm long. Twelve STM-tip wires laid side by side would just about match it.' },
       { s: 2.5e-4, n: 'An STM tip, by eye', f: 'Platinum–iridium wire, snipped with ordinary cutters. To the naked eye it’s blunt; at the very end, it is one atom sharp.' },
       { s: 8e-5, n: 'A human hair', f: 'About 80 µm across. You could line up roughly eighty thousand molecular junctions side by side along its width.' },
       { s: 7.5e-6, n: 'A red blood cell', f: 'Seven and a half thousand molecules across — a whole continent at the scale I work at.' },
@@ -1611,6 +1614,61 @@ section { position: relative; }
           // the tip, pinched between finger and thumb
           ctx.strokeStyle = acc; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
           ctx.beginPath(); ctx.moveTo(hx, hy - 4); ctx.lineTo(hx, hy + tipLen); ctx.stroke();
+        },
+        'Your hand'(R) {
+          // open palm, built as one path so overlapping parts don't double up while fading
+          const hand = new Path2D();
+          hand.roundRect(cx - R * 0.42, cy - R * 0.45, R * 0.84, R * 0.95, R * 0.26);         // palm
+          hand.roundRect(cx - R * 0.3, cy + R * 0.3, R * 0.6, R * 0.75, R * 0.12);            // wrist
+          [[-0.42, -1.02], [-0.205, -1.12], [0.01, -1.05], [0.225, -0.86]].forEach(([x, top]) =>
+            hand.roundRect(cx + R * x, cy + R * top, R * 0.19, R * (-0.25 - top), R * 0.095)); // fingers
+          const thumb = new Path2D();
+          thumb.roundRect(-R * 0.11, -R * 0.62, R * 0.22, R * 0.7, R * 0.11);
+          hand.addPath(thumb, new DOMMatrix().translate(cx - R * 0.33, cy + R * 0.16).rotate(-42));
+          const g = ctx.createLinearGradient(0, cy - R, 0, cy + R);
+          g.addColorStop(0, ink); g.addColorStop(1, muted);
+          ctx.fillStyle = g; ctx.fill(hand);
+        },
+        'A 1-euro coin'(R) {
+          // bimetallic: brass ring, silver centre
+          const ring = ctx.createRadialGradient(cx - R * 0.4, cy - R * 0.4, 0, cx, cy, R);
+          ring.addColorStop(0, '#f6dc8a'); ring.addColorStop(0.6, '#cfa443'); ring.addColorStop(1, '#8d6a1e');
+          ctx.fillStyle = ring; ctx.beginPath(); ctx.arc(cx, cy, R * 0.98, 0, Math.PI * 2); ctx.fill();
+          const core = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, 0, cx, cy, R * 0.72);
+          core.addColorStop(0, '#f4f5f6'); core.addColorStop(0.7, '#b9bdc2'); core.addColorStop(1, '#8a8f95');
+          ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, R * 0.7, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(110, 80, 20, .55)'; ctx.beginPath();
+          for (let i = 0; i < 12; i++) { const t = i / 12 * Math.PI * 2, x = cx + Math.cos(t) * R * 0.84, y = cy + Math.sin(t) * R * 0.84; ctx.moveTo(x + R * 0.035, y); ctx.arc(x, y, R * 0.035, 0, Math.PI * 2); }
+          ctx.fill();
+          if (R > 24) {
+            ctx.fillStyle = 'rgba(70, 75, 80, .35)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.font = '600 ' + Math.round(R * 0.62) + 'px ' + css('--serif');
+            ctx.fillText('1', cx - R * 0.2, cy - R * 0.05);
+            ctx.font = '600 ' + Math.round(R * 0.14) + 'px ' + css('--sans');
+            ctx.fillText('EURO', cx + R * 0.22, cy + R * 0.18);
+          }
+        },
+        'An ant'(R) {
+          // side-on ant, body length = 2R, standing on the coin
+          ctx.translate(cx, cy); ctx.rotate(-0.25);
+          const body = '#2b1c14';
+          ctx.strokeStyle = body; ctx.lineCap = ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(1, R * 0.035);
+          ctx.beginPath();
+          [[-0.22, -1], [-0.12, -1], [-0.02, -1], [-0.22, 1], [-0.12, 1], [-0.02, 1]].forEach(([x, sd], i) => {
+            const kx = [-0.42, -0.1, 0.25][i % 3];
+            ctx.moveTo(R * x, 0); ctx.lineTo(R * (x + kx * 0.6), R * 0.32 * sd); ctx.lineTo(R * (x + kx), R * 0.62 * sd);
+          });
+          ctx.moveTo(-R * 0.72, -R * 0.08); ctx.quadraticCurveTo(-R * 0.95, -R * 0.45, -R * 1.02, -R * 0.2); // antennae
+          ctx.moveTo(-R * 0.72, R * 0.08); ctx.quadraticCurveTo(-R * 0.95, R * 0.45, -R * 1.02, R * 0.2);
+          ctx.stroke();
+          const ant = new Path2D();
+          ant.ellipse(-R * 0.66, 0, R * 0.17, R * 0.15, 0, 0, Math.PI * 2);   // head
+          ant.ellipse(-R * 0.14, 0, R * 0.3, R * 0.12, 0, 0, Math.PI * 2);    // thorax
+          ant.ellipse(R * 0.22, 0, R * 0.07, R * 0.07, 0, 0, Math.PI * 2);    // waist
+          ant.ellipse(R * 0.6, 0, R * 0.38, R * 0.26, 0, 0, Math.PI * 2);     // abdomen
+          ctx.fillStyle = body; ctx.fill(ant);
+          ctx.fillStyle = 'rgba(255,255,255,.18)';
+          ctx.beginPath(); ctx.ellipse(R * 0.52, -R * 0.1, R * 0.18, R * 0.07, -0.2, 0, Math.PI * 2); ctx.fill();
         },
         'An STM tip, by eye'(R) {
           // a metal wire coming down from above, cut to a point at the centre
@@ -1708,7 +1766,7 @@ section { position: relative; }
         const R = o.s / 2 * k, m = R / half;
         if (R < 3 || !vis[o.n]) return;
         // fade in as it grows into view, fade out once we've zoomed well past it
-        const va = Math.min(1, (m - 0.04) / 0.16) * Math.min(1, (4 - m) / 2);
+        const va = Math.min(1, (m - 0.04) / 0.16) * Math.min(1, (3 - m) / 1.2);
         if (va <= 0.01) return;
         ctx.save(); ctx.globalAlpha = va; vis[o.n](R); ctx.restore();
       });
