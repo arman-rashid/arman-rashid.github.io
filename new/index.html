@@ -398,15 +398,15 @@ section { position: relative; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .pubs { border-top: 1px solid var(--line-strong); }
 .pub {
-  display: grid; grid-template-columns: 70px 120px 1fr 120px; gap: 28px; align-items: center;
+  display: grid; grid-template-columns: 70px 168px 1fr 120px; gap: 28px; align-items: center;
   padding: 26px 0; border-bottom: 1px solid var(--line); position: relative; transition: background .3s;
 }
 .pub::before { content: ''; position: absolute; left: -16px; right: -16px; top: 0; bottom: 0; border-radius: 14px; background: var(--card); opacity: 0; transition: opacity .3s; z-index: -1; }
 .pub:hover::before { opacity: 1; }
 .pub-y { font-family: var(--serif); font-size: 34px; color: var(--muted); line-height: 1; }
-.pub-img { width: 120px; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--line); }
-.pub-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
-.pub:hover .pub-img img { transform: scale(1.08); }
+.pub-img { width: 168px; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; }
+.pub-img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+.pub:hover .pub-img img { transform: scale(1.05); }
 .pub h4 { font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 2.1vw, 27px); line-height: 1.15; transition: color .2s; }
 .pub:hover h4 { color: var(--accent); }
 .pub-a { font-size: 13.5px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
@@ -420,9 +420,9 @@ section { position: relative; }
 .pub-go:hover svg { transform: translate(2px, -2px); }
 .pub.gone { display: none; }
 @media (max-width: 900px) {
-  .pub { grid-template-columns: 90px 1fr; gap: 16px 20px; }
+  .pub { grid-template-columns: 120px 1fr; gap: 16px 20px; }
   .pub-y { display: none; }
-  .pub-img { width: 90px; grid-row: span 2; align-self: start; }
+  .pub-img { width: 120px; grid-row: span 2; align-self: start; }
   .pub-go { justify-self: start; grid-column: 2; height: 34px; }
 }
 .pubs-more { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
@@ -434,8 +434,10 @@ section { position: relative; }
 .news-card { scroll-snap-align: start; background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s; }
 .news-card:hover { transform: translateY(-5px); border-color: var(--accent); }
 .news-img { aspect-ratio: 16/10; background: #fff; overflow: hidden; }
-.news-img img { width: 100%; height: 100%; object-fit: cover; }
-.news-img.contain img { object-fit: contain; padding: 28px; }
+.news-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+.news-card:hover .news-img img { transform: scale(1.04); }
+.news-img.contain img { padding: 28px; }
+.news-img.photo img { object-fit: cover; object-position: 50% 30%; padding: 0; }
 .news-b { padding: 18px 20px 22px; }
 .news-k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
 .news-b h4 { font-family: var(--serif); font-weight: 600; font-size: 23px; line-height: 1.12; margin: 8px 0 10px; }
@@ -470,6 +472,28 @@ section { position: relative; }
 .mail span { background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 3px no-repeat; transition: background-size .6s cubic-bezier(.2,.8,.2,1), color .3s; }
 .mail:hover span { background-size: 100% 3px; color: var(--accent); }
 .contact-sub { color: var(--muted); margin-top: 20px; max-width: 520px; }
+.cform-wrap { display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(32px, 6vw, 96px); margin-top: clamp(64px, 9vw, 110px); padding-top: 32px; border-top: 1px solid var(--line-strong); }
+.cform-intro h3 { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 3vw, 40px); line-height: 1.05; }
+.cform-intro p { color: var(--muted); margin-top: 14px; max-width: 340px; }
+.cform { display: grid; gap: 22px; }
+.cform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.cform label { display: block; }
+.cform label span { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; transition: color .2s; }
+.cform label:focus-within span { color: var(--accent); }
+.cform input, .cform textarea {
+  width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; padding: 8px 0 10px; outline: none; resize: vertical;
+  transition: border-color .2s;
+}
+.cform input:focus, .cform textarea:focus { border-bottom-color: var(--accent); }
+.cform-foot { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
+.btn-solid { background: var(--accent); color: var(--accent-ink); }
+.btn-solid:hover { filter: brightness(1.08); }
+.btn-solid:disabled { opacity: .6; cursor: progress; transform: none; }
+.cform-status { font-size: 14px; color: var(--muted); }
+.cform-status.ok { color: var(--accent-2); }
+.cform-status.err { color: var(--accent); }
+@media (max-width: 760px) { .cform-wrap, .cform-row { grid-template-columns: 1fr; } }
 .contact-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 80px; padding-top: 28px; border-top: 1px solid var(--line-strong); }
 .contact-cols h5 { font-family: var(--mono); font-weight: 400; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
 .contact-cols a, .contact-cols p { display: block; font-size: 15px; padding: 3px 0; color: var(--ink-2); }
@@ -479,6 +503,35 @@ section { position: relative; }
 .giant { font-family: var(--serif); font-size: clamp(48px, 13.5vw, 210px); line-height: .75; letter-spacing: -.04em; text-align: center; margin-top: 56px; color: transparent; -webkit-text-stroke: 1px var(--line-strong); user-select: none; white-space: nowrap; }
 .giant i { -webkit-text-stroke: 1px var(--accent); }
 @media (max-width: 760px) { .contact-cols { grid-template-columns: 1fr; gap: 32px; } }
+
+/* ───────── zoom interlude ───────── */
+.zoom { height: 520vh; border-bottom: 1px solid var(--line); background: var(--bg); }
+.zoom-stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+#zc { position: absolute; inset: 0; width: 100%; height: 100%; }
+.zoom-stick::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 75%, transparent) 30%, transparent 52%);
+}
+.zoom-bar { z-index: 2; }
+.zoom-ui { z-index: 2; position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
+.zoom-k { color: var(--accent); }
+.zoom-fov { font-family: var(--serif); font-weight: 600; font-size: clamp(56px, 9vw, 132px); line-height: .95; letter-spacing: -.03em; margin-top: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.zoom-sub { color: var(--muted); margin-top: 12px; }
+.zoom-card { max-width: 380px; margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line-strong); }
+.zoom-name { font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 2.8vw, 36px); line-height: 1.05; transition: color .3s; }
+.zoom-name.here { color: var(--accent); }
+.zoom-fact { color: var(--ink-2); margin-top: 10px; font-size: 15.5px; min-height: 3.3em; }
+.zoom-bar { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 40px; height: 1px; background: var(--line-strong); }
+.zoom-bar i { position: absolute; left: 0; top: -1px; height: 3px; width: 0; background: var(--accent); border-radius: 2px; }
+.zoom-bar span { position: absolute; top: 12px; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.zoom-bar span::before { content: ''; position: absolute; left: 50%; top: -16px; width: 1px; height: 9px; background: var(--line-strong); }
+@media (max-width: 760px) {
+  .zoom-ui { justify-content: flex-end; padding-bottom: 92px; }
+  .zoom-stick::before { background: linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 42%, transparent 62%); }
+  .zoom-fov { font-size: 52px; margin-top: 10px; }
+  .zoom-card { margin-top: 18px; padding-top: 14px; }
+  .zoom-fact { font-size: 14.5px; }
+}
 
 /* cursor tip follower (desktop only) */
 .tip { position: fixed; left: 0; top: 0; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 200; opacity: 0; transition: width .25s, height .25s, margin .25s, opacity .3s, background .25s; mix-blend-mode: normal; }
@@ -526,7 +579,7 @@ section { position: relative; }
 <section class="hero" id="top">
   <canvas id="stm" aria-hidden="true"></canvas>
   <div class="wrap hero-body">
-    <span class="hero-tag"><span class="rec"></span>Live scan · Au(111) · 4.2 K<span class="hint-desk"> · move your cursor</span></span>
+    <span class="hero-tag"><span class="rec"></span>Live scan · Au(111) · 4.2 K<span class="hint-desk"> · move to scan, click to drop a molecule</span></span>
     <h1 id="heroName"><span class="l1">Umar</span><span class="l2">Rashid</span></h1>
     <p class="hero-lede">I build instruments that <b>listen to single molecules</b> — wiring them between atomically sharp electrodes to see how charge, heat and light move through matter at the sub-nanometre scale.</p>
     <div class="hero-cta">
@@ -560,7 +613,7 @@ section { position: relative; }
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-num">01 — About</div>
-      <h2 class="sec-title">Chemist by training, <i>instrument&#8209;builder</i> by obsession.</h2>
+      <h2 class="sec-title">Curious by nature, <i>instrument&#8209;builder</i> by obsession.</h2>
     </div>
 
     <div class="about-grid">
@@ -599,6 +652,23 @@ section { position: relative; }
         <div class="stop now"><div class="stop-logo"><img src="../images/Logo_KIT.svg.png" alt="" loading="lazy"></div><div class="stop-k">Now · since Aug 2025</div><h3>KIT, Karlsruhe</h3><p>Research Fellow · PHI &amp; IQMT</p></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ───────── ZOOM INTERLUDE ───────── -->
+<section class="zoom" id="zoom" aria-label="Powers of ten: from a person down to a single gold atom">
+  <div class="zoom-stick">
+    <canvas id="zc" aria-hidden="true"></canvas>
+    <div class="wrap zoom-ui">
+      <div class="mono zoom-k">Interlude — how small is small?</div>
+      <div class="zoom-fov" id="zFov">3.00 m</div>
+      <div class="mono zoom-sub" id="zSub">Field of view · keep scrolling to zoom in</div>
+      <div class="zoom-card">
+        <div class="zoom-name" id="zName">You</div>
+        <p class="zoom-fact" id="zFact"></p>
+      </div>
+    </div>
+    <div class="zoom-bar" id="zBar" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
@@ -655,6 +725,7 @@ section { position: relative; }
         <div class="legend">
           <div class="lg"><i style="background:var(--accent)"></i><span><b>Live trace.</b> log(G/G<sub>0</sub>) as the electrodes separate.</span></div>
           <div class="lg"><i style="background:var(--accent-2)"></i><span><b>Histogram.</b> Every point from every trace. Watch the molecular peak grow.</span></div>
+          <div class="lg"><i style="background:#d4a441"></i><span><b>Inset.</b> What the electrodes are doing right now — gold neck, single-atom contact, molecule caught in the gap, or empty tunnelling.</span></div>
           <div class="lg"><i style="background:var(--muted)"></i><span><b>Ghosts.</b> The last dozen traces — no two junctions are alike.</span></div>
           <div class="lg"><i style="background:linear-gradient(90deg,var(--plot-bg),var(--accent),var(--ink))"></i><span><b>2D histogram.</b> Every trace aligned at the moment the gold contact breaks, binned by conductance and displacement — the molecular plateau shows up as a bright band, and its length tells you how far the molecule stretches.</span></div>
         </div>
@@ -684,7 +755,7 @@ section { position: relative; }
     </div>
 
     <div class="covers">
-      <div class="covers-copy reveal"><h3>On the cover of <i class="it">JACS</i>, three times in one volume.</h3><p>Front covers for work on flicker noise at the Au–thiol interface, conducting “non-conducting” polymers, and field-driven tautomerism.</p></div>
+      <div class="covers-copy reveal"><h3>On the cover of <i class="it">JACS</i>, three times over.</h3><p>Front covers for work on flicker noise at the Au–thiol interface, conducting “non-conducting” polymers, and field-driven tautomerism.</p></div>
       <div class="cover reveal d1"><img src="../images/jacsat.2024.146.issue-13.xlargecover1.jpg" alt="JACS volume 146 issue 13 cover" loading="lazy"></div>
       <div class="cover reveal d2"><img src="../images/jacsat.2024.146.issue-28.xlargecover1.jpg" alt="JACS volume 146 issue 28 cover" loading="lazy"></div>
       <div class="cover reveal d3"><img src="../images/jacsat.2024.146.issue-51.xlargecover.jpg" alt="JACS volume 146 issue 51 cover" loading="lazy"></div>
@@ -741,6 +812,29 @@ section { position: relative; }
     <div class="contact-k reveal">07 — Let’s talk</div>
     <a class="mail reveal d1" href="mailto:umarorarman@gmail.com"><span>umarorarman<br>@gmail.com</span></a>
     <p class="contact-sub reveal d2">I reply fast — unless I’m on holiday, or deep in the lab coaxing a molecule into a junction at four kelvin.</p>
+
+    <div class="cform-wrap">
+      <div class="cform-intro reveal">
+        <h3>Or leave a message here.</h3>
+        <p>Collaborations, questions about the instruments, or just saying hello — it lands straight in my inbox.</p>
+      </div>
+      <form class="cform reveal d1" id="contactForm">
+        <input type="hidden" name="access_key" value="bf17f117-8672-41e4-bcc0-71cfd4219d21">
+        <input type="hidden" name="subject" value="New message from your website">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="cform-row">
+          <label><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
+          <label><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+        </div>
+        <label><span>Message</span><textarea name="message" rows="5" required></textarea></label>
+        <div class="cform-foot">
+          <button type="submit" class="btn btn-solid" id="contactSubmitBtn">Send message
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="cform-status" id="contactFormStatus" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
 
     <div class="contact-cols">
       <div><h5>Where</h5><p>Physics Institute (PHI)</p><p>IQMT · Karlsruhe Institute of Technology</p><p>Karlsruhe, Germany</p></div>
@@ -818,7 +912,7 @@ section { position: relative; }
   const news = [
     ['New publication', 'Quantum interference in saturated systems', 'Angew. Chem. Int. Ed. · 2025', '../images/anie202513806-gra-0001-m.jpg', 'https://doi.org/10.1002/anie.202513806'],
     ['New position', 'Joined PHI & IQMT at KIT', '01 Aug 2025', '../images/Logo_KIT.svg.png', 'https://www.phi.kit.edu/english/staff_2430.php', 1],
-    ['Milestone', 'Defended my doctoral thesis', 'IISc Bangalore · 05 Jun 2025', '../images/IMG202506061236032.jpg', null],
+    ['Milestone', 'Defended my doctoral thesis', 'IISc Bangalore · 05 Jun 2025', '../images/IMG202506061236032.jpg', null, 'photo'],
     ['New publication', 'Mapping ground-state reactivity of a photoswitch', 'J. Am. Chem. Soc. · 2024', '../images/V4.png', 'https://doi.org/10.1021/jacs.4c13531'],
     ['Front cover', 'Au–thiol interface through flicker noise', 'J. Am. Chem. Soc. · 2024', '../images/paper6.jpeg', 'https://doi.org/10.1021/jacs.3c14079']
   ];
@@ -846,6 +940,7 @@ section { position: relative; }
     ['Those who were seen dancing were thought to be insane by those who <i>could not hear the music.</i>', 'Friedrich Nietzsche']
   ];
 
+  let zoomRedraw = () => {};
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
 
@@ -898,7 +993,7 @@ section { position: relative; }
     const tag = n[4] ? 'a' : 'div';
     const ext = n[4] && n[4].startsWith('http') ? ' target="_blank" rel="noopener"' : '';
     return `<${tag} class="news-card"${n[4] ? ` href="${n[4]}"${ext}` : ''}>
-      <div class="news-img${n[5] ? ' contain' : ''}"><img src="${n[3]}" alt="" loading="lazy"></div>
+      <div class="news-img${n[5] ? ' ' + (n[5] === 1 ? 'contain' : n[5]) : ''}"><img src="${n[3]}" alt="" loading="lazy"></div>
       <div class="news-b"><div class="news-k">${n[0]}</div><h4>${n[1]}</h4><div class="news-d">${n[2]}</div></div>
     </${tag}>`;
   }).join('');
@@ -922,6 +1017,7 @@ section { position: relative; }
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('ur-theme', next); } catch (e) {}
     bj && bj.redraw();
+    zoomRedraw();
   });
 
   /* ───────── nav ───────── */
@@ -1004,6 +1100,31 @@ section { position: relative; }
   $$('button', qd)[0].classList.add('on');
   qTimer = setInterval(() => showQ((qi + 1) % quotes.length), 7000);
 
+  /* ───────── contact form (Web3Forms) ───────── */
+  (function contactForm() {
+    const form = $('#contactForm'), btn = $('#contactSubmitBtn'), status = $('#contactFormStatus');
+    const btnHTML = btn.innerHTML;
+    const show = (msg, ok) => { status.textContent = msg; status.className = 'cform-status ' + (ok ? 'ok' : 'err'); };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true; btn.textContent = 'Sending…'; status.textContent = '';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+        const data = await res.json();
+        if (data.success) { show('Thanks — your message is on its way. I’ll get back to you soon.', true); form.reset(); }
+        else show('Something went wrong. Please email umarorarman@gmail.com directly.', false);
+      } catch (err) {
+        show('Network error — please email umarorarman@gmail.com directly.', false);
+      } finally {
+        btn.disabled = false; btn.innerHTML = btnHTML;
+      }
+    });
+  })();
+
   /* ───────── cursor ring ───────── */
   const tip = $('#tip');
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -1030,7 +1151,7 @@ section { position: relative; }
     const off = document.createElement('canvas');
     const octx = off.getContext('2d');
     let W, H, img, data, heights, row = 0, dpr, cw, ch;
-    let mol = [], vac = [], steps = [];
+    let mol = [], vac = [], steps = [], baseMol = 0, ripples = [];
     let mouse = { x: -1, y: -1, active: false };
     let drift = 0, frame = 0, visible = true, scanCount = 0;
     const NM_PER_PX = 0.035; // scale: lattice of Au(111) ≈ 0.288 nm
@@ -1062,6 +1183,7 @@ section { position: relative; }
       for (let i = 0; i < nMol; i++) {
         mol.push({ x: rand(W * 0.35, W), y: rand(0, H), a: rand(0, Math.PI), l: rand(5, 9), w: rand(1.6, 2.4), h: rand(0.9, 1.4) });
       }
+      baseMol = mol.length;
       for (let i = 0; i < nMol * 0.6; i++) vac.push({ x: rand(0, W), y: rand(0, H), r: rand(1.2, 2.2) });
       steps = [{ x0: rand(W * 0.5, W * 0.8), s: rand(-0.6, 0.6) }];
       // pre-fill the image so the first frame isn't empty
@@ -1119,6 +1241,19 @@ section { position: relative; }
     });
     $('.hero').addEventListener('pointerleave', () => { mouse.active = false; });
 
+    // click deposits a molecule under the tip; rescan the rows around it right away
+    $('.hero').addEventListener('click', (e) => {
+      if (e.target.closest('a, button')) return;
+      const r = cv.getBoundingClientRect();
+      const px = e.clientX - r.left, py = e.clientY - r.top;
+      const x = px / cw * W, y = py / ch * H;
+      mol.push({ x: x + drift, y, a: rand(0, Math.PI), l: rand(6, 9), w: rand(1.8, 2.4), h: rand(1.2, 1.5) });
+      if (mol.length > baseMol + 60) mol.splice(baseMol, 1);
+      for (let yy = Math.max(0, Math.floor(y - 12)); yy < Math.min(H, y + 12); yy++) computeRow(yy, drift);
+      octx.putImageData(img, 0, 0);
+      ripples.push({ x: px, y: py, t: 0 });
+    });
+
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; }).observe(cv);
 
     const roX = $('#roX'), roY = $('#roY'), roZ = $('#roZ'), roI = $('#roI'), roS = $('#roS');
@@ -1137,7 +1272,7 @@ section { position: relative; }
         octx.putImageData(img, 0, 0, 0, startRow, W, 4);
       }
       if (row >= H) { row = 0; scanCount++; }
-      drift += 0.012;
+      drift = 6 * Math.sin(frame * 0.0012); // bounded thermal drift, so features never wander off-screen
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.imageSmoothingEnabled = true;
@@ -1183,6 +1318,18 @@ section { position: relative; }
       ctx.stroke();
       ctx.restore();
 
+      // deposit ripples
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.t += 1 / 70;
+        if (rp.t >= 1) { ripples.splice(i, 1); continue; }
+        const a = 1 - rp.t, e = 1 - Math.pow(1 - rp.t, 3);
+        ctx.strokeStyle = `rgba(255,122,61,${a})`; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(rp.x, rp.y, 6 + e * 56, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = `rgba(239,232,220,${a})`; ctx.font = '500 11px ' + css('--mono');
+        ctx.fillText('+1 molecule', rp.x + 14, rp.y - 16 - e * 18);
+      }
+
       if (frame % 3 === 0) {
         const nmx = tipX / cw * W * NM_PER_PX * 10, nmy = tipY / ch * H * NM_PER_PX * 10;
         roX.textContent = nmx.toFixed(2) + ' nm';
@@ -1198,6 +1345,249 @@ section { position: relative; }
     setup();
     tipX = cw * 0.65; tipY = ch * 0.45;
     draw();
+  })();
+
+  /* ═════════ INTERLUDE: powers-of-ten zoom ═════════ */
+  (function zoom() {
+    const sec = $('#zoom'), cv = $('#zc'), ctx = cv.getContext('2d');
+    const zFov = $('#zFov'), zSub = $('#zSub'), zName = $('#zName'), zFact = $('#zFact'), bar = $('#zBar');
+    // s = diameter in metres
+    const objs = [
+      { s: 1.7, n: 'You', f: 'The starting point. The microscope behind everything below is about your height, and runs at 4.2 K — colder than deep space.' },
+      { s: 2.5e-4, n: 'An STM tip, by eye', f: 'Platinum–iridium wire, snipped with ordinary cutters. To the naked eye it’s blunt; at the very end, it is one atom sharp.' },
+      { s: 8e-5, n: 'A human hair', f: 'About 80 µm across. You could line up roughly eighty thousand molecular junctions side by side along its width.' },
+      { s: 7.5e-6, n: 'A red blood cell', f: 'Seven and a half thousand molecules across — a whole continent at the scale I work at.' },
+      { s: 1e-7, n: 'A virus', f: 'Around 100 nm. Ordinary light microscopes give up here; from now on we see by tunnelling electrons.' },
+      { s: 1.5e-8, n: 'A transistor in your phone', f: 'A gate roughly 15 nm long. Moore’s law is running out of room — the next step down is a single molecule.' },
+      { s: 1.2e-9, n: 'One molecule', here: 1, f: 'Where I work: a single molecule wired between gold electrodes. Its shape decides how electrons cross.' },
+      { s: 2.88e-10, n: 'One gold atom', here: 1, f: 'When a junction thins to a single atom, its conductance is exactly one quantum: G₀ = 2e²/h.' }
+    ];
+    const F0 = Math.log10(3), F1 = Math.log10(5e-10); // field-of-view range (log₁₀ m)
+    let w, h, dpr, p = -1, focus = -1, visible = false, queued = false;
+
+    const fmt = (m) => {
+      const units = [[1, 'm'], [1e-3, 'mm'], [1e-6, 'µm'], [1e-9, 'nm'], [1e-10, 'Å']];
+      for (const [f, u] of units) if (m >= f * 0.9995) { const v = m / f; return (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)) + ' ' + u; }
+      return (m / 1e-10).toFixed(2) + ' Å';
+    };
+    const supNum = (v) => String(v).replace(/[-0-9]/g, (c) => ({ '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' }[c]));
+
+    bar.insertAdjacentHTML('beforeend', [[1, '1 m'], [1e-3, '1 mm'], [1e-6, '1 µm'], [1e-9, '1 nm']]
+      .map(([m, l]) => `<span style="left:${((Math.log10(m) - F0) / (F1 - F0) * 100).toFixed(2)}%">${l}</span>`).join(''));
+
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = cv.clientWidth; h = cv.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      p = -1; update();
+    }
+
+    // standing figure, arms relaxed, 100 × 200 units (head drawn separately)
+    const SILHOUETTE = new Path2D('M44 31 C44 35 40 37.5 33 39.5 C25 41.5 21.5 46 21 54 L18.5 97 C18 102 19.5 105.5 22.5 105.5 C25.5 105.5 26.8 102.5 26.8 98.5 L29.5 63 L30.5 106 L31.5 189 C31.5 194 34 196.5 39 196.5 L45.5 196.5 C47.8 196.5 48.6 194 48.2 190.5 L49 113 L51 113 L51.8 190.5 C51.4 194 52.2 196.5 54.5 196.5 L61 196.5 C66 196.5 68.5 194 68.5 189 L69.5 106 L70.5 63 L73.2 98.5 C73.2 102.5 74.5 105.5 77.5 105.5 C80.5 105.5 82 102 81.5 97 L79 54 C78.5 46 75 41.5 67 39.5 C60 37.5 56 35 56 31 Z');
+
+    function hexagon(x, y, r) {
+      for (let i = 0; i <= 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; i ? ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a)) : ctx.moveTo(x + r * Math.cos(a), y + r * Math.sin(a)); }
+    }
+
+    function draw() {
+      const muted = css('--muted'), lineC = css('--line-strong'), acc = css('--accent'), acc2 = css('--accent-2'), ink = css('--ink');
+      const fov = Math.pow(10, F0 + (F1 - F0) * p);
+      const narrow = w < 760;
+      const cx = narrow ? w * 0.5 : w * 0.66, cy = narrow ? h * 0.3 : h * 0.48;
+      const half = Math.min(w, h) * (narrow ? 0.28 : 0.36);
+      const k = half / (fov / 2); // px per metre
+      const far = Math.max(w, h) * 2.5;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      // Au(111) lattice fades in at the bottom of the zoom
+      const a = 2.88e-10 * k;
+      if (a > 12) {
+        ctx.globalAlpha = Math.min(1, (a - 12) / 30) * 0.28;
+        ctx.fillStyle = muted;
+        ctx.beginPath();
+        const dy = a * 0.866, ra = a * 0.4;
+        for (let j = Math.floor(-cy / dy) - 1; j <= Math.ceil((h - cy) / dy) + 1; j++) {
+          const y = cy + j * dy, off = (((j % 2) + 2) % 2) ? a / 2 : 0;
+          for (let i = Math.floor((-cx - off) / a) - 1; i <= Math.ceil((w - cx - off) / a) + 1; i++) {
+            const x = cx + off + i * a;
+            ctx.moveTo(x + ra, y); ctx.arc(x, y, ra, 0, Math.PI * 2);
+          }
+        }
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // pick the object whose size best matches the view
+      let best = 0, bd = Infinity;
+      objs.forEach((o, i) => { const d = Math.abs(Math.log10(o.s / 2 * k / half)); if (d < bd) { bd = d; best = i; } });
+
+      // an illustration per level, drawn to scale inside its ring; everything nests toward (cx, cy)
+      const big = Math.max(w, h) * 1.6;
+      const vis = {
+        'You'(R) {
+          // a smooth silhouette (drawn in a 100 × 200 box) whose right hand sits exactly at the zoom centre
+          const s = R * 1.9 / 200, hx = 77.5, hy = 104;
+          const tipLen = 16;
+          ctx.translate(cx - hx * s, cy - hy * s); ctx.scale(s, s);
+          const g = ctx.createLinearGradient(0, 0, 0, 200);
+          g.addColorStop(0, ink); g.addColorStop(1, muted);
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(50, 18, 12.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fill(SILHOUETTE);
+          // the tip, pinched between finger and thumb
+          ctx.strokeStyle = acc; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(hx, hy - 4); ctx.lineTo(hx, hy + tipLen); ctx.stroke();
+        },
+        'An STM tip, by eye'(R) {
+          // a metal wire coming down from above, cut to a point at the centre
+          const g = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+          g.addColorStop(0, '#6f7378'); g.addColorStop(0.45, '#e9eaec'); g.addColorStop(0.6, '#c3c6ca'); g.addColorStop(1, '#5d6166');
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.moveTo(cx - R, Math.min(-10, cy - big)); ctx.lineTo(cx + R, Math.min(-10, cy - big));
+          ctx.lineTo(cx + R, cy - R * 1.9); ctx.lineTo(cx + R * 0.35, cy - R * 0.5); ctx.lineTo(cx, cy);
+          ctx.lineTo(cx - R * 0.25, cy - R * 0.9); ctx.lineTo(cx - R, cy - R * 2.6);
+          ctx.closePath(); ctx.fill();
+          ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1; ctx.stroke();
+        },
+        'A human hair'(R) {
+          ctx.translate(cx, cy); ctx.rotate(-0.42);
+          const g = ctx.createLinearGradient(0, -R, 0, R);
+          g.addColorStop(0, '#3e2a1c'); g.addColorStop(0.35, '#7a5638'); g.addColorStop(0.55, '#8d6644'); g.addColorStop(1, '#3a2719');
+          ctx.fillStyle = g; ctx.fillRect(-big, -R, big * 2, R * 2);
+          if (R > 8) {
+            // overlapping cuticle scales
+            ctx.strokeStyle = 'rgba(255,236,210,.28)'; ctx.lineWidth = Math.max(1, R * 0.025);
+            ctx.beginPath();
+            const st = R * 0.55;
+            for (let x = -big - (-big % st); x < big; x += st) { ctx.moveTo(x, -R); ctx.bezierCurveTo(x + R * 0.28, -R * 0.4, x + R * 0.28, R * 0.4, x, R); }
+            ctx.stroke();
+          }
+        },
+        'A red blood cell'(R) {
+          // biconcave disc: dark rim, pale dimple
+          const g = ctx.createRadialGradient(cx - R * 0.15, cy - R * 0.15, 0, cx, cy, R);
+          g.addColorStop(0, '#e9958a'); g.addColorStop(0.4, '#d65a4c'); g.addColorStop(0.78, '#b3302a'); g.addColorStop(1, '#7e1d1a');
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 0.98, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = 'rgba(255,220,210,.35)'; ctx.lineWidth = Math.max(1, R * 0.05);
+          ctx.beginPath(); ctx.arc(cx, cy, R * 0.62, Math.PI * 0.9, Math.PI * 1.7); ctx.stroke();
+        },
+        'A virus'(R) {
+          // capsid with a crown of spike proteins
+          const n = 18, r0 = R * 0.6;
+          ctx.strokeStyle = ctx.fillStyle = acc2; ctx.lineWidth = Math.max(1, R * 0.035); ctx.lineCap = 'round';
+          ctx.beginPath();
+          for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; ctx.moveTo(cx + Math.cos(t) * r0, cy + Math.sin(t) * r0); ctx.lineTo(cx + Math.cos(t) * R * 0.86, cy + Math.sin(t) * R * 0.86); }
+          ctx.stroke();
+          ctx.beginPath();
+          for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2, x = cx + Math.cos(t) * R * 0.88, y = cy + Math.sin(t) * R * 0.88; ctx.moveTo(x + R * 0.06, y); ctx.arc(x, y, R * 0.06, 0, Math.PI * 2); }
+          ctx.fill();
+          const g = ctx.createRadialGradient(cx - r0 * 0.3, cy - r0 * 0.3, 0, cx, cy, r0);
+          g.addColorStop(0, 'rgba(160,235,225,.95)'); g.addColorStop(1, acc2);
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath();
+          for (let i = 0; i < 7; i++) { const t = i / 7 * Math.PI * 2 + 0.3, x = cx + Math.cos(t) * r0 * 0.55, y = cy + Math.sin(t) * r0 * 0.55; ctx.moveTo(x + r0 * 0.12, y); ctx.arc(x, y, r0 * 0.12, 0, Math.PI * 2); }
+          ctx.fill();
+        },
+        'A transistor in your phone'(R) {
+          // top view of a FinFET: silicon fin running source → drain, metal gate across it
+          const va = ctx.globalAlpha;
+          ctx.fillStyle = muted; ctx.globalAlpha = va * 0.26;
+          ctx.fillRect(-10, cy - R * 0.38, w + 20, R * 0.76);
+          ctx.fillStyle = acc; ctx.globalAlpha = va * 0.16;
+          ctx.fillRect(cx - R, -10, R * 2, h + 20);
+          ctx.globalAlpha = va * 0.7;
+          ctx.strokeStyle = acc; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(cx - R, -10); ctx.lineTo(cx - R, h + 10); ctx.moveTo(cx + R, -10); ctx.lineTo(cx + R, h + 10); ctx.stroke();
+          if (R > 40) {
+            ctx.globalAlpha = va; ctx.fillStyle = muted;
+            ctx.textAlign = 'right'; ctx.fillText('SOURCE', cx - R - 12, cy);
+            ctx.textAlign = 'left'; ctx.fillText('DRAIN', cx + R + 12, cy);
+            ctx.textAlign = 'center'; ctx.fillText('GATE', cx, cy - R * 0.62);
+          }
+        },
+        'One molecule'(R) {
+          // anchor – ring – ring – anchor
+          const lw = Math.min(4, Math.max(1.2, R * 0.03));
+          ctx.strokeStyle = acc2; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(cx - R, cy); ctx.lineTo(cx - R * 0.52, cy);
+          hexagon(cx - R * 0.3, cy, R * 0.22);
+          ctx.moveTo(cx - R * 0.08, cy); ctx.lineTo(cx + R * 0.08, cy);
+          hexagon(cx + R * 0.3, cy, R * 0.22);
+          ctx.moveTo(cx + R * 0.52, cy); ctx.lineTo(cx + R, cy);
+          ctx.stroke();
+          ctx.fillStyle = acc;
+          ctx.beginPath(); ctx.arc(cx - R, cy, lw * 2.2, 0, Math.PI * 2); ctx.arc(cx + R, cy, lw * 2.2, 0, Math.PI * 2); ctx.fill();
+        },
+        'One gold atom'(R) {
+          ctx.globalAlpha *= Math.min(1, Math.max(0, (R / half - 0.15) / 0.3));
+          const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, 0, cx, cy, R * 0.84);
+          g.addColorStop(0, '#ffe39a'); g.addColorStop(0.5, '#e0a93f'); g.addColorStop(1, '#a8711c');
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 0.84, 0, Math.PI * 2); ctx.fill();
+        }
+      };
+
+      ctx.font = '11px ' + css('--mono');
+      ctx.textBaseline = 'middle';
+      objs.forEach((o) => {
+        const R = o.s / 2 * k, m = R / half;
+        if (R < 3 || !vis[o.n]) return;
+        // fade in as it grows into view, fade out once we've zoomed well past it
+        const va = Math.min(1, (m - 0.04) / 0.16) * Math.min(1, (4 - m) / 2);
+        if (va <= 0.01) return;
+        ctx.save(); ctx.globalAlpha = va; vis[o.n](R); ctx.restore();
+      });
+
+      objs.forEach((o, i) => {
+        const R = o.s / 2 * k;
+        if (R < 2 || R > far) return;
+        const al = Math.min(1, (R - 2) / 24) * Math.min(1, (far - R) / (far * 0.6));
+        const on = i === best;
+        ctx.globalAlpha = al;
+        ctx.strokeStyle = on ? acc : lineC; ctx.lineWidth = on ? 1.6 : 1;
+        ctx.setLineDash(on ? [] : [3, 5]);
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+        // label on the ring at ~40°
+        const lx = cx + R * 0.766, ly = cy - R * 0.643;
+        if (lx > 0 && lx < w - 8 && ly > 20 && ly < h - 70) {
+          const label = o.n + ' · ' + fmt(o.s), flip = lx + 9 + ctx.measureText(label).width > w - 12;
+          ctx.fillStyle = on ? acc : muted;
+          ctx.beginPath(); ctx.arc(lx, ly, 2.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = on ? ink : muted; ctx.textAlign = flip ? 'right' : 'left';
+          ctx.fillText(label, flip ? lx - 9 : lx + 9, ly);
+        }
+      });
+      ctx.globalAlpha = 1;
+
+      zFov.textContent = fmt(fov);
+      zSub.textContent = 'Field of view · 10' + supNum(Math.round(Math.log10(fov))) + ' m';
+      bar.firstElementChild.style.width = (p * 100).toFixed(2) + '%';
+      if (best !== focus) {
+        focus = best;
+        zName.textContent = objs[best].n;
+        zName.classList.toggle('here', !!objs[best].here);
+        zFact.textContent = objs[best].f;
+      }
+    }
+
+    function update() {
+      queued = false;
+      if (!w) return;
+      const r = sec.getBoundingClientRect();
+      const tot = sec.offsetHeight - window.innerHeight;
+      const np = Math.min(1, Math.max(0, -r.top / (tot || 1)));
+      if (np === p) return;
+      p = np; draw();
+    }
+    const queue = () => { if (visible && !queued) { queued = true; requestAnimationFrame(update); } };
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; queue(); }).observe(sec);
+    window.addEventListener('scroll', queue, { passive: true });
+    let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(size, 150); });
+    size();
+    zoomRedraw = () => { p = -1; update(); };
   })();
 
   /* ═════════ LAB: break-junction simulator ═════════ */
@@ -1246,7 +1636,7 @@ section { position: relative; }
         }
         pts[i] = g;
       }
-      return { pts, hasMol, breakAu };
+      return { pts, hasMol, breakAu, snap, pLen };
     }
 
     function addToHist(trace) {
@@ -1361,6 +1751,10 @@ section { position: relative; }
         ctx.fillStyle = col; ctx.beginPath(); ctx.arc(XT(li), Y(cur.pts[li]), 4, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
       }
+      if (cur && !is2d) {
+        const iw = narrow ? 128 : 176, ih = narrow ? 70 : 90;
+        drawJunction(padL + pw - iw - 6, padT + 6, iw, ih, cur, Math.min(curIdx, NPTS - 1));
+      }
 
       // histogram
       const hx0 = padL + pw + gap;
@@ -1397,6 +1791,55 @@ section { position: relative; }
       }
       $('#bjN').textContent = n.toLocaleString();
       $('#bjM').textContent = n ? Math.round(nMol / n * 100) + '%' : '0%';
+    }
+
+    // cartoon of the electrodes for the point currently being drawn
+    function drawJunction(x, y, iw, ih, tr, li) {
+      const d = li / (NPTS - 1) * DMAX, after = d - tr.breakAu;
+      const r = ih / 17, cx = x + iw / 2, cy = y + ih * 0.42;
+      const gold = '#d4a441', goldEdge = 'rgba(80, 50, 0, .45)';
+      let neck = 0, apex, state, mol = 0;
+      if (after < 0) {
+        neck = d > tr.breakAu * 0.93 ? 1 : 3 - Math.min(2, Math.floor(d / tr.breakAu * 3));
+        apex = r * 1.75;
+        state = neck === 1 ? 'single-atom contact · 1 G₀' : neck + '-atom gold neck';
+      } else {
+        apex = Math.min(iw * 0.44, r * 2.4 + after * iw * 0.2);
+        const onPlateau = tr.hasMol && after > tr.snap && after < tr.snap + tr.pLen;
+        mol = onPlateau ? 1 : tr.hasMol && after >= tr.snap + tr.pLen ? 2 : 0;
+        state = mol === 1 ? 'molecule bridging the gap' : mol === 2 ? 'molecule detached · tunnelling' : 'empty gap · tunnelling';
+      }
+      ctx.save();
+      ctx.fillStyle = css('--plot-bg'); ctx.globalAlpha = 0.92; ctx.fillRect(x, y, iw, ih); ctx.globalAlpha = 1;
+      ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, iw - 1, ih - 1);
+      ctx.beginPath(); ctx.rect(x, y, iw, ih); ctx.clip();
+
+      const ax = [cx - apex, cx + apex];
+      if (mol) {
+        const acc2 = css('--accent-2');
+        ctx.strokeStyle = acc2; ctx.lineWidth = Math.max(1.2, r * 0.32); ctx.lineJoin = 'round';
+        ctx.beginPath();
+        if (mol === 1) {
+          const mx = cx, hr = r * 1.05;
+          ctx.moveTo(ax[0] + r, cy); ctx.lineTo(mx - hr, cy);
+          for (let i = 0; i <= 6; i++) { const a = Math.PI + i * Math.PI / 3; ctx.lineTo(mx + hr * Math.cos(a), cy + hr * Math.sin(a)); }
+          ctx.moveTo(mx + hr, cy); ctx.lineTo(ax[1] - r, cy);
+        } else {
+          ctx.moveTo(ax[0] + r, cy); ctx.lineTo(ax[0] + r * 3.2, cy + r * 0.8);
+        }
+        ctx.stroke();
+      }
+      ctx.fillStyle = gold; ctx.strokeStyle = goldEdge; ctx.lineWidth = 0.8;
+      const atom = (ax0, ay0) => { ctx.beginPath(); ctx.arc(ax0, ay0, r * 0.95, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); };
+      [-1, 1].forEach((side, si) => {
+        for (let j = 0; j < 6; j++) for (let i = 0; i <= j; i++) atom(ax[si] + side * j * r * 1.75, cy + (i - j / 2) * r * 2);
+      });
+      for (let i = 0; i < neck; i++) atom(cx, cy + (i - (neck - 1) / 2) * r * 2);
+
+      ctx.fillStyle = css('--muted'); ctx.font = '10px ' + css('--mono');
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(state, x + 8, y + ih - 7);
+      ctx.restore();
     }
 
     function sup(v) {
@@ -1445,7 +1888,7 @@ section { position: relative; }
     return { redraw };
   })();
 
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => bj.redraw());
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { bj.redraw(); zoomRedraw(); });
 })();
 </script>
 </body>
