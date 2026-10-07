@@ -301,7 +301,7 @@ section { position: relative; }
 }
 
 /* ───────── journey ───────── */
-.journey { display: grid; grid-template-columns: repeat(5, 1fr); position: relative; }
+.journey { display: grid; grid-template-columns: repeat(var(--n, 5), 1fr); position: relative; }
 .journey::before { content: ''; position: absolute; left: 0; right: 0; top: 27px; height: 1px; background: var(--line-strong); }
 .journey .fill { position: absolute; left: 0; top: 27px; height: 1px; background: var(--accent); width: 0; transition: width 2.2s cubic-bezier(.2,.8,.2,1); }
 .journey.in .fill { width: 100%; }
@@ -650,45 +650,32 @@ section { position: relative; }
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-num">01 — About</div>
-      <h2 class="sec-title">Curious by nature, <i>instrument&#8209;builder</i> by obsession.</h2>
+      <h2 class="sec-title" id="aboutTitle"></h2>
     </div>
 
     <div class="about-grid">
       <div>
-        <p class="statement reveal">Below <i>one nanometre</i>, wires stop being wires. <span class="dim">They become molecules — and molecules have opinions about how electrons should flow.</span></p>
-        <div class="about-copy reveal d1">
-          <p>After a Master’s in Chemistry at the University of Kashmir, I moved to Bangalore for a PhD at the Indian Institute of Science. There I worked on <b>molecular electronics</b>: taking a multidisciplinary approach to ask how single molecules — or ensembles of them — can mimic the functions of conventional electronic components, pushing miniaturisation past the limits where Moore’s law runs into quantum mechanics.</p>
-          <p>Today I’m a research fellow at the <b>Physics Institute (PHI)</b> and the <b>Institute of Quantum Materials and Technologies (IQMT)</b> at KIT, building instrumentation and studying light–matter interaction with a liquid-helium-temperature scanning tunnelling microscope — a magnificent beast, as I like to call it.</p>
-        </div>
+        <p class="statement reveal" id="aboutStatement"></p>
+        <div class="about-copy reveal d1" id="aboutCopy"></div>
         <div class="tools reveal d2" id="tools"></div>
       </div>
       <figure class="portrait reveal d1">
-        <img src="images/hero.jpeg" alt="Portrait of Umar Rashid" loading="lazy">
-        <figcaption class="portrait-cap"><span>Karlsruhe, DE</span><b>● Research Fellow</b></figcaption>
+        <img id="aboutPortrait" alt="Portrait of Umar Rashid" loading="lazy">
+        <figcaption class="portrait-cap"><span id="aboutPlace"></span><b id="aboutRole"></b></figcaption>
       </figure>
     </div>
 
-    <div class="stats reveal">
+    <div class="stats reveal" id="stats">
       <div class="stat"><div class="stat-n" data-count="207" id="sCit">0</div><div class="stat-l">Citations</div></div>
       <div class="stat"><div class="stat-n" data-count="8" id="sH">0</div><div class="stat-l">h-index</div></div>
       <div class="stat"><div class="stat-n" data-count="7" id="sI10">0</div><div class="stat-l">i10-index</div></div>
       <div class="stat"><div class="stat-n" data-count="13" id="sPub">0</div><div class="stat-l">Publications</div></div>
-      <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Journal covers</div></div>
-      <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Fellowships</div></div>
-      <div class="stat"><div class="stat-n" data-count="14">0</div><div class="stat-l">Awards</div></div>
     </div>
     <p class="stats-note" id="statsNote">Synced from Google Scholar</p>
 
     <div style="margin-top: clamp(80px, 10vw, 130px)">
-      <div class="topics-h reveal" style="margin-bottom: 40px"><h3>The route here</h3><span class="mono" style="color:var(--muted)">2010 → now</span></div>
-      <div class="journey reveal" id="journey">
-        <div class="fill"></div>
-        <div class="stop"><div class="stop-logo"><img src="images/zyro-image.png" alt="" loading="lazy"></div><div class="stop-y">2010 – 2012</div><div class="stop-k">Secondary</div><h3>School board</h3><p>Distinction · J&amp;K State Board of School Education, Srinagar</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-y">2012 – 2016</div><div class="stop-k">B.Sc.</div><h3>Science</h3><p>1st position at college level · University of Kashmir</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/University_of_Kashmir_logo.png" alt="" loading="lazy"></div><div class="stop-y">2016 – 2018</div><div class="stop-k">M.Sc. · Gold medal</div><h3>Chemistry</h3><p>Rank 1 across the university and affiliated colleges</p></div>
-        <div class="stop"><div class="stop-logo"><img src="images/IISc_Master_Seal.png" alt="" loading="lazy"></div><div class="stop-y">2019 – 2025</div><div class="stop-k">Ph.D. · PMRF · Molecular electronics</div><h3>IISc Bangalore</h3><p>Inorganic &amp; Physical Chemistry · defended June 2025</p></div>
-        <div class="stop now"><div class="stop-logo"><img src="images/Logo_KIT.svg.png" alt="" loading="lazy"></div><div class="stop-y">Aug 2025 – now</div><div class="stop-k">Now</div><h3>KIT, Karlsruhe</h3><p>Research Fellow · PHI &amp; IQMT</p></div>
-      </div>
+      <div class="topics-h reveal" style="margin-bottom: 40px"><h3>The route here</h3><span class="mono" style="color:var(--muted)" id="journeyRange"></span></div>
+      <div class="journey reveal" id="journey"><div class="fill"></div></div>
     </div>
   </div>
 </section>
@@ -715,36 +702,20 @@ section { position: relative; }
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-num">02 — Research</div>
-      <h2 class="sec-title">Quantum transport, <i>one molecule</i> at a time.</h2>
+      <h2 class="sec-title" id="researchTitle"></h2>
     </div>
 
-    <div class="research-intro reveal">
-      <p class="big">The field still lacks a consensus on how a molecule’s structure and conformation shape the charge it carries. My work is about building the tools — and the data — to settle that.</p>
-      <p>I develop instrumentation to probe electronic, thermal and thermoelectric properties of metal│molecule│metal and metal│SAM│metal junctions, often with a nanoscale electrochemical twist. By measuring across levels of complexity — from a single molecule to a self-assembled monolayer — we can pin down structure–property relationships and translate them into real devices for organic electronics, sensing, optoelectronics and energy harvesting.</p>
-    </div>
+    <div class="research-intro reveal"><p class="big" id="researchLead"></p><p id="researchIntro"></p></div>
 
     <details class="instr reveal">
       <summary>
         <h3>Instrumentation</h3>
-        <span class="instr-meta"><span class="mono">3 rigs · EGaIn · MCBJ · STM-BJ</span><span class="instr-tog" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></span>
+        <span class="instr-meta"><span class="mono" id="rigMeta"></span><span class="instr-tog" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></span>
       </summary>
-      <div class="rigs">
-      <article class="rig">
-        <div class="rig-img"><img src="images/EGaIn1.jpg" alt="EGaIn large-area molecular junction setup" loading="lazy"></div>
-        <div class="rig-b"><div class="rig-k"><span>Rig 01</span><b>pA · ensemble</b></div><h3>EGaIn platform</h3><p>Large-area junctions measuring picoamp currents under bias (conductance) or a temperature gradient (thermopower) between a liquid-metal top contact and template-stripped Au / Ag.</p></div>
-      </article>
-      <article class="rig">
-        <div class="rig-img"><img src="images/View1.jpg" alt="Mechanically controlled break junction setup" loading="lazy"></div>
-        <div class="rig-b"><div class="rig-k"><span>Rig 02</span><b>fA · single molecule</b></div><h3>MCBJ</h3><p>Mechanically controlled break junction resolving femtoamp currents across single metal│molecule│metal junctions — built-in piezo, bipotentiostat, and an open design for external stimuli.</p></div>
-      </article>
-      <article class="rig">
-        <div class="rig-img"><img src="images/Assembly.png" alt="STM break junction assembly render" loading="lazy"></div>
-        <div class="rig-b"><div class="rig-k"><span>Rig 03</span><b>vertical · heated</b></div><h3>STM-BJ</h3><p>Vertical single-molecule junctions between a sharp tip and a flat electrode. A heated substrate opens up thermopower and spin-dependent transport.</p></div>
-      </article>
-      </div>
+      <div class="rigs" id="rigs"></div>
     </details>
 
-    <div class="topics-h reveal"><h3>Questions I chase</h3><span class="mono" style="color:var(--muted)">7 threads</span></div>
+    <div class="topics-h reveal"><h3>Questions I chase</h3><span class="mono" style="color:var(--muted)" id="topicCount"></span></div>
     <div id="topics"></div>
   </div>
 </section>
@@ -898,7 +869,7 @@ section { position: relative; }
 
 <div class="tip" id="tip"></div>
 
-<!-- Single source of truth for papers, awards and education:
+<!-- Single source of truth for papers, awards, education and the About / Research sections:
      rendered by the script below, and read by generate_cv.py to build cv.html. -->
 <script type="application/json" id="site-data">
 {
@@ -1099,7 +1070,175 @@ section { position: relative; }
    "State Board Scholarship",
    "School topper, J&K State Board of School Education"
   ]
- ]
+ ],
+ "about": {
+  "title": "Curious by nature, <i>instrument‑builder</i> by obsession.",
+  "statement": "Below <i>one nanometre</i>, wires stop being wires. <span class=\"dim\">They become molecules — and molecules have opinions about how electrons should flow.</span>",
+  "paragraphs": [
+   "After a Master’s in Chemistry at the University of Kashmir, I moved to Bangalore for a PhD at the Indian Institute of Science. There I worked on <b>molecular electronics</b>: taking a multidisciplinary approach to ask how single molecules — or ensembles of them — can mimic the functions of conventional electronic components, pushing miniaturisation past the limits where Moore’s law runs into quantum mechanics.",
+   "Today I’m a research fellow at the <b>Physics Institute (PHI)</b> and the <b>Institute of Quantum Materials and Technologies (IQMT)</b> at KIT, building instrumentation and studying light–matter interaction with a liquid-helium-temperature scanning tunnelling microscope — a magnificent beast, as I like to call it."
+  ],
+  "skills": [
+   "LabVIEW",
+   "Python",
+   "MATLAB",
+   "Gaussian",
+   "SIESTA",
+   "Quantum Espresso",
+   "STM-BJ",
+   "MCBJ",
+   "EGaIn",
+   "AFM / STM",
+   "Cryogenics",
+   "Ultra-high vacuum",
+   "Autodesk Inventor",
+   "SolidWorks",
+   "3D printing",
+   "Illustrator",
+   "Origin",
+   "XPS / UPS",
+   "Electrochemistry",
+   "Machine learning"
+  ],
+  "portrait": "images/hero.jpeg",
+  "place": "Karlsruhe, DE",
+  "role": "Research Fellow",
+  "stats": [
+   [
+    4,
+    "Journal covers"
+   ],
+   [
+    4,
+    "Fellowships"
+   ],
+   [
+    14,
+    "Awards"
+   ]
+  ],
+  "journeyRange": "2010 → now",
+  "journey": [
+   {
+    "logo": "images/zyro-image.png",
+    "years": "2010 – 2012",
+    "kind": "Secondary",
+    "title": "School board",
+    "text": "Distinction · J&amp;K State Board of School Education, Srinagar"
+   },
+   {
+    "logo": "images/University_of_Kashmir_logo.png",
+    "years": "2012 – 2016",
+    "kind": "B.Sc.",
+    "title": "Science",
+    "text": "1st position at college level · University of Kashmir"
+   },
+   {
+    "logo": "images/University_of_Kashmir_logo.png",
+    "years": "2016 – 2018",
+    "kind": "M.Sc. · Gold medal",
+    "title": "Chemistry",
+    "text": "Rank 1 across the university and affiliated colleges"
+   },
+   {
+    "logo": "images/IISc_Master_Seal.png",
+    "years": "2019 – 2025",
+    "kind": "Ph.D. · PMRF · Molecular electronics",
+    "title": "IISc Bangalore",
+    "text": "Inorganic &amp; Physical Chemistry · defended June 2025"
+   },
+   {
+    "logo": "images/Logo_KIT.svg.png",
+    "years": "Aug 2025 – now",
+    "kind": "Now",
+    "title": "KIT, Karlsruhe",
+    "text": "Research Fellow · PHI &amp; IQMT",
+    "now": 1
+   }
+  ]
+ },
+ "research": {
+  "title": "Quantum transport, <i>one molecule</i> at a time.",
+  "lead": "The field still lacks a consensus on how a molecule’s structure and conformation shape the charge it carries. My work is about building the tools — and the data — to settle that.",
+  "intro": "I develop instrumentation to probe electronic, thermal and thermoelectric properties of metal│molecule│metal and metal│SAM│metal junctions, often with a nanoscale electrochemical twist. By measuring across levels of complexity — from a single molecule to a self-assembled monolayer — we can pin down structure–property relationships and translate them into real devices for organic electronics, sensing, optoelectronics and energy harvesting.",
+  "rigs": [
+   {
+    "img": "images/EGaIn1.jpg",
+    "alt": "EGaIn large-area molecular junction setup",
+    "label": "Rig 01",
+    "scale": "pA · ensemble",
+    "title": "EGaIn platform",
+    "text": "Large-area junctions measuring picoamp currents under bias (conductance) or a temperature gradient (thermopower) between a liquid-metal top contact and template-stripped Au / Ag."
+   },
+   {
+    "img": "images/View1.jpg",
+    "alt": "Mechanically controlled break junction setup",
+    "label": "Rig 02",
+    "scale": "fA · single molecule",
+    "title": "MCBJ",
+    "text": "Mechanically controlled break junction resolving femtoamp currents across single metal│molecule│metal junctions — built-in piezo, bipotentiostat, and an open design for external stimuli."
+   },
+   {
+    "img": "images/Assembly.png",
+    "alt": "STM break junction assembly render",
+    "label": "Rig 03",
+    "scale": "vertical · heated",
+    "title": "STM-BJ",
+    "text": "Vertical single-molecule junctions between a sharp tip and a flat electrode. A heated substrate opens up thermopower and spin-dependent transport."
+   }
+  ],
+  "topics": [
+   {
+    "tag": "EGaIn · SAMs",
+    "title": "Electron transport across monolayers",
+    "img": "images/EGAIN.jpg",
+    "lead": "Self-assembled monolayers between an EGaIn top contact and template-stripped metal.",
+    "text": "Characterising how molecular length, intra- and inter-molecular interactions, metal–molecule coupling and the choice of electrode metal shape transport — and how humidity, ambient gases and light perturb it."
+   },
+   {
+    "tag": "EGaIn · heat",
+    "title": "Thermopower across monolayers",
+    "img": "images/egain5.jpg",
+    "lead": "The thermoelectric voltage generated across SAM junctions under an applied temperature gradient.",
+    "text": "Once conductance is characterised, thermopower is the next logical probe: its sign and magnitude reveal the majority carrier and whether transport is HOMO- or LUMO-mediated."
+   },
+   {
+    "tag": "MCBJ · STM",
+    "title": "Single-molecule transport & quantum interference",
+    "img": "images/Picture1.png",
+    "lead": "How molecular architecture and external stimuli control conductance at the single-molecule level.",
+    "text": "Break-junction measurements expose quantum interference of electron waves through molecular orbitals — and show how atom-level structural edits affect the performance, energy consumption and lifetime of molecular-scale devices."
+   },
+   {
+    "tag": "Data · ML",
+    "title": "Machine learning for molecular electronics",
+    "img": "images/untitled1.png",
+    "lead": "Clustering individual conductance traces instead of averaging them away.",
+    "text": "Every junction forms with a new geometry, and statistics alone give only the population. Using PCA, K-means++, t-SNE and related tools, I sort traces into families — high-conductance, low-conductance, pure tunnelling — to recover information histograms hide."
+   },
+   {
+    "tag": "Mechanochemistry",
+    "title": "Reaction dynamics, in real time",
+    "img": "images/Picture9.jpg",
+    "lead": "Watching — and steering — a reaction one molecule at a time.",
+    "text": "Mechanically stretching an electrically wired molecule can force it to isomerise; following its conductance at high sampling rates exposes intermediates and metastable states, opening a window onto single-molecule mechanochemistry."
+   },
+   {
+    "tag": "Noise",
+    "title": "1/f flicker noise in junctions",
+    "img": "images/Screenshot2024-10-01130433.png",
+    "lead": "Flicker-noise power as a probe of how a molecule is coupled to its electrodes.",
+    "text": "Pink noise from atomic rearrangements in the electrodes distinguishes through-bond from through-space tunnelling, flags π-stacked plateaus, and ranks anchoring groups — key to designing junctions that last."
+   },
+   {
+    "tag": "STM · energy",
+    "title": "Single-molecule thermopower for renewable energy",
+    "img": "images/STM2.jpg",
+    "lead": "Heat-to-electricity conversion at the scale of one molecule.",
+    "text": "Understanding heat transport through metals and molecular junctions is a step toward harvesting solar and thermal energy more efficiently, and toward controlling heat dissipation in nanoscale electronics."
+   }
+  ]
+ }
 }
 </script>
 <script>
@@ -1111,34 +1250,11 @@ section { position: relative; }
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
   /* ───────── data ───────── */
-  const skills = ['LabVIEW', 'Python', 'MATLAB', 'Gaussian', 'SIESTA', 'Quantum Espresso', 'STM-BJ', 'MCBJ', 'EGaIn', 'AFM / STM', 'Cryogenics', 'Ultra-high vacuum', 'Autodesk Inventor', 'SolidWorks', '3D printing', 'Illustrator', 'Origin', 'XPS / UPS', 'Electrochemistry', 'Machine learning'];
   const marquee = ['Molecular electronics', 'Quantum transport', 'Nanoscale junctions', 'Plasmonics', 'Scanning probe microscopy', 'Surface science', 'Thermoelectrics', 'Single-molecule mechanochemistry'];
 
-  const topics = [
-    ['EGaIn · SAMs', 'Electron transport across monolayers', 'images/EGAIN.jpg',
-     'Self-assembled monolayers between an EGaIn top contact and template-stripped metal.',
-     'Characterising how molecular length, intra- and inter-molecular interactions, metal–molecule coupling and the choice of electrode metal shape transport — and how humidity, ambient gases and light perturb it.'],
-    ['EGaIn · heat', 'Thermopower across monolayers', 'images/egain5.jpg',
-     'The thermoelectric voltage generated across SAM junctions under an applied temperature gradient.',
-     'Once conductance is characterised, thermopower is the next logical probe: its sign and magnitude reveal the majority carrier and whether transport is HOMO- or LUMO-mediated.'],
-    ['MCBJ · STM', 'Single-molecule transport & quantum interference', 'images/Picture1.png',
-     'How molecular architecture and external stimuli control conductance at the single-molecule level.',
-     'Break-junction measurements expose quantum interference of electron waves through molecular orbitals — and show how atom-level structural edits affect the performance, energy consumption and lifetime of molecular-scale devices.'],
-    ['Data · ML', 'Machine learning for molecular electronics', 'images/untitled1.png',
-     'Clustering individual conductance traces instead of averaging them away.',
-     'Every junction forms with a new geometry, and statistics alone give only the population. Using PCA, K-means++, t-SNE and related tools, I sort traces into families — high-conductance, low-conductance, pure tunnelling — to recover information histograms hide.'],
-    ['Mechanochemistry', 'Reaction dynamics, in real time', 'images/Picture9.jpg',
-     'Watching — and steering — a reaction one molecule at a time.',
-     'Mechanically stretching an electrically wired molecule can force it to isomerise; following its conductance at high sampling rates exposes intermediates and metastable states, opening a window onto single-molecule mechanochemistry.'],
-    ['Noise', '1/f flicker noise in junctions', 'images/Screenshot2024-10-01130433.png',
-     'Flicker-noise power as a probe of how a molecule is coupled to its electrodes.',
-     'Pink noise from atomic rearrangements in the electrodes distinguishes through-bond from through-space tunnelling, flags π-stacked plateaus, and ranks anchoring groups — key to designing junctions that last.'],
-    ['STM · energy', 'Single-molecule thermopower for renewable energy', 'images/STM2.jpg',
-     'Heat-to-electricity conversion at the scale of one molecule.',
-     'Understanding heat transport through metals and molecular junctions is a step toward harvesting solar and thermal energy more efficiently, and toward controlling heat dissipation in nanoscale electronics.']
-  ];
-
   const DATA = JSON.parse(document.getElementById('site-data').textContent);
+  const about = DATA.about, research = DATA.research; // text fields may hold <i>/<b> markup
+  const skills = about.skills, topics = research.topics;
   const pubs = DATA.publications; // f = first author, b = feature badge, k = journal filter key
 
   const news = [
@@ -1166,25 +1282,48 @@ section { position: relative; }
   $('#marquee').innerHTML = mq + mq;
   $('#tools').innerHTML = skills.map((s) => `<span>${s}</span>`).join('');
 
+  $('#aboutTitle').innerHTML = about.title;
+  $('#aboutStatement').innerHTML = about.statement;
+  $('#aboutCopy').innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join('');
+  $('#aboutPortrait').src = about.portrait;
+  $('#aboutPlace').textContent = about.place;
+  $('#aboutRole').textContent = '● ' + about.role;
+  $('#stats').insertAdjacentHTML('beforeend', about.stats.map(([n, l]) =>
+    `<div class="stat"><div class="stat-n" data-count="${+n || 0}">0</div><div class="stat-l">${esc(l)}</div></div>`).join(''));
+  $('#journeyRange').textContent = about.journeyRange;
+  $('#journey').style.setProperty('--n', about.journey.length);
+  $('#journey').insertAdjacentHTML('beforeend', about.journey.map((s) => `
+    <div class="stop${s.now ? ' now' : ''}"><div class="stop-logo">${s.logo ? `<img src="${esc(s.logo)}" alt="" loading="lazy">` : ''}</div><div class="stop-y">${s.years}</div><div class="stop-k">${s.kind}</div><h3>${s.title}</h3><p>${s.text}</p></div>`).join(''));
+
+  $('#researchTitle').innerHTML = research.title;
+  $('#researchLead').innerHTML = research.lead;
+  $('#researchIntro').innerHTML = research.intro;
+  $('#rigMeta').textContent = `${research.rigs.length} rig${research.rigs.length === 1 ? '' : 's'} · ${research.rigs.map((r) => r.title.replace(/<[^>]+>/g, '').replace(/ platform$/i, '')).join(' · ')}`;
+  $('#rigs').innerHTML = research.rigs.map((r) => `
+      <article class="rig">
+        <div class="rig-img"><img src="${esc(r.img)}" alt="${esc(r.alt || '')}" loading="lazy"></div>
+        <div class="rig-b"><div class="rig-k"><span>${r.label}</span><b>${r.scale}</b></div><h3>${r.title}</h3><p>${r.text}</p></div>
+      </article>`).join('');
+  $('#topicCount').textContent = `${topics.length} thread${topics.length === 1 ? '' : 's'}`;
+
   $('#topics').innerHTML = topics.map((t, i) => `
     <div class="topic reveal">
       <button class="topic-btn" aria-expanded="false">
         <span class="topic-n">${String(i + 1).padStart(2, '0')}</span>
-        <span class="topic-t">${t[1]}</span>
-        <span class="topic-tag">${t[0]}</span>
+        <span class="topic-t">${t.title}</span>
+        <span class="topic-tag">${t.tag}</span>
         <span class="topic-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
       </button>
       <div class="topic-panel"><div><div class="topic-c">
-        <img src="${t[2]}" alt="" loading="lazy">
-        <div><strong>${t[3]}</strong>${t[4]}</div>
+        <img src="${t.img}" alt="" loading="lazy">
+        <div><strong>${t.lead}</strong>${t.text}</div>
       </div></div></div>
     </div>`).join('');
   $$('.topic-btn').forEach((b) => b.addEventListener('click', () => {
     const open = b.parentElement.classList.toggle('open');
     b.setAttribute('aria-expanded', open);
   }));
-  $('.topic').classList.add('open');
-  $('.topic-btn').setAttribute('aria-expanded', 'true');
+  if (topics.length) { $('.topic').classList.add('open'); $('.topic-btn').setAttribute('aria-expanded', 'true'); }
 
   $('#pubs').innerHTML = pubs.map((p) => {
     const tags = [p.k, p.f ? 'first' : '', p.b ? 'featured' : ''].join(' ');

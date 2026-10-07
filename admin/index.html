@@ -124,8 +124,9 @@ a.btn.primary { color: var(--accent-ink); }
 .pub-pill .txt { flex: 1; min-width: 0; text-align: left; }
 .pub-pill .txt b { display: block; font-size: 14px; }
 .pub-pill .txt small { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-nav.tabs { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); height: var(--nav-h); }
-nav.tabs button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--muted); font-size: 11.5px; font-weight: 500; }
+nav.tabs { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(7, 1fr); height: var(--nav-h); }
+nav.tabs button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--muted); font-size: 11.5px; font-weight: 500; min-width: 0; padding: 0; }
+@media (max-width: 420px) { nav.tabs button { font-size: 10px; letter-spacing: -.01em; } }
 nav.tabs svg { width: 22px; height: 22px; }
 nav.tabs button.on { color: var(--ink); }
 nav.tabs button.on svg { color: var(--accent); }
@@ -227,6 +228,8 @@ textarea.inp { min-height: 84px; resize: vertical; line-height: 1.45; }
   <nav class="tabs" id="tabs">
     <button data-tab="news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5"/></svg>News</button>
     <button data-tab="papers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Papers</button>
+    <button data-tab="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>About</button>
+    <button data-tab="research"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/><path d="M7 15h10"/></svg>Research</button>
     <button data-tab="honours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>Honours</button>
     <button data-tab="files"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Files</button>
     <button data-tab="deploy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>Deploy</button>
@@ -659,6 +662,234 @@ function editEdu(i) {
     onDelete() { const [x] = E.splice(i, 1); markIndex(`Removed education: ${x[0]}`); },
   });
 }
+/* ───────── ABOUT + RESEARCH (site-data.about / site-data.research) ───────── */
+const plain = (s) => String(s ?? '').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').trim();
+const MARKUP_HINT = 'Wrap words in <i>…</i> for the orange italics, <b>…</b> for bold.';
+// one-off rows (no reordering) for single settings blocks
+function infoList(rows) {
+  const wrap = el('<div class="list"></div>');
+  rows.forEach((r) => {
+    const row = el(`<div class="row${r.thumb ? '' : ' noimg'}">
+      ${r.thumb ? `<div class="thumb${r.contain ? ' contain' : ''}" style="background-image:url('${esc(imgSrc(r.thumb))}')"></div>` : ''}
+      <button class="row-b">${r.kind ? `<div class="row-k">${esc(r.kind)}</div>` : ''}<div class="row-t">${esc(r.title)}</div>${r.detail ? `<div class="row-d">${esc(r.detail)}</div>` : ''}</button><span></span></div>`);
+    $('.row-b', row).onclick = r.onClick;
+    wrap.append(row);
+  });
+  return wrap;
+}
+function sectionMissing(main, key, name) {
+  if (S.model.data[key]) return false;
+  main.append(el(`<div class="view-h"><div><h1>${name}</h1><p>index.html has no "${key}" entry in its data block, so there is nothing to edit here yet.</p></div></div>`));
+  return true;
+}
+// sheet with fields bound to a copy of `obj`; onSave receives the edited copy
+function objectSheet(title, obj, build, { isNew = false, onSave, onDelete, required } = {}) {
+  const o = JSON.parse(JSON.stringify(obj));
+  const form = document.createElement('div');
+  build(form, o);
+  editSheet(title, form, {
+    isNew, onDelete,
+    onSave() {
+      if (required && !String(o[required] ?? '').trim()) { toast('Fill in the ' + required + ' first', true); return false; }
+      Object.keys(o).forEach((k) => { if (o[k] === undefined || o[k] === null) delete o[k]; });
+      return onSave(o);
+    },
+  });
+}
+// edit an array of objects stored at `arr`
+function crudSheet(arr, i, blank, label, build, opts = {}) {
+  const isNew = i < 0;
+  objectSheet(isNew ? `Add ${label}` : `Edit ${label}`, isNew ? blank : arr[i], build, {
+    isNew, required: opts.required,
+    onSave(o) {
+      if (isNew) { opts.atStart ? arr.unshift(o) : arr.push(o); newRefs.add(o); markIndex(`${opts.log}: ${plain(o.title).slice(0, 50)}`); }
+      else { arr[i] = o; markIndex(`Edited ${opts.log.toLowerCase()}: ${plain(o.title).slice(0, 50)}`); }
+    },
+    onDelete() { const [x] = arr.splice(i, 1); markIndex(`Removed ${opts.log.toLowerCase()}: ${plain(x.title).slice(0, 50)}`); },
+  });
+}
+
+function renderAbout(main) {
+  if (sectionMissing(main, 'about', 'About')) return;
+  const A = S.model.data.about;
+  main.append(el(`<div class="view-h"><div><h1>About</h1><p>Section 01 on the home page: intro, portrait, skills, counters and the timeline.</p></div></div>`));
+  main.append(infoList([
+    { kind: 'Heading & intro', title: plain(A.title), detail: `${A.paragraphs.length} paragraph${A.paragraphs.length === 1 ? '' : 's'} · ${plain(A.statement)}`, onClick: editAboutIntro },
+    { kind: 'Portrait', thumb: A.portrait, title: A.role, detail: A.place, onClick: editPortrait },
+    { kind: 'Skills', title: `${A.skills.length} skill tags`, detail: A.skills.join(' · '), onClick: editSkills },
+  ]));
+
+  main.append(el('<h2 class="sub-h">Counters</h2>'));
+  main.append(el('<p class="note" style="margin:0 0 10px">Citations, h-index, i10-index and publications come from Google Scholar automatically. These extra counters sit after them.</p>'));
+  main.append(btnRow(btn(IC.plus + 'Add counter', '', () => editStat(-1))));
+  main.append(listView(A.stats, { kind: (s) => String(s[0]), title: (s) => s[1], isNew: (s) => newRefs.has(s), onEdit: editStat }));
+
+  main.append(el('<h2 class="sub-h">Timeline: "The route here"</h2>'));
+  main.append(btnRow(btn(IC.plus + 'Add stop', '', () => editStop(-1)), btn('Range label', 'sm ghost', editRange)));
+  main.append(listView(A.journey, {
+    thumb: (s) => s.logo, contain: () => true, kind: (s) => [s.years, s.now ? 'current' : ''].filter(Boolean).join(' · '),
+    title: (s) => plain(s.title), detail: (s) => plain(`${s.kind} · ${s.text}`), isNew: (s) => newRefs.has(s), onEdit: editStop,
+  }));
+}
+function editAboutIntro() {
+  const A = S.model.data.about;
+  objectSheet('Heading & intro', { title: A.title, statement: A.statement, paragraphs: A.paragraphs }, (form, o) => {
+    form.append(
+      field('Heading', o.title, { area: true, hint: MARKUP_HINT, onInput: (v) => o.title = v }),
+      field('Big statement', o.statement, { area: true, hint: 'Text inside <span class="dim">…</span> shows in grey.', onInput: (v) => o.statement = v }),
+    );
+    const paras = el('<div></div>');
+    const draw = () => {
+      paras.innerHTML = '';
+      o.paragraphs.forEach((p, i) => {
+        const f = field(`Paragraph ${i + 1}`, p, { area: true, onInput: (v) => o.paragraphs[i] = v });
+        $('textarea', f).style.minHeight = '140px';
+        if (o.paragraphs.length > 1) f.append(btn('Remove paragraph', 'sm ghost danger', () => { o.paragraphs.splice(i, 1); draw(); }));
+        paras.append(f);
+      });
+      paras.append(btnRow(btn(IC.plus + 'Add paragraph', 'sm', () => { o.paragraphs.push(''); draw(); })));
+    };
+    draw();
+    form.append(paras);
+  }, {
+    onSave(o) {
+      if (!plain(o.title)) { toast('The heading cannot be empty', true); return false; }
+      A.title = o.title; A.statement = o.statement || ''; A.paragraphs = (o.paragraphs || []).filter((p) => p.trim());
+      markIndex('Edited About intro');
+    },
+  });
+}
+function editPortrait() {
+  const A = S.model.data.about;
+  objectSheet('Portrait', { portrait: A.portrait, place: A.place, role: A.role }, (form, o) => {
+    form.append(
+      imageField('Photo', o.portrait, { hint: () => 'portrait', onChange: (v) => o.portrait = v }),
+      field('Place', o.place, { placeholder: 'Karlsruhe, DE', onInput: (v) => o.place = v }),
+      field('Role', o.role, { placeholder: 'Research Fellow', hint: 'Shown in orange on the photo caption.', onInput: (v) => o.role = v }),
+    );
+  }, {
+    onSave(o) {
+      if (!o.portrait) { toast('Pick a photo first', true); return false; }
+      A.portrait = o.portrait; A.place = o.place || ''; A.role = o.role || '';
+      markIndex('Edited portrait');
+    },
+  });
+}
+function editSkills() {
+  const A = S.model.data.about;
+  let text = A.skills.join('\n');
+  const form = document.createElement('div');
+  const f = field('Skill tags', text, { area: true, hint: 'One per line, in the order they appear.', onInput: (v) => text = v });
+  $('textarea', f).style.minHeight = '320px';
+  form.append(f);
+  editSheet('Skills', form, {
+    onSave() {
+      A.skills = text.split('\n').map((s) => s.trim()).filter(Boolean);
+      markIndex(`Edited skills (${A.skills.length})`);
+    },
+  });
+}
+function editStat(i) {
+  const isNew = i < 0, ST = S.model.data.about.stats;
+  const s = isNew ? ['', ''] : ST[i].slice();
+  const form = document.createElement('div');
+  form.append(
+    field('Number', s[0], { type: 'number', onInput: (v) => s[0] = v === '' ? '' : +v }),
+    field('Label', s[1], { placeholder: 'Journal covers', onInput: (v) => s[1] = v }),
+  );
+  editSheet(isNew ? 'Add counter' : 'Edit counter', form, {
+    isNew,
+    onSave() {
+      if (s[0] === '' || !String(s[1]).trim()) { toast('A counter needs a number and a label', true); return false; }
+      if (isNew) { ST.push(s); newRefs.add(s); markIndex(`Counter: ${s[1]}`); } else { ST[i] = s; markIndex(`Edited counter: ${s[1]} = ${s[0]}`); }
+    },
+    onDelete() { const [x] = ST.splice(i, 1); markIndex(`Removed counter: ${x[1]}`); },
+  });
+}
+function editStop(i) {
+  const J = S.model.data.about.journey;
+  crudSheet(J, i, { logo: '', years: '', kind: '', title: '', text: '' }, 'timeline stop', (form, o) => {
+    form.append(
+      imageField('Logo', o.logo, { hint: () => plain(o.title) + '-logo', onChange: (v) => o.logo = v }),
+      field('Years', o.years, { placeholder: '2019 – 2025', onInput: (v) => o.years = v }),
+      field('Label', o.kind, { placeholder: 'Ph.D. · PMRF', hint: 'Small orange caps line above the title.', onInput: (v) => o.kind = v }),
+      field('Title', o.title, { placeholder: 'IISc Bangalore', onInput: (v) => o.title = v }),
+      field('Detail', o.text, { area: true, onInput: (v) => o.text = v }),
+      checkbox('Current position (highlighted ring)', o.now, (v) => { o.now = v ? 1 : undefined; }),
+    );
+  }, { required: 'title', log: 'Timeline' });
+}
+function editRange() {
+  const A = S.model.data.about;
+  let v = A.journeyRange || '';
+  const form = document.createElement('div');
+  form.append(field('Range shown next to the timeline heading', v, { placeholder: '2010 → now', onInput: (x) => v = x }));
+  editSheet('Timeline range', form, { onSave() { A.journeyRange = v.trim(); markIndex('Edited timeline range'); } });
+}
+
+function renderResearch(main) {
+  if (sectionMissing(main, 'research', 'Research')) return;
+  const R = S.model.data.research;
+  main.append(el(`<div class="view-h"><div><h1>Research</h1><p>Section 02 on the home page: intro, instruments and research questions.</p></div></div>`));
+  main.append(infoList([{ kind: 'Heading & intro', title: plain(R.title), detail: plain(R.lead), onClick: editResearchIntro }]));
+
+  main.append(el('<h2 class="sub-h">Instrumentation</h2>'));
+  main.append(btnRow(btn(IC.plus + 'Add instrument', '', () => editRig(-1))));
+  main.append(listView(R.rigs, {
+    thumb: (r) => r.img, kind: (r) => [r.label, r.scale].filter(Boolean).join(' · '), title: (r) => plain(r.title),
+    detail: (r) => plain(r.text), isNew: (r) => newRefs.has(r), onEdit: editRig,
+  }));
+
+  main.append(el('<h2 class="sub-h">Questions I chase</h2>'));
+  main.append(btnRow(btn(IC.plus + 'Add research topic', 'primary', () => editTopic(-1))));
+  main.append(listView(R.topics, {
+    thumb: (t) => t.img, kind: (t) => t.tag, title: (t) => plain(t.title), detail: (t) => plain(t.lead),
+    isNew: (t) => newRefs.has(t), onEdit: editTopic,
+  }));
+}
+function editResearchIntro() {
+  const R = S.model.data.research;
+  objectSheet('Heading & intro', { title: R.title, lead: R.lead, intro: R.intro }, (form, o) => {
+    form.append(
+      field('Heading', o.title, { area: true, hint: MARKUP_HINT, onInput: (v) => o.title = v }),
+      field('Lead (large text)', o.lead, { area: true, onInput: (v) => o.lead = v }),
+      field('Paragraph', o.intro, { area: true, onInput: (v) => o.intro = v }),
+    );
+    $$('textarea', form).slice(1).forEach((t) => t.style.minHeight = '140px');
+  }, {
+    onSave(o) {
+      if (!plain(o.title)) { toast('The heading cannot be empty', true); return false; }
+      R.title = o.title; R.lead = o.lead || ''; R.intro = o.intro || '';
+      markIndex('Edited Research intro');
+    },
+  });
+}
+function editRig(i) {
+  const R = S.model.data.research.rigs;
+  crudSheet(R, i, { img: '', alt: '', label: `Rig ${String(R.length + 1).padStart(2, '0')}`, scale: '', title: '', text: '' }, 'instrument', (form, o) => {
+    form.append(
+      imageField('Photo', o.img, { hint: () => plain(o.title), onChange: (v) => o.img = v }),
+      field('Name', o.title, { placeholder: 'STM-BJ', onInput: (v) => o.title = v }),
+      (() => { const d = el('<div class="two"></div>'); d.append(field('Label', o.label, { placeholder: 'Rig 04', onInput: (v) => o.label = v }), field('Tag', o.scale, { placeholder: 'fA · single molecule', onInput: (v) => o.scale = v })); return d; })(),
+      field('Description', o.text, { area: true, onInput: (v) => o.text = v }),
+      field('Image description', o.alt, { hint: 'For screen readers, e.g. "Low-temperature STM chamber".', onInput: (v) => o.alt = v }),
+    );
+  }, { required: 'title', log: 'Instrument' });
+}
+function editTopic(i) {
+  const T = S.model.data.research.topics;
+  crudSheet(T, i, { tag: '', title: '', img: '', lead: '', text: '' }, 'research topic', (form, o) => {
+    form.append(
+      field('Title', o.title, { area: true, onInput: (v) => o.title = v }),
+      field('Tag', o.tag, { placeholder: 'STM · energy', hint: 'Short label on the right of the row.', onInput: (v) => o.tag = v }),
+      imageField('Image', o.img, { hint: () => plain(o.title), onChange: (v) => o.img = v }),
+      field('Summary (bold first line)', o.lead, { area: true, onInput: (v) => o.lead = v }),
+      field('Details', o.text, { area: true, onInput: (v) => o.text = v }),
+    );
+    $$('textarea', form).pop().style.minHeight = '160px';
+  }, { required: 'title', log: 'Research topic' });
+}
+
 function btnRow(...b) { const d = el('<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"></div>'); d.append(...b); return d; }
 
 /* ───────── FILES ───────── */
@@ -977,11 +1208,13 @@ function renderWelcome() {
 function render() {
   const m = $('#main'); m.innerHTML = '';
   $$('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === S.tab));
-  const structured = ['news', 'papers', 'honours'].includes(S.tab);
+  const structured = ['news', 'papers', 'about', 'research', 'honours'].includes(S.tab);
   if (structured && !S.modelOk) {
     m.append(el(`<div class="view-h"><div><h1>Locked</h1><p>index.html no longer contains a readable data block or news array, so this editor is off. Fix it in Files → index.html, or reload to discard.</p></div></div>`));
   } else if (S.tab === 'news') renderNews(m);
   else if (S.tab === 'papers') renderPapers(m);
+  else if (S.tab === 'about') renderAbout(m);
+  else if (S.tab === 'research') renderResearch(m);
   else if (S.tab === 'honours') renderHonours(m);
   else if (S.tab === 'files') renderFiles(m);
   else if (S.tab === 'deploy') renderDeploy(m);

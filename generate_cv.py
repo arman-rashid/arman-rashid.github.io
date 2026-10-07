@@ -63,15 +63,17 @@ def _shrink_image(raw, max_w=420):
         return raw, None
 
 
-def extract_photo(soup, base_dir="."):
+def extract_photo(soup, base_dir=".", data=None):
     """
-    Extract profile image (.portrait img on the current site, .profile-ring img on the old one).
+    Extract profile image (site-data about.portrait, else .portrait img / .profile-ring img in the markup).
     If src is a local path (e.g., images/...), read it from disk and encode to base64.
     """
-    img = soup.select_one(".portrait img") or soup.select_one(".profile-ring img")
-    if not img:
-        return ""
-    src = img.get("src", "").strip()
+    src = ((data or {}).get("about") or {}).get("portrait", "").strip()
+    if not src:
+        img = soup.select_one(".portrait img") or soup.select_one(".profile-ring img")
+        if not img:
+            return ""
+        src = img.get("src", "").strip()
     
     # If already base64, return as-is
     if src.startswith("data:image"):
@@ -156,7 +158,7 @@ def load_site_data(soup):
     return json.loads(tag.string)
 
 
-def site_stats(soup, scholar_stats):
+def site_stats(soup, scholar_stats, data=None):
     stats = []
     for card in soup.select(".stats .stat"):
         num_el, label_el = card.select_one(".stat-n"), card.select_one(".stat-l")
@@ -165,6 +167,9 @@ def site_stats(soup, scholar_stats):
         key = _SITE_STAT_IDS.get(num_el.get("id"))
         n = scholar_stats.get(key) if key else None
         stats.append((str(n if n is not None else num_el.get("data-count", "—")), label_el.get_text(strip=True)))
+    # Hand-set counters (covers, fellowships, awards) live in site-data and are rendered by JS
+    for n, label in ((data or {}).get("about") or {}).get("stats", []):
+        stats.append((str(n), label))
     return stats
 
 
@@ -361,11 +366,11 @@ def main():
 
     # 3. Extract dynamic data (photo from local filesystem)
     scholar_stats = load_scholar_stats()
-    photo_b64 = extract_photo(soup, base_dir=".")
     data = load_site_data(soup)
+    photo_b64 = extract_photo(soup, base_dir=".", data=data)
     if data:
         print("🧾 Using embedded site-data JSON", file=sys.stderr)
-        stats = site_stats(soup, scholar_stats)
+        stats = site_stats(soup, scholar_stats, data)
         edu = [tuple(e) for e in data.get("education", [])]
         pubs = site_publications(data)
         awards = sort_awards([(a[0], a[1]) for a in data.get("awards", [])])
