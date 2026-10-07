@@ -246,7 +246,7 @@ section { position: relative; }
 .sec { padding: clamp(80px, 12vw, 160px) 0; border-bottom: 1px solid var(--line); }
 .sec-head { display: grid; grid-template-columns: 180px 1fr; gap: 24px; margin-bottom: clamp(40px, 6vw, 72px); align-items: end; }
 .sec-num { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px solid var(--accent); align-self: end; }
-.sec-title { font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 4.4vw, 60px); line-height: 1.02; letter-spacing: -.02em; }
+.sec-title { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 3.4vw, 46px); line-height: 1.08; letter-spacing: -.02em; }
 .sec-title i { color: var(--accent); }
 @media (max-width: 760px) { .sec-head { grid-template-columns: 1fr; gap: 16px; } .sec-num { justify-self: start; } }
 
@@ -257,7 +257,7 @@ section { position: relative; }
 
 /* ───────── about ───────── */
 .about-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
-.statement { font-family: var(--serif); font-size: clamp(24px, 2.8vw, 38px); line-height: 1.15; letter-spacing: -.015em; }
+.statement { font-family: var(--serif); font-size: clamp(20px, 2.1vw, 28px); line-height: 1.25; letter-spacing: -.015em; }
 .statement i { color: var(--accent); }
 .statement .dim { color: var(--muted); }
 .about-copy { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; color: var(--ink-2); font-size: 15.5px; }
@@ -416,7 +416,7 @@ section { position: relative; }
 
 /* ───────── publications ───────── */
 .covers { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 20px; margin-bottom: 80px; align-items: end; }
-.covers-copy h3 { font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 2.4vw, 34px); line-height: 1; }
+.covers-copy h3 { font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 2vw, 28px); line-height: 1; }
 .covers-copy p { color: var(--muted); margin-top: 14px; font-size: 15px; max-width: 320px; }
 .cover { border-radius: 10px; overflow: hidden; aspect-ratio: 3/4; background: var(--bg-2); box-shadow: var(--shadow); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
 .cover img { width: 100%; height: 100%; object-fit: cover; }
@@ -434,11 +434,11 @@ section { position: relative; }
 }
 .pub::before { content: ''; position: absolute; left: -16px; right: -16px; top: 0; bottom: 0; border-radius: 14px; background: var(--card); opacity: 0; transition: opacity .3s; z-index: -1; }
 .pub:hover::before { opacity: 1; }
-.pub-y { font-family: var(--serif); font-size: 34px; color: var(--muted); line-height: 1; }
+.pub-y { font-family: var(--serif); font-size: 26px; color: var(--muted); line-height: 1; }
 .pub-img { width: 168px; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; }
 .pub-img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
 .pub:hover .pub-img img { transform: scale(1.05); }
-.pub h4 { font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 2.1vw, 27px); line-height: 1.15; transition: color .2s; }
+.pub h4 { font-family: var(--serif); font-weight: 600; font-size: clamp(17px, 1.45vw, 20px); line-height: 1.25; transition: color .2s; }
 .pub:hover h4 { color: var(--accent); }
 .pub-a { font-size: 13.5px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
 .pub-a b { color: var(--ink); font-weight: 600; }
@@ -485,7 +485,7 @@ section { position: relative; }
 
 /* ───────── quote ───────── */
 .quote { padding: clamp(90px, 14vw, 180px) 0; text-align: center; border-bottom: 1px solid var(--line); overflow: hidden; }
-.quote blockquote { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 48px); line-height: 1.1; letter-spacing: -.015em; max-width: 960px; margin: 0 auto; min-height: 3.2em; display: flex; align-items: center; justify-content: center; transition: opacity .6s, filter .6s; }
+.quote blockquote { font-family: var(--serif); font-size: clamp(20px, 2.4vw, 32px); line-height: 1.25; letter-spacing: -.015em; max-width: 960px; margin: 0 auto; min-height: 3.2em; display: flex; align-items: center; justify-content: center; transition: opacity .6s, filter .6s; }
 .quote blockquote.fade { opacity: 0; filter: blur(6px); }
 .quote blockquote i { color: var(--accent); }
 .quote cite { display: block; font-style: normal; margin-top: 28px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
