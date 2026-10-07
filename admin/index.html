@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f2eee6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c0b0a" media="(prefers-color-scheme: dark)">
+<title>Site Studio</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f2eee6; --bg-2: #ebe6dc; --card: #faf7f1; --ink: #15130f; --ink-2: #3d3830; --muted: #776f63;
+  --line: rgba(21,19,15,.13); --line-strong: rgba(21,19,15,.28);
+  --accent: #cf4c14; --accent-ink: #fff; --ok: #2f7d5b; --warn: #b7791f; --bad: #b42318;
+  --glow: rgba(207,76,20,.14);
+  --head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --code: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+  --nav-h: 64px;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0b0a; --bg-2: #13110e; --card: #171410; --ink: #efe8dc; --ink-2: #cfc6b7; --muted: #8f8677;
+    --line: rgba(239,232,220,.11); --line-strong: rgba(239,232,220,.26);
+    --accent: #ff7a3d; --accent-ink: #120a05; --ok: #5fd6a0; --warn: #f0b44c; --bad: #ff6b5e; --glow: rgba(255,122,61,.16);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0b0a; --bg-2: #13110e; --card: #171410; --ink: #efe8dc; --ink-2: #cfc6b7; --muted: #8f8677;
+  --line: rgba(239,232,220,.11); --line-strong: rgba(239,232,220,.26);
+  --accent: #ff7a3d; --accent-ink: #120a05; --ok: #5fd6a0; --warn: #f0b44c; --bad: #ff6b5e; --glow: rgba(255,122,61,.16);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--sans); -webkit-tap-highlight-color: transparent; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hidden { display: none !important; }
+
+/* ── header ── */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 10px 18px; }
+.sig { font-family: 'Mrs Saint Delafield', cursive; font-size: 34px; line-height: 1; padding-top: 6px; }
+.top-t { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.top-t b { font-family: var(--head); font-weight: 600; font-size: 15px; }
+.top-t small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
+.dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); } .dot.busy { background: var(--warn); animation: pulse 1s infinite; }
+.spacer { flex: 1; }
+.icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); display: grid; place-items: center; }
+.icon-btn svg { width: 19px; height: 19px; }
+
+/* ── views ── */
+main { max-width: 760px; margin: 0 auto; padding: 18px 18px calc(var(--nav-h) + 110px); }
+.view-h { display: flex; align-items: flex-end; gap: 12px; margin: 6px 0 16px; }
+.view-h h1 { font-family: var(--head); font-weight: 600; font-size: 28px; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
+.view-h p { margin: 4px 0 0; color: var(--muted); font-size: 13.5px; }
+.sub-h { font-family: var(--head); font-weight: 600; font-size: 17px; margin: 28px 0 10px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--card); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.btn svg { width: 17px; height: 17px; }
+a.btn { text-decoration: none; color: inherit; }
+a.btn.primary { color: var(--accent-ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.ghost { border-color: transparent; background: transparent; }
+.btn.danger { color: var(--bad); }
+.btn.sm { height: 34px; padding: 0 12px; font-size: 13px; border-radius: 10px; }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* list rows */
+.list { border: 1px solid var(--line); border-radius: 16px; background: var(--card); overflow: hidden; }
+.row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 10px 10px 10px 12px; border-bottom: 1px solid var(--line); }
+.row:last-child { border-bottom: 0; }
+.row.noimg { grid-template-columns: 1fr auto; }
+.row.new { box-shadow: inset 3px 0 0 var(--accent); }
+.thumb { width: 56px; height: 56px; border-radius: 10px; background: var(--bg-2) center/cover no-repeat; border: 1px solid var(--line); }
+.thumb.contain { background-size: contain; background-color: #fff; }
+.row-b { min-width: 0; text-align: left; background: none; border: 0; padding: 4px 0; }
+.row-k { font-size: 12px; color: var(--accent); font-weight: 600; }
+.row-t { font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.row-d { font-size: 12.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mv { display: flex; flex-direction: column; gap: 2px; }
+.mv button { width: 32px; height: 26px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); display: grid; place-items: center; }
+.mv button:disabled { opacity: .25; }
+.mv svg { width: 16px; height: 16px; }
+.empty { padding: 28px 18px; text-align: center; color: var(--muted); }
+
+/* files */
+.search { width: 100%; height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--card); padding: 0 14px; margin-bottom: 12px; }
+.frow { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 14px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; }
+.frow:last-child { border-bottom: 0; }
+.frow code { font-family: var(--code); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.frow small { color: var(--muted); font-size: 12px; }
+.frow .tag { font-size: 11px; font-weight: 600; color: var(--accent); }
+
+/* deploy */
+.run { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
+.run:last-child { border-bottom: 0; }
+.run .st { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+.st.success { background: var(--ok); } .st.failure, .st.cancelled { background: var(--bad); } .st.in_progress, .st.queued, .st.pending, .st.waiting { background: var(--warn); animation: pulse 1s infinite; }
+.run b { font-weight: 600; font-size: 14px; display: block; }
+.run small { color: var(--muted); font-size: 12px; }
+.actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.act { text-align: left; padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); }
+.act b { display: block; font-family: var(--head); font-weight: 600; font-size: 15px; }
+.act span { font-size: 12.5px; color: var(--muted); }
+
+/* ── bottom nav + publish bar ── */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding-bottom: env(safe-area-inset-bottom, 0px); background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--line); }
+.pub-bar { max-width: 760px; margin: 0 auto; padding: 10px 14px 0; }
+.pub-pill { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 8px 8px 16px; border-radius: 16px; border: 1px solid var(--accent); background: var(--card); box-shadow: 0 0 0 4px var(--glow); }
+.pub-pill .pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s infinite; flex: none; }
+.pub-pill .txt { flex: 1; min-width: 0; text-align: left; }
+.pub-pill .txt b { display: block; font-size: 14px; }
+.pub-pill .txt small { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.tabs { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); height: var(--nav-h); }
+nav.tabs button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--muted); font-size: 11.5px; font-weight: 500; }
+nav.tabs svg { width: 22px; height: 22px; }
+nav.tabs button.on { color: var(--ink); }
+nav.tabs button.on svg { color: var(--accent); }
+
+/* ── sheet ── */
+.scrim { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.4); opacity: 0; transition: opacity .2s; }
+.scrim.open { opacity: 1; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 51; max-height: calc(100% - 40px - env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; background: var(--bg); border-radius: 22px 22px 0 0; border-top: 1px solid var(--line-strong); transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1); padding-bottom: env(safe-area-inset-bottom, 0px); max-width: 760px; margin: 0 auto; }
+.sheet.open { transform: none; }
+.sheet.full { height: calc(100% - 20px - env(safe-area-inset-top, 0px)); }
+.sheet-h { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; border-bottom: 1px solid var(--line); }
+.sheet-h h2 { font-family: var(--head); font-weight: 600; font-size: 19px; margin: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sheet-b { overflow: auto; padding: 16px; -webkit-overflow-scrolling: touch; flex: 1; }
+.sheet-f { display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--line); }
+.sheet-f .btn { flex: 1; }
+@media (prefers-reduced-motion: reduce) { .sheet, .scrim { transition: none; } .pulse, .dot.busy, .st { animation: none !important; } }
+
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--ink-2); }
+.field > em { display: block; font-style: normal; font-size: 12px; color: var(--muted); margin-top: 5px; }
+.inp { width: 100%; min-height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--card); padding: 10px 12px; }
+textarea.inp { min-height: 84px; resize: vertical; line-height: 1.45; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 500; }
+.check input { width: 20px; height: 20px; accent-color: var(--accent); }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button { height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--card); font-size: 13px; font-weight: 500; }
+.seg button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.inline { display: flex; gap: 8px; }
+.inline .inp { flex: 1; }
+
+.imgpick { display: grid; grid-template-columns: 88px 1fr; gap: 12px; align-items: center; }
+.imgpick .thumb { width: 88px; height: 88px; }
+.imgpick .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.imgpick small { display: block; color: var(--muted); font-size: 12px; word-break: break-all; margin-bottom: 6px; font-family: var(--code); }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+.gallery button { aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2) center/cover no-repeat; position: relative; overflow: hidden; }
+.gallery button span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 10px; padding: 3px 4px; background: rgba(0,0,0,.55); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+
+.editor-wrap { display: flex; flex-direction: column; height: 100%; }
+.editor { flex: 1; width: 100%; min-height: 50vh; border: 0; border-radius: 0; background: var(--card); padding: 14px; font: 12.5px/1.55 var(--code); white-space: pre; overflow: auto; resize: none; tab-size: 2; }
+.findbar { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--line); align-items: center; }
+.findbar .inp { min-height: 36px; height: 36px; padding: 6px 10px; }
+.findbar small { color: var(--muted); font-size: 12px; min-width: 44px; text-align: right; }
+
+.steps { list-style: none; margin: 0; padding: 0; }
+.steps li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 10px 0; align-items: start; }
+.steps .n { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--line-strong); display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--muted); }
+.steps li.done .n { background: var(--ok); border-color: var(--ok); color: #fff; }
+.steps li.doing .n { border-color: var(--accent); color: var(--accent); animation: pulse 1s infinite; }
+.steps li.fail .n { background: var(--bad); border-color: var(--bad); color: #fff; }
+.steps b { display: block; font-weight: 600; }
+.steps small { color: var(--muted); font-size: 12.5px; }
+.chg { list-style: none; margin: 0 0 14px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.chg li { display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.chg li:last-child { border-bottom: 0; }
+.chg code { font-family: var(--code); font-size: 12px; color: var(--muted); }
+.chg .k { font-size: 11px; font-weight: 700; color: var(--accent); width: 46px; flex: none; }
+
+.toast { position: fixed; left: 50%; bottom: calc(var(--nav-h) + 90px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); z-index: 60; background: var(--ink); color: var(--bg); padding: 11px 16px; border-radius: 12px; font-size: 14px; font-weight: 500; opacity: 0; transition: .2s; pointer-events: none; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+.toast.err { background: var(--bad); color: #fff; }
+
+/* onboarding */
+.welcome { padding-top: 6vh; }
+.welcome .sig { font-size: 64px; }
+.welcome h1 { font-family: var(--head); font-weight: 600; font-size: 30px; letter-spacing: -.02em; margin: 10px 0 8px; line-height: 1.1; }
+.welcome p { color: var(--ink-2); max-width: 54ch; }
+.welcome ol { padding-left: 20px; color: var(--ink-2); }
+.welcome ol li { margin-bottom: 8px; }
+.welcome a { color: var(--accent); }
+.note { padding: 12px 14px; border-radius: 12px; background: var(--bg-2); border: 1px solid var(--line); font-size: 13px; color: var(--ink-2); }
+.loading { padding: 40px 0; text-align: center; color: var(--muted); }
+@keyframes pulse { 50% { opacity: .35; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <span class="sig" aria-hidden="true">Arman</span>
+    <div class="top-t"><b>Site Studio</b><small id="status"><span class="dot"></span>Not connected</small></div>
+    <div class="spacer"></div>
+    <button class="icon-btn" id="reloadBtn" aria-label="Reload from GitHub" title="Reload from GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main id="main"><div class="loading">Loading…</div></main>
+
+<div class="dock hidden" id="dock">
+  <div class="pub-bar hidden" id="pubBar">
+    <button class="pub-pill" id="pubPill">
+      <span class="pulse"></span>
+      <span class="txt"><b id="pubCount">1 unpublished change</b><small id="pubSummary"></small></span>
+      <span class="btn primary sm">Review &amp; publish</span>
+    </button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5"/></svg>News</button>
+    <button data-tab="papers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Papers</button>
+    <button data-tab="honours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>Honours</button>
+    <button data-tab="files"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Files</button>
+    <button data-tab="deploy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>Deploy</button>
+  </nav>
+</div>
+
+<div class="scrim hidden" id="scrim"></div>
+<section class="sheet hidden" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-h"><h2 id="sheetTitle"></h2><button class="icon-btn" id="sheetClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="sheet-b" id="sheetBody"></div>
+  <div class="sheet-f" id="sheetFoot"></div>
+</section>
+<div class="toast" id="toast"></div>
+<input type="file" id="filePick" class="hidden">
+
+<script src="core.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const IC = {
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>',
+  ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+};
+
+/* ───────── storage ───────── */
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('studio.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('studio.' + k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem('studio.' + k); } catch {} },
+};
+const cfg = Object.assign({ owner: 'arman-rashid', repo: 'arman-rashid.github.io', branch: 'main', token: '', site: 'https://arman-rashid.github.io/' }, LS.get('cfg', {}));
+const theme = LS.get('theme', null);
+if (theme) document.documentElement.dataset.theme = theme;
+
+/* ───────── state ───────── */
+const S = {
+  head: null,          // commit sha the edits are based on
+  tree: [],            // [{path, sha, size, type}]
+  indexText: '',       // index.html at head
+  indexSha: '',
+  model: null,         // { data, news }
+  modelOk: true,
+  indexDirty: false,
+  rawIndex: null,      // raw-edited index.html when structured parse failed
+  changes: new Map(),  // path -> {kind:'text'|'b64'|'delete', content, baseSha, preview}
+  log: [],             // human-readable change notes
+  tab: LS.get('tab', 'news'),
+  runs: [], workflows: [],
+};
+
+/* ───────── utils ───────── */
+const b64ToText = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, '')), (c) => c.charCodeAt(0)));
+const textToB64 = (t) => { const b = new TextEncoder().encode(t); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); };
+const rawUrl = (p) => `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${S.head || cfg.branch}/${p.split('/').map(encodeURIComponent).join('/')}`;
+const imgSrc = (p) => { if (!p) return ''; const c = S.changes.get(p); if (c && c.preview) return c.preview; if (/^https?:/.test(p)) return p; return rawUrl(p); };
+const slug = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[^\w.-]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const ago = (d) => { const s = (Date.now() - new Date(d)) / 1000; if (s < 60) return 'just now'; if (s < 3600) return Math.floor(s / 60) + ' min ago'; if (s < 86400) return Math.floor(s / 3600) + ' h ago'; return Math.floor(s / 86400) + ' d ago'; };
+const fmtSize = (n) => n == null ? '' : n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(0) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+const TEXT_EXT = /\.(html?|css|js|mjs|json|md|txt|py|ya?ml|xml|svg|tex|bib|csv|webmanifest|gitignore|nojekyll|toml|cfg|ini)$/i;
+const IMG_EXT = /\.(png|jpe?g|gif|webp|svg|avif)$/i;
+
+let toastT;
+function toast(msg, err) {
+  const t = $('#toast'); t.textContent = msg; t.classList.toggle('err', !!err); t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), err ? 5200 : 2600);
+}
+function setStatus(kind, text) { $('#status').innerHTML = `<span class="dot ${kind}"></span>${esc(text)}`; }
+
+/* ───────── GitHub API ───────── */
+async function gh(path, opts = {}) {
+  const url = path.startsWith('http') ? path : `https://api.github.com/repos/${cfg.owner}/${cfg.repo}${path}`;
+  const res = await fetch(url, {
+    method: opts.method || 'GET',
+    headers: Object.assign({
+      Authorization: `Bearer ${cfg.token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    }, opts.body ? { 'Content-Type': 'application/json' } : {}, opts.headers || {}),
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+    cache: 'no-store',
+  });
+  if (res.status === 204) return null;
+  let data = null; try { data = await res.json(); } catch {}
+  if (!res.ok) {
+    const m = (data && data.message) || res.statusText;
+    const hint = res.status === 401 ? 'The token was rejected. Paste a fresh one in Settings.'
+      : res.status === 403 ? `GitHub refused (${m}). Check the token has Contents and Actions write access for this repo.`
+      : res.status === 404 ? `Not found: ${path.split('?')[0]}. Check owner, repo and branch in Settings, and that the token can see this repo.`
+      : res.status === 409 || res.status === 422 ? `GitHub rejected the request: ${m}`
+      : `GitHub error ${res.status}: ${m}`;
+    const e = new Error(hint); e.status = res.status; throw e;
+  }
+  return data;
+}
+
+async function loadAll() {
+  setStatus('busy', 'Loading from GitHub…');
+  const ref = await gh(`/git/ref/heads/${encodeURIComponent(cfg.branch)}`);
+  S.head = ref.object.sha;
+  const [file, commit] = await Promise.all([
+    gh(`/contents/index.html?ref=${S.head}`),
+    gh(`/git/commits/${S.head}`),
+  ]);
+  S.indexSha = file.sha;
+  S.indexText = file.content ? b64ToText(file.content) : b64ToText((await gh(`/git/blobs/${file.sha}`)).content);
+  try { S.model = Core.parseIndex(S.indexText); S.modelOk = true; }
+  catch (e) { S.model = null; S.modelOk = false; toast(e.message, true); }
+  S.indexDirty = false; S.rawIndex = null; S.changes.clear(); S.log = [];
+  const t = await gh(`/git/trees/${commit.tree.sha}?recursive=1`);
+  S.tree = t.tree.filter((x) => x.type === 'blob');
+  setStatus('ok', `${cfg.branch} @ ${S.head.slice(0, 7)} · ${ago(commit.committer.date)}`);
+  updatePubBar();
+}
+
+/* ───────── change tracking ───────── */
+function note(msg) { S.log.push(msg); updatePubBar(); }
+function markIndex(msg) { S.indexDirty = true; note(msg); render(); }
+function pendingPaths() {
+  const p = new Map(S.changes);
+  if (S.indexDirty || S.rawIndex != null) p.set('index.html', { kind: 'text' });
+  return p;
+}
+function currentIndex() {
+  if (S.rawIndex != null) return S.rawIndex;
+  if (S.indexDirty && S.model) return Core.buildIndex(S.indexText, S.model);
+  return S.indexText;
+}
+function updatePubBar() {
+  const n = pendingPaths().size;
+  $('#pubBar').classList.toggle('hidden', n === 0);
+  $('#pubCount').textContent = `${n} file${n === 1 ? '' : 's'} with unpublished changes`;
+  $('#pubSummary').textContent = S.log.slice(-2).reverse().join(' · ') || [...pendingPaths().keys()].join(', ');
+}
+window.addEventListener('beforeunload', (e) => { if (pendingPaths().size) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ───────── sheet ───────── */
+let sheetOnClose = null;
+function openSheet(title, body, foot, { full = false, onClose = null } = {}) {
+  $('#sheetTitle').textContent = title;
+  const b = $('#sheetBody'); b.innerHTML = ''; typeof body === 'string' ? (b.innerHTML = body) : b.append(body);
+  const f = $('#sheetFoot'); f.innerHTML = ''; f.classList.toggle('hidden', !foot || !foot.length);
+  (foot || []).forEach((x) => f.append(x));
+  b.style.padding = full ? '0' : '';
+  $('#sheet').classList.toggle('full', full);
+  sheetOnClose = onClose;
+  $('#scrim').classList.remove('hidden'); $('#sheet').classList.remove('hidden');
+  requestAnimationFrame(() => { $('#scrim').classList.add('open'); $('#sheet').classList.add('open'); });
+  b.scrollTop = 0;
+}
+function closeSheet() {
+  $('#scrim').classList.remove('open'); $('#sheet').classList.remove('open');
+  setTimeout(() => { $('#scrim').classList.add('hidden'); $('#sheet').classList.add('hidden'); }, 260);
+  const cb = sheetOnClose; sheetOnClose = null; if (cb) cb();
+}
+$('#sheetClose').onclick = closeSheet; $('#scrim').onclick = closeSheet;
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#sheet').classList.contains('hidden')) closeSheet(); });
+
+function btn(label, cls, onClick) { const b = document.createElement('button'); b.className = 'btn ' + (cls || ''); b.innerHTML = label; b.onclick = onClick; return b; }
+function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
+
+/* ───────── image handling ───────── */
+async function resizeImage(file, max = 1600) {
+  if (/svg|gif/.test(file.type)) return { blob: file, ext: file.name.split('.').pop().toLowerCase() };
+  const bmp = await createImageBitmap(file).catch(() => null);
+  if (!bmp) return { blob: file, ext: (file.name.split('.').pop() || 'jpg').toLowerCase() };
+  const sc = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const w = Math.round(bmp.width * sc), h = Math.round(bmp.height * sc);
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const cx = cv.getContext('2d');
+  const png = file.type === 'image/png';
+  if (!png) { cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h); }
+  cx.drawImage(bmp, 0, 0, w, h);
+  const blob = await new Promise((r) => cv.toBlob(r, png ? 'image/png' : 'image/jpeg', 0.86));
+  return { blob, ext: png ? 'png' : 'jpg' };
+}
+const blobToB64 = (blob) => new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(String(fr.result).split(',')[1]); fr.readAsDataURL(blob); });
+const blobToURL = (blob) => new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+
+function pickFile(accept, capture) {
+  return new Promise((resolve) => {
+    const i = $('#filePick'); i.value = ''; i.accept = accept || ''; capture ? i.setAttribute('capture', 'environment') : i.removeAttribute('capture');
+    i.onchange = () => resolve(i.files[0] || null); i.click();
+  });
+}
+function uniquePath(dir, name) {
+  const exists = (p) => S.tree.some((x) => x.path === p) || S.changes.has(p);
+  let p = `${dir}/${name}`; const dot = name.lastIndexOf('.'); const base = dot > 0 ? name.slice(0, dot) : name, ext = dot > 0 ? name.slice(dot) : '';
+  for (let i = 2; exists(p); i++) p = `${dir}/${base}-${i}${ext}`;
+  return p;
+}
+async function uploadImage(hint) {
+  const f = await pickFile('image/*');
+  if (!f) return null;
+  const { blob, ext } = await resizeImage(f);
+  const base = slug(hint || f.name.replace(/\.[^.]+$/, '')) || 'image';
+  const path = uniquePath('images', `${base}.${ext}`);
+  S.changes.set(path, { kind: 'b64', content: await blobToB64(blob), preview: await blobToURL(blob), size: blob.size });
+  note(`Added ${path}`);
+  toast(`Added ${path.split('/').pop()} (${fmtSize(blob.size)})`);
+  return path;
+}
+function imageGallery(onPick) {
+  const imgs = [...S.changes.keys()].filter((p) => IMG_EXT.test(p) && S.changes.get(p).kind !== 'delete')
+    .concat(S.tree.filter((x) => x.path.startsWith('images/') && IMG_EXT.test(x.path)).map((x) => x.path).reverse());
+  const wrap = el(`<div><input class="search" placeholder="Filter images" aria-label="Filter images"><div class="gallery"></div></div>`);
+  const g = $('.gallery', wrap);
+  const draw = (q) => {
+    g.innerHTML = imgs.filter((p) => !q || p.toLowerCase().includes(q)).map((p) =>
+      `<button data-p="${esc(p)}" style="background-image:url('${esc(imgSrc(p))}')"><span>${esc(p.replace('images/', ''))}</span></button>`).join('');
+    $$('button', g).forEach((b) => b.onclick = () => onPick(b.dataset.p));
+  };
+  $('input', wrap).oninput = (e) => draw(e.target.value.toLowerCase());
+  draw('');
+  return wrap;
+}
+// image field used in forms; value stored as `images/x.jpg` (news) or `x.jpg` (pubs)
+function imageField(label, value, { prefix = '', hint = '', onChange }) {
+  const full = () => value ? (prefix && !value.startsWith(prefix) && !/^https?:/.test(value) ? prefix + value : value) : '';
+  const f = el(`<div class="field"><span>${esc(label)}</span><div class="imgpick"><div class="thumb"></div><div><small></small><div class="acts"></div></div></div></div>`);
+  const paint = () => { $('.thumb', f).style.backgroundImage = value ? `url('${imgSrc(full())}')` : ''; $('small', f).textContent = value || 'No image'; };
+  const set = (p) => { value = prefix ? p.replace(prefix, '') : p; onChange(value); paint(); };
+  $('.acts', f).append(
+    btn(IC.upload + 'Upload', 'sm', async () => { const p = await uploadImage(hint()); if (p) set(p); }),
+    btn('Choose existing', 'sm', () => {
+      const prev = { title: $('#sheetTitle').textContent, body: [...$('#sheetBody').childNodes], foot: [...$('#sheetFoot').childNodes] };
+      const restore = () => { $('#sheetTitle').textContent = prev.title; $('#sheetBody').replaceChildren(...prev.body); $('#sheetFoot').replaceChildren(...prev.foot); $('#sheetFoot').classList.remove('hidden'); };
+      $('#sheetTitle').textContent = 'Choose image';
+      $('#sheetBody').replaceChildren(imageGallery((p) => { set(p); restore(); }));
+      $('#sheetFoot').replaceChildren(btn('Back', '', restore));
+    }),
+  );
+  paint();
+  return f;
+}
+
+/* ───────── form helpers ───────── */
+function field(label, value, { type = 'text', area = false, hint = '', list = null, placeholder = '', onInput }) {
+  const id = 'f' + Math.random().toString(36).slice(2, 8);
+  const f = el(`<label class="field" for="${id}"><span>${esc(label)}</span>${area
+    ? `<textarea class="inp" id="${id}" placeholder="${esc(placeholder)}"></textarea>`
+    : `<input class="inp" id="${id}" type="${type}" placeholder="${esc(placeholder)}" ${list ? `list="${id}l"` : ''}>`}${list ? `<datalist id="${id}l">${list.map((x) => `<option value="${esc(x)}">`).join('')}</datalist>` : ''}${hint ? `<em>${esc(hint)}</em>` : ''}</label>`);
+  const inp = $('.inp', f); inp.value = value ?? ''; inp.oninput = () => onInput(inp.value);
+  return f;
+}
+function segment(label, options, value, onChange) {
+  const f = el(`<div class="field"><span>${esc(label)}</span><div class="seg"></div></div>`);
+  options.forEach(([v, l]) => { const b = btn(esc(l), '', () => { value = v; onChange(v); $$('button', f).forEach((x) => x.classList.toggle('on', x === b)); }); b.className = v === value ? 'on' : ''; $('.seg', f).append(b); });
+  return f;
+}
+function checkbox(label, checked, onChange) {
+  const f = el(`<label class="check"><input type="checkbox"> <span>${esc(label)}</span></label>`);
+  $('input', f).checked = !!checked; $('input', f).onchange = (e) => onChange(e.target.checked);
+  return f;
+}
+function confirmDanger(msg) { return window.confirm(msg); }
+
+/* ───────── generic list editor ───────── */
+function listView(items, { thumb, contain, kind, title, detail, onEdit, isNew }) {
+  const wrap = el('<div class="list"></div>');
+  if (!items.length) { wrap.innerHTML = '<div class="empty">Nothing here yet. Add the first one.</div>'; return wrap; }
+  items.forEach((it, i) => {
+    const t = thumb ? thumb(it) : null;
+    const r = el(`<div class="row${thumb ? '' : ' noimg'}${isNew && isNew(it) ? ' new' : ''}">
+      ${thumb ? `<div class="thumb${contain && contain(it) ? ' contain' : ''}" style="${t ? `background-image:url('${esc(imgSrc(t))}')` : ''}"></div>` : ''}
+      <button class="row-b">${kind ? `<div class="row-k">${esc(kind(it))}</div>` : ''}<div class="row-t">${esc(title(it))}</div>${detail ? `<div class="row-d">${esc(detail(it))}</div>` : ''}</button>
+      <div class="mv"><button aria-label="Move up" ${i === 0 ? 'disabled' : ''}>${IC.up}</button><button aria-label="Move down" ${i === items.length - 1 ? 'disabled' : ''}>${IC.down}</button></div>
+    </div>`);
+    $('.row-b', r).onclick = () => onEdit(i);
+    const [u, d] = $$('.mv button', r);
+    u.onclick = () => { [items[i - 1], items[i]] = [items[i], items[i - 1]]; markIndex(`Reordered: ${title(items[i - 1]).slice(0, 40)}`); };
+    d.onclick = () => { [items[i + 1], items[i]] = [items[i], items[i + 1]]; markIndex(`Reordered: ${title(items[i + 1]).slice(0, 40)}`); };
+    wrap.append(r);
+  });
+  return wrap;
+}
+function editSheet(title, form, { isNew, onSave, onDelete }) {
+  const foot = [];
+  if (!isNew && onDelete) foot.push(btn('Delete', 'danger', () => { if (confirmDanger('Delete this entry?')) { onDelete(); closeSheet(); } }));
+  foot.push(btn(isNew ? 'Add to site' : 'Save changes', 'primary', () => { if (onSave() !== false) closeSheet(); }));
+  openSheet(title, form, foot);
+}
+const newRefs = new WeakSet();
+
+/* ───────── NEWS ───────── */
+const NEWS_KINDS = ['New publication', 'Front cover', 'New position', 'Milestone', 'Talk', 'Award', 'Conference', 'Outreach'];
+function renderNews(main) {
+  main.append(el(`<div class="view-h"><div><h1>News</h1><p>Cards in the news strip on the home page, top to bottom.</p></div></div>`));
+  main.append(btnRow(btn(IC.plus + 'Add news', 'primary', () => editNews(-1))));
+  main.append(listView(S.model.news, {
+    thumb: (n) => n[3], contain: (n) => n[5] === 1,
+    kind: (n) => n[0], title: (n) => n[1], detail: (n) => n[2], isNew: (n) => newRefs.has(n),
+    onEdit: editNews,
+  }));
+}
+function editNews(i, preset) {
+  const isNew = i < 0;
+  const n = isNew ? (preset || ['New publication', '', '', '', null]).slice() : S.model.news[i].slice();
+  while (n.length < 6) n.push(undefined);
+  const form = document.createElement('div');
+  form.append(
+    field('Kind', n[0], { list: NEWS_KINDS, onInput: (v) => n[0] = v }),
+    field('Headline', n[1], { area: true, onInput: (v) => n[1] = v }),
+    field('Detail line', n[2], { placeholder: 'J. Am. Chem. Soc. · 2026', hint: 'Shown small under the headline: venue, place or date.', onInput: (v) => n[2] = v }),
+    imageField('Image', n[3], { hint: () => n[1] || n[0], onChange: (v) => n[3] = v }),
+    segment('Image fit', [[undefined, 'Fill card'], [1, 'Fit whole (logos)'], ['photo', 'Photo']], n[5], (v) => n[5] = v),
+    field('Link', n[4], { type: 'url', placeholder: 'https://doi.org/…', hint: 'Leave empty for a card that does not link anywhere.', onInput: (v) => n[4] = v.trim() || null }),
+  );
+  editSheet(isNew ? 'Add news' : 'Edit news', form, {
+    isNew,
+    onSave() {
+      if (!n[1].trim()) { toast('Add a headline first', true); return false; }
+      n[4] = n[4] || null;
+      if (n[5] === undefined || n[5] === null || n[5] === '') n.length = 5;
+      if (isNew) { S.model.news.unshift(n); newRefs.add(n); markIndex(`News: ${n[1].slice(0, 50)}`); }
+      else { S.model.news[i] = n; markIndex(`Edited news: ${n[1].slice(0, 50)}`); }
+    },
+    onDelete() { const [x] = S.model.news.splice(i, 1); markIndex(`Removed news: ${x[1].slice(0, 50)}`); },
+  });
+}
+
+/* ───────── PAPERS ───────── */
+function renderPapers(main) {
+  const P = S.model.data.publications;
+  main.append(el(`<div class="view-h"><div><h1>Papers</h1><p>${P.length} publications. Paste a DOI to add one in seconds.</p></div></div>`));
+  main.append(btnRow(btn(IC.plus + 'Add paper', 'primary', () => editPaper(-1))));
+  main.append(listView(P, {
+    thumb: (p) => p.img ? 'images/' + p.img : '', kind: (p) => [p.y, p.b, p.f ? 'first author' : ''].filter(Boolean).join(' · '),
+    title: (p) => p.t, detail: (p) => p.j, isNew: (p) => newRefs.has(p), onEdit: editPaper,
+  }));
+}
+function editPaper(i) {
+  const isNew = i < 0;
+  const P = S.model.data.publications;
+  const p = isNew ? { y: new Date().getFullYear(), t: '', a: '', j: '', k: 'other', doi: '' } : Object.assign({}, P[i]);
+  const form = document.createElement('div');
+  const draw = () => {
+    form.innerHTML = '';
+    const doiF = el(`<div class="field"><span>DOI</span><div class="inline"><input class="inp" placeholder="10.1021/jacs.…" inputmode="url" autocapitalize="off"></div><em>Fetch fills title, authors, journal and year from Crossref. Check the result before saving.</em></div>`);
+    const doiIn = $('input', doiF); doiIn.value = p.doi || '';
+    doiIn.oninput = () => p.doi = doiIn.value.trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+    const fetchB = btn('Fetch', '', async () => {
+      if (!p.doi) { toast('Paste a DOI first', true); return; }
+      fetchB.disabled = true; fetchB.textContent = 'Fetching…';
+      try {
+        const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(p.doi)}`);
+        if (!r.ok) throw new Error(r.status === 404 ? 'Crossref has no record of that DOI' : 'Crossref error ' + r.status);
+        const x = Core.fromCrossref((await r.json()).message);
+        Object.keys(x).forEach((k) => { if (x[k] !== undefined && x[k] !== '') p[k] = x[k]; });
+        if (!x.f) delete p.f;
+        draw(); toast('Filled from Crossref');
+      } catch (e) { toast(e.message, true); fetchB.disabled = false; fetchB.textContent = 'Fetch'; }
+    });
+    $('.inline', doiF).append(fetchB);
+    form.append(
+      doiF,
+      field('Title', p.t, { area: true, onInput: (v) => p.t = v }),
+      field('Authors', p.a, { area: true, hint: 'Write yourself as U. Rashid so the site bolds your name.', onInput: (v) => p.a = v }),
+      field('Journal line', p.j, { placeholder: 'J. Am. Chem. Soc. 2026, 148, 23, 24357–24366', onInput: (v) => p.j = v }),
+      (() => { const d = el('<div class="two"></div>'); d.append(field('Year', p.y, { type: 'number', onInput: (v) => p.y = +v || v }), field('Badge', p.b, { list: ['Front cover', 'Hot article', 'Hot topic', 'Editor\u2019s choice', 'Most read'], placeholder: 'optional', onInput: (v) => { p.b = v.trim(); if (!p.b) delete p.b; } })); return d; })(),
+      segment('Filter on the site', [['jacs', 'JACS'], ['angew', 'Angewandte'], ['other', 'Other']], p.k, (v) => p.k = v),
+      checkbox('First author', p.f, (v) => { if (v) p.f = 1; else delete p.f; }),
+      field('Second badge', p.alt, { placeholder: 'optional, e.g. Co-first author', onInput: (v) => { p.alt = v.trim(); if (!p.alt) delete p.alt; } }),
+      imageField('Graphic', p.img, { prefix: 'images/', hint: () => (p.doi || p.t).replace(/^10\.\d+\//, ''), onChange: (v) => p.img = v }),
+    );
+    if (isNew) form.append(checkbox('Also add a news card for this paper', addNews, (v) => addNews = v));
+  };
+  let addNews = isNew;
+  draw();
+  editSheet(isNew ? 'Add paper' : 'Edit paper', form, {
+    isNew,
+    onSave() {
+      if (!p.t.trim() || !p.doi) { toast('A paper needs at least a title and a DOI', true); return false; }
+      const order = ['y', 't', 'a', 'j', 'k', 'f', 'b', 'alt', 'img', 'doi'];
+      const clean = {}; order.concat(Object.keys(p)).forEach((k) => { if (p[k] !== undefined && p[k] !== '' && !(k in clean)) clean[k] = p[k]; });
+      if (isNew) {
+        const at = P.findIndex((x) => (+x.y || 0) <= (+clean.y || 0));
+        P.splice(at < 0 ? P.length : at, 0, clean); newRefs.add(clean);
+        markIndex(`Paper: ${clean.t.slice(0, 50)}`);
+        if (addNews) setTimeout(() => editNews(-1, [clean.b === 'Front cover' ? 'Front cover' : 'New publication', clean.t, `${(clean.j || '').split(/\s\d{4}/)[0]} · ${clean.y}`, clean.img ? 'images/' + clean.img : '', 'https://doi.org/' + clean.doi]), 320);
+      } else { P[i] = clean; markIndex(`Edited paper: ${clean.t.slice(0, 50)}`); }
+    },
+    onDelete() { const [x] = P.splice(i, 1); markIndex(`Removed paper: ${x.t.slice(0, 50)}`); },
+  });
+}
+
+/* ───────── HONOURS (awards + education) ───────── */
+function renderHonours(main) {
+  const A = S.model.data.awards, E = S.model.data.education;
+  main.append(el(`<div class="view-h"><div><h1>Honours</h1><p>Awards and the education timeline.</p></div></div>`));
+  main.append(btnRow(btn(IC.plus + 'Add award', 'primary', () => editAward(-1))));
+  main.append(listView(A, { kind: (a) => a[2] ? 'Highlighted' : '', title: (a) => a[0], detail: (a) => a[1], isNew: (a) => newRefs.has(a), onEdit: editAward }));
+  main.append(el('<h2 class="sub-h">Education &amp; positions</h2>'));
+  main.append(btnRow(btn(IC.plus + 'Add entry', '', () => editEdu(-1))));
+  main.append(listView(E, { kind: (e) => e[3], title: (e) => `${e[0]} · ${e[2]}`, detail: (e) => e[1], isNew: (e) => newRefs.has(e), onEdit: editEdu }));
+}
+function editAward(i) {
+  const isNew = i < 0, A = S.model.data.awards;
+  const a = isNew ? ['', ''] : A[i].slice();
+  const form = document.createElement('div');
+  form.append(
+    field('Award', a[0], { onInput: (v) => a[0] = v }),
+    field('Awarded by / detail', a[1], { onInput: (v) => a[1] = v }),
+    checkbox('Highlight with a star', a[2], (v) => { if (v) a[2] = 1; else a.length = 2; }),
+  );
+  editSheet(isNew ? 'Add award' : 'Edit award', form, {
+    isNew,
+    onSave() { if (!a[0].trim()) { toast('Name the award first', true); return false; } if (isNew) { A.unshift(a); newRefs.add(a); markIndex(`Award: ${a[0]}`); } else { A[i] = a; markIndex(`Edited award: ${a[0]}`); } },
+    onDelete() { const [x] = A.splice(i, 1); markIndex(`Removed award: ${x[0]}`); },
+  });
+}
+function editEdu(i) {
+  const isNew = i < 0, E = S.model.data.education;
+  const e = isNew ? ['', '', '', ''] : E[i].slice();
+  const form = document.createElement('div');
+  form.append(
+    field('Stage', e[0], { list: ['Secondary', 'Bachelors', 'Masters', 'Ph.D', 'Postdoc', 'Employment'], onInput: (v) => e[0] = v }),
+    field('Note', e[1], { placeholder: 'Gold Medalist, Research Fellow…', onInput: (v) => e[1] = v }),
+    field('Institution', e[2], { area: true, onInput: (v) => e[2] = v }),
+    field('Years', e[3], { placeholder: 'Aug 2025 – now', onInput: (v) => e[3] = v }),
+  );
+  editSheet(isNew ? 'Add entry' : 'Edit entry', form, {
+    isNew,
+    onSave() { if (!e[0].trim()) { toast('Add a stage first', true); return false; } if (isNew) { E.push(e); newRefs.add(e); markIndex(`Education: ${e[0]}`); } else { E[i] = e; markIndex(`Edited education: ${e[0]}`); } },
+    onDelete() { const [x] = E.splice(i, 1); markIndex(`Removed education: ${x[0]}`); },
+  });
+}
+function btnRow(...b) { const d = el('<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"></div>'); d.append(...b); return d; }
+
+/* ───────── FILES ───────── */
+let fileQuery = '';
+function renderFiles(main) {
+  main.append(el(`<div class="view-h"><div><h1>Files</h1><p>Every file in the repo. Edit text, replace images, upload PDFs.</p></div></div>`));
+  main.append(btnRow(
+    btn(IC.upload + 'Upload file', 'primary', uploadAny),
+    btn(IC.plus + 'New file', '', newFile),
+  ));
+  const q = el('<input class="search" type="search" placeholder="Filter by path" aria-label="Filter files">');
+  q.value = fileQuery;
+  const list = el('<div class="list"></div>');
+  const all = () => {
+    const m = new Map(S.tree.map((x) => [x.path, { path: x.path, size: x.size, tag: '' }]));
+    pendingPaths().forEach((c, p) => m.set(p, { path: p, size: c.size ?? m.get(p)?.size, tag: c.kind === 'delete' ? 'deleted' : m.has(p) ? 'edited' : 'new' }));
+    return [...m.values()].sort((a, b) => (b.tag ? 1 : 0) - (a.tag ? 1 : 0) || a.path.localeCompare(b.path));
+  };
+  const draw = () => {
+    const items = all().filter((x) => !fileQuery || x.path.toLowerCase().includes(fileQuery.toLowerCase()));
+    list.innerHTML = items.slice(0, 300).map((x) => `<button class="frow" data-p="${esc(x.path)}"><code>${esc(x.path)}</code>${x.tag ? `<span class="tag">${x.tag}</span>` : ''}<small>${fmtSize(x.size)}</small></button>`).join('') || '<div class="empty">No files match.</div>';
+    $$('.frow', list).forEach((b) => b.onclick = () => openFile(b.dataset.p));
+  };
+  q.oninput = () => { fileQuery = q.value; draw(); };
+  main.append(q, list); draw();
+}
+async function readRepoText(path) {
+  const c = S.changes.get(path);
+  if (path === 'index.html') return currentIndex();
+  if (c && c.kind === 'text') return c.content;
+  if (c && c.kind === 'b64') return b64ToText(c.content);
+  const node = S.tree.find((x) => x.path === path);
+  if (!node) return '';
+  const blob = await gh(`/git/blobs/${node.sha}`);
+  return b64ToText(blob.content);
+}
+async function openFile(path) {
+  const c = S.changes.get(path);
+  if (c && c.kind === 'delete') {
+    openSheet(path.split('/').pop(), `<p class="note">This file will be deleted when you publish.</p>`, [btn('Keep the file', 'primary', () => { S.changes.delete(path); S.log = S.log.filter((l) => l !== `Deleted ${path}`); updatePubBar(); closeSheet(); render(); })]);
+    return;
+  }
+  if (IMG_EXT.test(path) && !/\.svg$/i.test(path)) return openImage(path);
+  if (!TEXT_EXT.test(path) && path.includes('.')) return openBinary(path);
+  openSheet(path, '<div class="loading">Opening…</div>', [], { full: true });
+  try { openEditor(path, await readRepoText(path)); }
+  catch (e) { toast(e.message, true); closeSheet(); }
+}
+function openEditor(path, text) {
+  const wrap = el(`<div class="editor-wrap"><div class="findbar"><input class="inp" type="search" placeholder="Find" aria-label="Find in file"><small></small><button class="btn sm" data-a="prev" aria-label="Previous match">${IC.up}</button><button class="btn sm" data-a="next" aria-label="Next match">${IC.down}</button></div><textarea class="editor" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea></div>`);
+  const ta = $('textarea', wrap), fi = $('.findbar input', wrap), cnt = $('.findbar small', wrap);
+  ta.value = text;
+  let hits = [], at = -1;
+  const find = () => { hits = []; const q = fi.value.toLowerCase(); if (q) { const v = ta.value.toLowerCase(); for (let i = v.indexOf(q); i >= 0; i = v.indexOf(q, i + 1)) hits.push(i); } at = -1; cnt.textContent = q ? `${hits.length}` : ''; };
+  const go = (d) => {
+    if (!hits.length) return; at = (at + d + hits.length) % hits.length; const i = hits[at];
+    ta.focus(); ta.setSelectionRange(i, i + fi.value.length);
+    const line = ta.value.slice(0, i).split('\n').length; ta.scrollTop = Math.max(0, (line - 4) * 19.4);
+    cnt.textContent = `${at + 1}/${hits.length}`;
+  };
+  fi.oninput = find; fi.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); go(e.shiftKey ? -1 : 1); } };
+  $('[data-a=next]', wrap).onclick = () => go(1); $('[data-a=prev]', wrap).onclick = () => go(-1);
+  const foot = [];
+  if (S.tree.some((x) => x.path === path) && path !== 'index.html') foot.push(btn('Delete file', 'danger', () => { if (confirmDanger(`Delete ${path}?`)) { S.changes.set(path, { kind: 'delete' }); note(`Deleted ${path}`); closeSheet(); render(); } }));
+  foot.push(btn('Keep changes', 'primary', () => {
+    const v = ta.value;
+    if (v === text) { closeSheet(); return; }
+    if (path === 'index.html') {
+      try { S.model = Core.parseIndex(v); S.modelOk = true; S.indexText = v; S.rawIndex = null; S.indexDirty = true; }
+      catch (e) { S.rawIndex = v; S.modelOk = false; toast('Saved, but News/Papers/Honours are locked until the data block parses again: ' + e.message, true); }
+    } else {
+      S.changes.set(path, { kind: 'text', content: v, size: new Blob([v]).size });
+    }
+    note(`Edited ${path}`); closeSheet(); render();
+  }));
+  $('#sheetBody').replaceChildren(wrap); $('#sheetFoot').replaceChildren(...foot); $('#sheetFoot').classList.remove('hidden');
+}
+function openImage(path) {
+  const body = el(`<div><img src="${esc(imgSrc(path))}" alt="" style="border-radius:12px;border:1px solid var(--line);margin:0 auto 12px;max-height:55vh"><p class="note"><code>${esc(path)}</code><br>Used on the site as <code>${esc(path)}</code>${path.startsWith('images/') ? ` or <code>${esc(path.slice(7))}</code> in papers` : ''}.</p></div>`);
+  openSheet(path.split('/').pop(), body, [
+    btn('Delete', 'danger', () => { if (confirmDanger(`Delete ${path}? Anything that uses it will show a broken image.`)) { if (S.changes.has(path) && !S.tree.some((x) => x.path === path)) S.changes.delete(path); else S.changes.set(path, { kind: 'delete' }); note(`Deleted ${path}`); closeSheet(); render(); } }),
+    btn(IC.upload + 'Replace', 'primary', async () => {
+      const f = await pickFile('image/*'); if (!f) return;
+      const keepExt = path.split('.').pop().toLowerCase();
+      const { blob, ext } = await resizeImage(f);
+      if (ext !== keepExt && !(ext === 'jpg' && keepExt === 'jpeg')) { toast(`The new image is .${ext} but the file is .${keepExt}. Upload it as a new image instead.`, true); return; }
+      S.changes.set(path, { kind: 'b64', content: await blobToB64(blob), preview: await blobToURL(blob), size: blob.size });
+      note(`Replaced ${path}`); closeSheet(); render();
+    }),
+  ]);
+}
+function openBinary(path) {
+  openSheet(path.split('/').pop(), `<p class="note"><code>${esc(path)}</code> is a binary file. You can replace it with a new upload or delete it.</p><p><a class="btn" href="${esc(rawUrl(path))}" target="_blank" rel="noopener">Open current file ${IC.ext}</a></p>`, [
+    btn('Delete', 'danger', () => { if (confirmDanger(`Delete ${path}?`)) { S.changes.set(path, { kind: 'delete' }); note(`Deleted ${path}`); closeSheet(); render(); } }),
+    btn(IC.upload + 'Replace', 'primary', async () => {
+      const f = await pickFile(''); if (!f) return;
+      if (f.size > 25 * 1048576) { toast('Files over 25 MB are too large for GitHub uploads from the app', true); return; }
+      S.changes.set(path, { kind: 'b64', content: await blobToB64(f), size: f.size });
+      note(`Replaced ${path}`); closeSheet(); render();
+    }),
+  ]);
+}
+async function uploadAny() {
+  const f = await pickFile('');
+  if (!f) return;
+  if (f.size > 25 * 1048576) { toast('Files over 25 MB are too large for GitHub uploads from the app', true); return; }
+  const isImg = /^image\//.test(f.type);
+  const defDir = isImg ? 'images' : /pdf/.test(f.type) ? 'files' : '';
+  const dest = window.prompt('Save as (path in the repo)', (defDir ? defDir + '/' : '') + (isImg ? slug(f.name.replace(/\.[^.]+$/, '')) + '.' + f.name.split('.').pop().toLowerCase() : f.name));
+  if (!dest) return;
+  const path = dest.replace(/^\/+/, '');
+  if (isImg && IMG_EXT.test(path) && !/\.(svg|gif)$/i.test(path)) {
+    const { blob } = await resizeImage(f);
+    S.changes.set(path, { kind: 'b64', content: await blobToB64(blob), preview: await blobToURL(blob), size: blob.size });
+  } else {
+    S.changes.set(path, { kind: 'b64', content: await blobToB64(f), size: f.size });
+  }
+  note(`${S.tree.some((x) => x.path === path) ? 'Replaced' : 'Added'} ${path}`); render();
+}
+function newFile() {
+  const p = window.prompt('New file path', 'notes.md');
+  if (!p) return;
+  const path = p.replace(/^\/+/, '');
+  if (S.tree.some((x) => x.path === path)) { openFile(path); return; }
+  openSheet(path, '', [], { full: true });
+  openEditor(path, '');
+}
+
+/* ───────── DEPLOY ───────── */
+async function renderDeploy(main) {
+  main.append(el(`<div class="view-h"><div><h1>Deploy</h1><p>Run your site automations and watch builds.</p></div></div>`));
+  const grid = el('<div class="actions-grid"></div>');
+  const quick = [
+    ['update_scholar.yml', 'Refresh Scholar stats', 'Pulls citations and h-index via SerpApi'],
+    ['update_cv.yml', 'Rebuild CV', 'Regenerates cv.html from the site'],
+  ];
+  quick.forEach(([wf, t, d]) => {
+    const b = el(`<button class="act"><b>${esc(t)}</b><span>${esc(d)}</span></button>`);
+    b.onclick = () => dispatch(wf, t, b);
+    grid.append(b);
+  });
+  const site = el(`<a class="act" href="${esc(cfg.site)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><b>Open the site</b><span>${esc(cfg.site.replace(/^https?:\/\//, ''))}</span></a>`);
+  const cv = el(`<a class="act" href="${esc(cfg.site)}cv.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><b>Open the CV</b><span>cv.html</span></a>`);
+  grid.append(site, cv);
+  main.append(grid);
+  main.append(el('<h2 class="sub-h">Recent runs</h2>'));
+  const list = el('<div class="list"><div class="loading">Loading runs…</div></div>');
+  main.append(list);
+  main.append(btnRow(btn('Refresh', 'sm', () => drawRuns(list))));
+  drawRuns(list);
+}
+async function drawRuns(list) {
+  try {
+    const r = await gh('/actions/runs?per_page=12');
+    list.innerHTML = r.workflow_runs.map((w) => {
+      const st = w.status === 'completed' ? w.conclusion : w.status;
+      return `<a class="run" href="${esc(w.html_url)}" target="_blank" rel="noopener"><span class="st ${esc(st)}"></span><span><b>${esc(w.name)}</b><small>${esc(w.event)} · ${esc(st)} · ${ago(w.created_at)}</small></span><small>${esc(w.head_sha.slice(0, 7))}</small></a>`;
+    }).join('') || '<div class="empty">No workflow runs yet.</div>';
+  } catch (e) { list.innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+async function dispatch(wf, label, b) {
+  b.disabled = true;
+  try {
+    await gh(`/actions/workflows/${wf}/dispatches`, { method: 'POST', body: { ref: cfg.branch } });
+    toast(`${label} started`);
+    setTimeout(() => { const l = $('.list', $('#main')); if (l && S.tab === 'deploy') drawRuns(l); }, 2500);
+  } catch (e) { toast(e.message, true); }
+  b.disabled = false;
+}
+
+/* ───────── PUBLISH ───────── */
+function reviewPublish() {
+  const pend = pendingPaths();
+  const body = document.createElement('div');
+  body.append(el(`<ul class="chg">${[...pend.entries()].map(([p, c]) => `<li><span class="k">${c.kind === 'delete' ? 'DELETE' : S.tree.some((x) => x.path === p) ? 'EDIT' : 'NEW'}</span><code>${esc(p)}</code></li>`).join('')}</ul>`));
+  const auto = S.log.length === 1 ? S.log[0] : `Update site: ${S.log.slice(0, 3).join('; ')}${S.log.length > 3 ? `; +${S.log.length - 3} more` : ''}`;
+  let msg = auto.length > 160 ? auto.slice(0, 160).replace(/\s+\S*$/, '') + '…' : auto;
+  body.append(field('Commit message', msg, { onInput: (v) => msg = v }));
+  body.append(el(`<p class="note">Publishing makes one commit to <b>${esc(cfg.branch)}</b>. GitHub Pages then rebuilds the site, and a change to index.html also triggers your CV workflow.</p>`));
+  openSheet('Review and publish', body, [
+    btn('Discard all', 'danger', () => { if (confirmDanger('Throw away every unpublished change?')) { S.changes.clear(); S.indexDirty = false; S.rawIndex = null; S.log = []; closeSheet(); reload(); } }),
+    btn('Publish now', 'primary', () => publish(msg.trim() || auto)),
+  ]);
+}
+async function publish(message) {
+  const steps = [['Check for newer commits', ''], ['Upload changed files', ''], ['Create commit', ''], ['Update the ' + cfg.branch + ' branch', ''], ['Site rebuilds on GitHub Pages', 'Usually under a minute']];
+  const ol = el(`<ol class="steps">${steps.map(([t, d], i) => `<li><span class="n">${i + 1}</span><span><b>${esc(t)}</b><small>${esc(d)}</small></span></li>`).join('')}</ol>`);
+  openSheet('Publishing', ol, []);
+  const li = $$('li', ol);
+  const mark = (i, cls, sub) => { li[i].className = cls; if (sub != null) $('small', li[i]).textContent = sub; };
+  try {
+    mark(0, 'doing');
+    const ref = await gh(`/git/ref/heads/${encodeURIComponent(cfg.branch)}`);
+    const latest = ref.object.sha;
+    const pend = pendingPaths();
+    if (latest !== S.head) {
+      // Something else committed (often the Scholar/CV bots). Safe only if none of our files changed upstream.
+      const cmp = await gh(`/compare/${S.head}...${latest}`);
+      const touched = new Set((cmp.files || []).map((f) => f.filename));
+      const clash = [...pend.keys()].filter((p) => touched.has(p));
+      if (clash.length) throw new Error(`${clash.join(', ')} changed on GitHub since you loaded it. Copy anything you need, then tap reload and redo the edit.`);
+      mark(0, 'done', `Built on top of ${latest.slice(0, 7)} (${cmp.ahead_by} newer commit${cmp.ahead_by === 1 ? '' : 's'}, no overlap)`);
+    } else mark(0, 'done', 'Up to date');
+
+    mark(1, 'doing');
+    const entries = [];
+    let k = 0;
+    for (const [path, c] of pend) {
+      $('small', li[1]).textContent = `${++k} of ${pend.size}: ${path}`;
+      if (c.kind === 'delete') { entries.push({ path, mode: '100644', type: 'blob', sha: null }); continue; }
+      const content = path === 'index.html' ? currentIndex() : c.content;
+      const blob = await gh('/git/blobs', { method: 'POST', body: path === 'index.html' || c.kind === 'text' ? { content, encoding: 'utf-8' } : { content, encoding: 'base64' } });
+      entries.push({ path, mode: '100644', type: 'blob', sha: blob.sha });
+    }
+    mark(1, 'done', `${pend.size} file${pend.size === 1 ? '' : 's'}`);
+
+    mark(2, 'doing');
+    const base = await gh(`/git/commits/${latest}`);
+    const tree = await gh('/git/trees', { method: 'POST', body: { base_tree: base.tree.sha, tree: entries } });
+    const commit = await gh('/git/commits', { method: 'POST', body: { message, tree: tree.sha, parents: [latest] } });
+    mark(2, 'done', commit.sha.slice(0, 7));
+
+    mark(3, 'doing');
+    await gh(`/git/refs/heads/${encodeURIComponent(cfg.branch)}`, { method: 'PATCH', body: { sha: commit.sha } });
+    mark(3, 'done', 'Pushed');
+
+    // reset local state to the new head
+    S.log = []; S.changes.clear(); S.indexDirty = false; S.rawIndex = null;
+    loadAll().then(render).catch(() => {});
+
+    mark(4, 'doing', 'Waiting for GitHub Pages…');
+    $('#sheetFoot').replaceChildren(btn('Done', '', closeSheet), (() => { const a = el(`<a class="btn primary" href="${esc(cfg.site)}" target="_blank" rel="noopener">Open site ${IC.ext}</a>`); return a; })());
+    $('#sheetFoot').classList.remove('hidden');
+    watchPages(commit.sha, (cls, sub) => mark(4, cls, sub));
+  } catch (e) {
+    const i = li.findIndex((x) => x.className === 'doing');
+    if (i >= 0) mark(i, 'fail', e.message);
+    $('#sheetFoot').replaceChildren(btn('Close', '', closeSheet)); $('#sheetFoot').classList.remove('hidden');
+    toast('Publish stopped. Nothing was half-written: your edits are still here.', true);
+  }
+}
+async function watchPages(sha, cb) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < 6 * 60 * 1000) {
+    await new Promise((r) => setTimeout(r, 6000));
+    try {
+      const r = await gh(`/actions/runs?head_sha=${sha}&per_page=20`);
+      const pages = r.workflow_runs.find((w) => /pages/i.test(w.name));
+      const others = r.workflow_runs.filter((w) => w !== pages).map((w) => `${w.name}: ${w.status === 'completed' ? w.conclusion : w.status}`);
+      if (pages) {
+        const st = pages.status === 'completed' ? pages.conclusion : pages.status;
+        const extra = others.length ? ` · ${others.join(' · ')}` : '';
+        if (st === 'success') { cb('done', `Live. ${Math.round((Date.now() - t0) / 1000)} s${extra}`); toast('Your site is live'); return; }
+        if (pages.status === 'completed') { cb('fail', `Pages build ${st}. Open Deploy for details.`); return; }
+        cb('doing', `Pages: ${st}${extra}`);
+      }
+    } catch (e) { cb('doing', 'Could not read build status (the token may lack Actions read access). The commit is pushed.'); return; }
+  }
+  cb('doing', 'Still building. Check the Deploy tab.');
+}
+
+/* ───────── settings / onboarding ───────── */
+function settingsForm(first) {
+  const c = Object.assign({}, cfg);
+  const body = document.createElement('div');
+  body.append(
+    field('GitHub token', c.token, { type: 'password', placeholder: 'github_pat_…', hint: 'Fine-grained token, only this repository. Stored on this device only.', onInput: (v) => c.token = v.trim() }),
+    (() => { const d = el('<div class="two"></div>'); d.append(field('Owner', c.owner, { onInput: (v) => c.owner = v.trim() }), field('Branch', c.branch, { onInput: (v) => c.branch = v.trim() })); return d; })(),
+    field('Repository', c.repo, { onInput: (v) => c.repo = v.trim() }),
+    field('Site address', c.site, { type: 'url', onInput: (v) => c.site = v.trim().replace(/\/?$/, '/') }),
+  );
+  if (!first) {
+    body.append(segment('Theme', [[null, 'Match phone'], ['light', 'Light'], ['dark', 'Dark']], LS.get('theme', null), (v) => {
+      if (v) { document.documentElement.dataset.theme = v; LS.set('theme', v); } else { delete document.documentElement.dataset.theme; LS.del('theme'); }
+    }));
+  }
+  const save = async () => {
+    if (!c.token) { toast('Paste a token first', true); return; }
+    Object.assign(cfg, c);
+    try {
+      setStatus('busy', 'Checking access…');
+      const r = await gh('');
+      if (!r.permissions || !r.permissions.push) throw new Error('This token can read the repo but cannot write to it. Give it Contents: Read and write.');
+      LS.set('cfg', cfg); closeSheet(); await reload(); toast('Connected');
+    } catch (e) { setStatus('bad', 'Not connected'); toast(e.message, true); }
+  };
+  return { body, save };
+}
+function openSettings() {
+  const { body, save } = settingsForm(false);
+  openSheet('Settings', body, [
+    btn('Sign out', 'danger', () => { if (confirmDanger('Remove the token from this device?')) { cfg.token = ''; LS.set('cfg', cfg); closeSheet(); boot(); } }),
+    btn('Save and connect', 'primary', save),
+  ]);
+}
+function renderWelcome() {
+  $('#dock').classList.add('hidden');
+  const m = $('#main'); m.innerHTML = '';
+  const w = el(`<div class="welcome">
+    <div class="sig">Arman</div>
+    <h1>Edit your site from your phone.</h1>
+    <p>Add news, papers and awards, swap images, edit any file and publish straight to GitHub Pages. Your token stays on this device.</p>
+    <ol>
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → new fine-grained token</a>.</li>
+      <li>Repository access: only <b>${esc(cfg.owner)}/${esc(cfg.repo)}</b>.</li>
+      <li>Permissions: <b>Contents</b> read and write, <b>Actions</b> read and write. Pick an expiry you are comfortable with.</li>
+      <li>Paste it below.</li>
+    </ol>
+  </div>`);
+  const { body, save } = settingsForm(true);
+  w.append(body, btnRow(btn('Connect', 'primary', save)));
+  m.append(w);
+}
+
+/* ───────── render ───────── */
+function render() {
+  const m = $('#main'); m.innerHTML = '';
+  $$('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === S.tab));
+  const structured = ['news', 'papers', 'honours'].includes(S.tab);
+  if (structured && !S.modelOk) {
+    m.append(el(`<div class="view-h"><div><h1>Locked</h1><p>index.html no longer contains a readable data block or news array, so this editor is off. Fix it in Files → index.html, or reload to discard.</p></div></div>`));
+  } else if (S.tab === 'news') renderNews(m);
+  else if (S.tab === 'papers') renderPapers(m);
+  else if (S.tab === 'honours') renderHonours(m);
+  else if (S.tab === 'files') renderFiles(m);
+  else if (S.tab === 'deploy') renderDeploy(m);
+  updatePubBar();
+}
+$$('#tabs button').forEach((b) => b.onclick = () => { S.tab = b.dataset.tab; LS.set('tab', S.tab); render(); window.scrollTo(0, 0); });
+$('#pubPill').onclick = reviewPublish;
+$('#settingsBtn').onclick = openSettings;
+async function reload() {
+  if (pendingPaths().size && !confirmDanger('Reloading throws away unpublished changes. Continue?')) return;
+  S.changes.clear(); S.indexDirty = false; S.rawIndex = null; S.log = [];
+  $('#main').innerHTML = '<div class="loading">Loading from GitHub…</div>';
+  try { await loadAll(); $('#dock').classList.remove('hidden'); render(); }
+  catch (e) { setStatus('bad', 'Not connected'); $('#main').innerHTML = ''; $('#main').append(el(`<div class="view-h"><div><h1>Couldn't load the site</h1><p>${esc(e.message)}</p></div></div>`), btnRow(btn('Try again', 'primary', reload), btn('Settings', '', openSettings))); }
+}
+$('#reloadBtn').onclick = () => cfg.token ? reload() : null;
+
+function boot() {
+  if (!cfg.token) { setStatus('', 'Not connected'); renderWelcome(); return; }
+  reload();
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+boot();
+})();
+</script>
+</body>
+</html>
