@@ -418,7 +418,7 @@ section { position: relative; }
 .covers { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 20px; margin-bottom: 80px; align-items: end; }
 .covers-copy h3 { font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 2vw, 28px); line-height: 1; }
 .covers-copy p { color: var(--muted); margin-top: 14px; font-size: 15px; max-width: 320px; }
-.cover { border-radius: 10px; overflow: hidden; aspect-ratio: 3/4; background: var(--bg-2); box-shadow: var(--shadow); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.cover { display: block; border-radius: 10px; overflow: hidden; aspect-ratio: 3/4; background: var(--bg-2); box-shadow: var(--shadow); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
 .cover img { width: 100%; height: 100%; object-fit: cover; }
 .cover:nth-child(2) { transform: rotate(-3deg); }
 .cover:nth-child(3) { transform: translateY(-20px); }
@@ -765,9 +765,9 @@ section { position: relative; }
 
     <div class="covers">
       <div class="covers-copy reveal"><h3>On the cover of <i class="it">JACS</i>, three times over.</h3><p>Front covers for work on flicker noise at the Au–thiol interface, conducting “non-conducting” polymers, and field-driven tautomerism.</p></div>
-      <div class="cover reveal d1"><img src="images/jacsat.2024.146.issue-13.xlargecover1.jpg" alt="JACS volume 146 issue 13 cover" loading="lazy"></div>
-      <div class="cover reveal d2"><img src="images/jacsat.2024.146.issue-28.xlargecover1.jpg" alt="JACS volume 146 issue 28 cover" loading="lazy"></div>
-      <div class="cover reveal d3"><img src="images/jacsat.2024.146.issue-51.xlargecover.jpg" alt="JACS volume 146 issue 51 cover" loading="lazy"></div>
+      <a class="cover reveal d1" href="https://doi.org/10.1021/jacs.3c14079" target="_blank" rel="noopener"><img src="images/jacsat.2024.146.issue-13.xlargecover1.jpg" alt="JACS volume 146 issue 13 cover" loading="lazy"></a>
+      <a class="cover reveal d2" href="https://doi.org/10.1021/jacs.4c03016" target="_blank" rel="noopener"><img src="images/jacsat.2024.146.issue-28.xlargecover1.jpg" alt="JACS volume 146 issue 28 cover" loading="lazy"></a>
+      <a class="cover reveal d3" href="https://doi.org/10.1021/jacs.4c12423" target="_blank" rel="noopener"><img src="images/jacsat.2024.146.issue-51.xlargecover.jpg" alt="JACS volume 146 issue 51 cover" loading="lazy"></a>
     </div>
 
     <div class="filters reveal" id="filters">
