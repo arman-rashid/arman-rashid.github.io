@@ -22,6 +22,7 @@
 <script>
   (function () {
     try { var t = localStorage.getItem('ur-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    try { if (localStorage.getItem('ur-zoom') === 'off') document.documentElement.classList.add('zoom-off'); } catch (e) {}
     document.documentElement.classList.add('js');
   })();
 </script>
@@ -558,6 +559,13 @@ section { position: relative; }
 .zoom-bar { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 40px; height: 1px; background: var(--line-strong); }
 .zoom-bar i { position: absolute; left: 0; top: -1px; height: 3px; width: 0; background: var(--accent); border-radius: 2px; }
 .zoom-bar span { position: absolute; top: 12px; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.zoom-ctl { display: flex; gap: 8px; margin-top: 22px; pointer-events: auto; }
+.zoom-ctl button, .zoom-show button { height: 30px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); transition: .2s; }
+.zoom-ctl button:hover, .zoom-show button:hover { color: var(--accent); border-color: var(--accent); }
+.zoom-show { display: none; border-bottom: 1px solid var(--line); }
+.zoom-show .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 18px; padding-bottom: 18px; color: var(--muted); }
+.zoom-off .zoom { display: none; }
+.zoom-off .zoom-show { display: block; }
 .zoom-bar span::before { content: ''; position: absolute; left: 50%; top: -16px; width: 1px; height: 9px; background: var(--line-strong); }
 @media (max-width: 760px) {
   .zoom-ui { justify-content: flex-end; padding-bottom: 92px; }
@@ -692,10 +700,20 @@ section { position: relative; }
         <div class="zoom-name" id="zName">You</div>
         <p class="zoom-fact" id="zFact"></p>
       </div>
+      <div class="zoom-ctl">
+        <button type="button" id="zSkip">Skip ↓</button>
+        <button type="button" id="zHide">Hide this</button>
+      </div>
     </div>
     <div class="zoom-bar" id="zBar" aria-hidden="true"><i></i></div>
   </div>
 </section>
+<div class="zoom-show">
+  <div class="wrap">
+    <span class="mono">Interlude hidden — how small is small?</span>
+    <button type="button" id="zShow">Show it</button>
+  </div>
+</div>
 
 <!-- ───────── RESEARCH ───────── -->
 <section class="sec" id="research">
@@ -2012,6 +2030,17 @@ section { position: relative; }
     let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(size, 150); });
     size();
     zoomRedraw = () => { p = -1; update(); };
+
+    // let visitors skip the interlude, or hide it (remembered for next visit)
+    const next = $('#research'), root = document.documentElement;
+    const setOff = (off) => {
+      root.classList.toggle('zoom-off', off);
+      try { off ? localStorage.setItem('ur-zoom', 'off') : localStorage.removeItem('ur-zoom'); } catch (e) {}
+      if (!off) size();
+    };
+    $('#zSkip').addEventListener('click', () => next.scrollIntoView());
+    $('#zHide').addEventListener('click', () => { setOff(true); next.scrollIntoView(); });
+    $('#zShow').addEventListener('click', () => { setOff(false); sec.scrollIntoView(); });
   })();
 
   /* ═════════ FOOTER: the name, written by electrons ═════════ */
